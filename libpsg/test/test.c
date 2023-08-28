@@ -16,7 +16,8 @@ void libpsgTest()
 {
     struct libpsg x;
 
-    libpsg_play(&x, kill_data, 0);
+    libpsg_init(&x, &back_data, SYS_isPAL());
+    libpsg_play(&x, 0);
 
     while(1)
     {

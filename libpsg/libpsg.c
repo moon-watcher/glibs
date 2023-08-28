@@ -1,15 +1,18 @@
-#include <genesis.h>
 #include "core/SN76489.h"
 #include "libpsg.h"
 
-void libpsg_play(struct libpsg *const psg, const unsigned char *const data, unsigned char track)
+void libpsg_init(struct libpsg *const psg, const unsigned char *const data, unsigned char isPAL)
 {
 	psg->sn.data = data;
-	psg->track = track;
-	psg->pause = 0;
-	psg->isPAL = SYS_isPAL();
+	psg->isPAL = isPAL;
+	libpsg_pause(psg);
+}
 
-	SN76489_play(&psg->sn, psg->track);
+void libpsg_play(struct libpsg *const psg, unsigned char track)
+{
+	psg->vtimer = 0;
+	libpsg_resume(psg);
+	SN76489_play(&psg->sn, track);
 }
 
 void libpsg_stop(struct libpsg *const psg)
@@ -20,16 +23,18 @@ void libpsg_stop(struct libpsg *const psg)
 
 void libpsg_update(struct libpsg *const psg)
 {
-	if ((psg->isPAL || (vtimer % 6)) && !psg->pause)
+	if (psg->isPlaying && (psg->isPAL || (psg->vtimer % 6)))
 		SN76489_update(&psg->sn);
+
+	++psg->vtimer;
 }
 
 void libpsg_pause(struct libpsg *const psg)
 {
-	psg->pause = 1;
+	psg->isPlaying = 0;
 }
 
 void libpsg_resume(struct libpsg *const psg)
 {
-	psg->pause = 0;
+	psg->isPlaying = 1;
 }
