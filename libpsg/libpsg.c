@@ -1,10 +1,3 @@
-/* PSG multichannel sound effects player v1.0 by Shiru, 03.11.07 */
-
-/* gcc version 12.12.07 */
-
-/* Modified by @MoonWatcherMD at 20151019. Thanks, Shiru! */
-/* Modified by @MoonWatcherMD at 20170313. Added pause/resume */
-
 #include <genesis.h>
 #include "core/SN76489.h"
 #include "libpsg.h"
