@@ -1,12 +1,12 @@
 #pragma once
 
-typedef struct _sfx {
+struct sfx
+{
 	char *title;
 	unsigned char *data;
 	unsigned long length;
-}
-SFX;
+};
 
-void sfxInit ( );
-void sfxPlay ( int );
-void sfxStop ( );
+void sfxInit();
+void sfxPlay(unsigned int);
+void sfxStop();
