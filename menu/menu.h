@@ -2,51 +2,51 @@
 
 #include "option.h"
 
-typedef struct menu_t menu_t;
+typedef struct menu menu;
 
-typedef struct menu_t
+typedef struct menu
 {
-    int (*handler)(menu_t *const menu, menuOption_t *const, int);
+    int (*handler)(menu *const, menuOption *const, int);
 
     int (*drawOption)(void *const);
     int (*drawSelected)(void *const);
 
-    unsigned round : 1;
-    unsigned oneOption : 1;
+    unsigned int round : 1;
+    unsigned int oneOption : 1;
 
-    menuOption_t *head;
-    menuOption_t *tail;
-    menuOption_t *selectedOption;
-} menu_t;
+    menuOption *head;
+    menuOption *tail;
+    menuOption *selectedOption;
+} menu;
 
-menu_t *menu_create(void (*handler)(), int (*selected)(), int (*draw)());
-void menu_destroy(menu_t *menu);
-menuOption_t *menu_addOption(menu_t *const menu, void *const data, menu_t *const submenu);
-void menu_drawAll(menu_t *const menu);
-int menu_update(menu_t *const menu);
-menuOption_t *menu_incOption(menu_t *const menu);
-menuOption_t *menu_decOption(menu_t *const menu);
-int menu_drawSelected(menu_t *const menu);
-int menu_drawOption(menu_t *const menu, menuOption_t *const);
-menu_t *menu_getSubmenu(menu_t *const menu);
-void menu_selectOption(menu_t *const menu, menuOption_t *const);
-menuOption_t *menu_getOptionByIndex(menu_t *const menu, unsigned index);
-menuOption_t *menu_getSelected(menu_t *const menu);
-int menu_getIndex(menu_t *const menu);
-void menu_deactivate(menu_t *const menu, bool recursive);
-void menu_activate(menu_t *const menu, bool recursive);
+menu *menu_create(void (*)(), int (*)(), int (*)());
+void menu_destroy(menu *);
+menuOption *menu_addOption(menu *const, void *const, menu *const);
+void menu_drawAll(menu *const);
+int menu_update(menu *const);
+menuOption *menu_incOption(menu *const);
+menuOption *menu_decOption(menu *const);
+int menu_drawSelected(menu *const);
+int menu_drawOption(menu *const, menuOption *const);
+menu *menu_getSubmenu(menu *const);
+void menu_selectOption(menu *const, menuOption *const);
+menuOption *menu_getOptionByIndex(menu *const, unsigned int);
+menuOption *menu_getSelected(menu *const);
+int menu_getIndex(menu *const);
+void menu_deactivate(menu *const, unsigned int);
+void menu_activate(menu *const, unsigned int);
 
 enum
 {
-    ERROR_MENU_UPDATE = -9999,
-    ERROR_MENU_UPDATE_HANDLER,
-    ERROR_MENU_DRAWSELECTED,
-    ERROR_MENU_DRAWSELECTED_DRAWSELECTED,
-    ERROR_MENU_DRAWSELECTED_SELECTEDOPTION,
-    ERROR_MENU_DRAWSELECTED_DATA,
-    ERROR_MENU_DRAWOPTION,
-    ERROR_MENU_DRAWOPTION_DRAWOPTION,
-    ERROR_MENU_GETINDEX,
-    ERROR_MENU_GETINDEX_SELECTEDOPTION,
-    ERROR_MENU_GETINDEX_GETINDEX,
+    MENU_ERROR_UPDATE = -9999,
+    MENU_ERROR_UPDATE_HANDLER,
+    MENU_ERROR_DRAWSELECTED,
+    MENU_ERROR_DRAWSELECTED_DRAWSELECTED,
+    MENU_ERROR_DRAWSELECTED_SELECTEDOPTION,
+    MENU_ERROR_DRAWSELECTED_DATA,
+    MENU_ERROR_DRAWOPTION,
+    MENU_ERROR_DRAWOPTION_DRAWOPTION,
+    MENU_ERROR_GETINDEX,
+    MENU_ERROR_GETINDEX_SELECTEDOPTION,
+    MENU_ERROR_GETINDEX_GETINDEX,
 };

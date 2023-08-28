@@ -1,15 +1,15 @@
 #pragma once
 
-#include "config.h"
+#include "config/config.h"
 
-typedef struct menu_t menu_t;
-typedef struct menuOption_t menuOption_t;
+typedef struct menu menu;
+typedef struct menuOption menuOption;
 
-typedef struct menuOption_t
+typedef struct menuOption
 {
-    menu_t *submenu;
-    menuOption_t *next;
-    menuOption_t *prev;
+    menu *submenu;
+    menuOption *next;
+    menuOption *prev;
 
-    unsigned char data[CONFIG_MENU_DATASIZE];
-} menuOption_t;
+    unsigned char data[MENU_CONFIG_DATASIZE];
+} menuOption;
