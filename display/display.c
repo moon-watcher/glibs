@@ -51,8 +51,8 @@ void display_prepare(void *ptr, s16 pal, u16 type)
 
     if (type == DISPLAY_MULTIFONT)
     {
-        colors = ((Multifont *)ptr)->image->palette->data;
-        pal = pal < 0 ? ((Multifont *)ptr)->pal : pal;
+        colors = ((multifont *)ptr)->image->palette->data;
+        pal = pal < 0 ? ((multifont *)ptr)->pal : pal;
     }
 
     else if (type == DISPLAY_SPRITEDEFINITION)

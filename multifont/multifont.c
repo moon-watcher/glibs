@@ -1,6 +1,6 @@
 #include "multifont.h"
 
-void multifont_init(Multifont *const mf, const Image *image, unsigned int plan, unsigned int pal, unsigned int (*vramPos_f)(unsigned int))
+void multifont_init(multifont *const mf, const Image *image, unsigned int plan, unsigned int pal, unsigned int (*vramPos_f)(unsigned int))
 {
     mf->image = image;
     mf->pal = pal;
@@ -9,7 +9,7 @@ void multifont_init(Multifont *const mf, const Image *image, unsigned int plan, 
     mf->vramPos_f = vramPos_f;
 }
 
-void multifont_text_init(MultifontText *const mft, Multifont *const mf, unsigned int pos)
+void multifont_text_init(multifontText *const mft, multifont *const mf, unsigned int pos)
 {
     mft->mf = mf;
     mft->pos_in_tileset = pos;
@@ -18,19 +18,19 @@ void multifont_text_init(MultifontText *const mft, Multifont *const mf, unsigned
     memset(mft->chars_vrampos, 0, 128 * 2);
 }
 
-void multifont_text_setWidth(MultifontText *const mft, unsigned int size)
+void multifont_text_setWidth(multifontText *const mft, unsigned int size)
 {
     mft->width = size;
 }
 
-void multifont_text_setHeight(MultifontText *const mft, unsigned int size)
+void multifont_text_setHeight(multifontText *const mft, unsigned int size)
 {
     mft->height = size;
 }
 
-void multifont_text_writeCharEx(MultifontText *const mft, char chr, unsigned int x, unsigned int y, int plan, int pal, int prio)
+void multifont_text_writeCharEx(multifontText *const mft, char chr, unsigned int x, unsigned int y, int plan, int pal, int prio)
 {
-    Multifont *const mf = mft->mf;
+    multifont *const mf = mft->mf;
     u32 *const ptr_tiles = mf->image->tileset->tiles + (mft->pos_in_tileset << 3);
     unsigned int (*vramPos_f)(unsigned int) = mf->vramPos_f;
     unsigned int tiles = mft->width * mft->height;
@@ -59,12 +59,12 @@ void multifont_text_writeCharEx(MultifontText *const mft, char chr, unsigned int
     VDP_setTileMapXY(plan, TILE_ATTR_FULL(pal, prio, 0, 0, *vrampos), x, y);
 }
 
-void multifont_text_writeChar(MultifontText *const mft, char chr, unsigned int x, unsigned int y)
+void multifont_text_writeChar(multifontText *const mft, char chr, unsigned int x, unsigned int y)
 {
     multifont_text_writeCharEx(mft, chr, x, y, -1, -1, -1);
 }
 
-void multifont_text_writeEx(MultifontText *const mft, const char *const text, unsigned int x, unsigned int y, int plan, int pal, int prio)
+void multifont_text_writeEx(multifontText *const mft, const char *const text, unsigned int x, unsigned int y, int plan, int pal, int prio)
 {
     char chr;
     const char *string = text;
@@ -76,7 +76,7 @@ void multifont_text_writeEx(MultifontText *const mft, const char *const text, un
     }
 }
 
-void multifont_text_write(MultifontText *const mft, const char *const text, unsigned int x, unsigned int y)
+void multifont_text_write(multifontText *const mft, const char *const text, unsigned int x, unsigned int y)
 {
     multifont_text_writeEx(mft, text, x, y, -1, -1, -1);
 }
