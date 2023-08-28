@@ -2,19 +2,19 @@
 
 typedef struct
 {
-	struct AllocaltorList
+	struct allocatorList
 	{
 		unsigned int index;
 		unsigned int size;
-		struct AllocaltorList *next;
+		struct allocatorList *next;
 	} *list;
 
 	unsigned int base;
 	unsigned int count;
-} Allocaltor;
+} allocator;
 
-void allocator_init(Allocaltor *const, unsigned int);
-void allocator_destroy(Allocaltor *const);
-unsigned int allocator_new(Allocaltor *const, unsigned int);
-void allocator_delete(Allocaltor *const, unsigned int);
-// unsigned int allocator_count(Allocaltor *const);
+void allocator_init(allocator *const, unsigned int);
+void allocator_destroy(allocator *const);
+unsigned int allocator_new(allocator *const, unsigned int);
+void allocator_delete(allocator *const, unsigned int);
+// unsigned int allocator_count(allocator *const);
