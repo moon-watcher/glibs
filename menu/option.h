@@ -2,14 +2,13 @@
 
 #include "config/config.h"
 
-typedef struct menu menu;
-typedef struct menuOption menuOption;
+struct menu;
 
-typedef struct menuOption
+struct menuOption
 {
-    menu *submenu;
-    menuOption *next;
-    menuOption *prev;
+    struct menu *submenu;
+    struct menuOption *next;
+    struct menuOption *prev;
 
     unsigned char data[MENU_CONFIG_DATASIZE];
-} menuOption;
+};

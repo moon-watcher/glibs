@@ -2,11 +2,9 @@
 
 #include "option.h"
 
-typedef struct menu menu;
-
-typedef struct menu
+struct menu
 {
-    int (*handler)(menu *const, menuOption *const, int);
+    int (*handler)(struct menu *const, struct menuOption *const, int);
 
     int (*drawOption)(void *const);
     int (*drawSelected)(void *const);
@@ -14,27 +12,27 @@ typedef struct menu
     unsigned int round : 1;
     unsigned int oneOption : 1;
 
-    menuOption *head;
-    menuOption *tail;
-    menuOption *selectedOption;
-} menu;
+    struct menuOption *head;
+    struct menuOption *tail;
+    struct menuOption *selectedOption;
+};
 
-menu *menu_create(void (*)(), int (*)(), int (*)());
-void menu_destroy(menu *);
-menuOption *menu_addOption(menu *const, void *const, menu *const);
-void menu_drawAll(menu *const);
-int menu_update(menu *const);
-menuOption *menu_incOption(menu *const);
-menuOption *menu_decOption(menu *const);
-int menu_drawSelected(menu *const);
-int menu_drawOption(menu *const, menuOption *const);
-menu *menu_getSubmenu(menu *const);
-void menu_selectOption(menu *const, menuOption *const);
-menuOption *menu_getOptionByIndex(menu *const, unsigned int);
-menuOption *menu_getSelected(menu *const);
-int menu_getIndex(menu *const);
-void menu_deactivate(menu *const, unsigned int);
-void menu_activate(menu *const, unsigned int);
+struct menu *menu_create(void (*)(), int (*)(), int (*)());
+void menu_destroy(struct menu *);
+struct menuOption *menu_addOption(struct menu *const, void *const, struct menu *const);
+void menu_drawAll(struct menu *const);
+int menu_update(struct menu *const);
+struct menuOption *menu_incOption(struct menu *const);
+struct menuOption *menu_decOption(struct menu *const);
+int menu_drawSelected(struct menu *const);
+int menu_drawOption(struct menu *const, struct menuOption *const);
+struct menu *menu_getSubmenu(struct menu *const);
+void menu_selectOption(struct menu *const, struct menuOption *const);
+struct menuOption *menu_getOptionByIndex(struct menu *const, unsigned int);
+struct menuOption *menu_getSelected(struct menu *const);
+int menu_getIndex(struct menu *const);
+void menu_deactivate(struct menu *const, unsigned int);
+void menu_activate(struct menu *const, unsigned int);
 
 enum
 {
