@@ -4,7 +4,7 @@ typedef struct
 {
     unsigned int index;
     unsigned int size;
-} Incremental_t;
+} incremental;
 
-void incremental_init(Incremental_t *const, unsigned int);
-unsigned int incremental_get(Incremental_t *const, unsigned int);
+void incremental_init(incremental *const, unsigned int);
+unsigned int incremental_get(incremental *const, unsigned int);

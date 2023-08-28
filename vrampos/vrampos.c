@@ -1,6 +1,6 @@
 #include "../incremental/Incremental.h"
 
-static Incremental_t vrampos_incremental;
+static incremental vrampos_incremental;
 
 void vrampos_init()
 {
