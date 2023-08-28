@@ -1,0 +1,196 @@
+KonTechs Freeware License Agreement (License, Copyright and Terms of Use)
+
+
+ATTENTION: READ CAREFULLY: By using, copying, or distributing the
+accompanying software you indicate your acceptance of the following
+Freeware License Agreement ("Agreement").
+
+
+PREAMBLE
+
+This License Agreement is based on the SPS Freeware License Agreement,
+which can be found at http://www.softpres.org
+It is a semi-free license and forbids any selling of this software.
+You cannot charge to give it to somebody, not even for media costs.
+You cannot have it on a CDROM that is distributed for payment.
+You cannot use it as part of providing a service that receives payment
+in any form.
+Reverse engineering is tolerated but discouraged. Please ask KonTechs
+for help first, it might save you a lot of time.
+
+
+1. LICENSE. KonTechs Limited hereby grants you (each licensee is
+   addressed as "you") a non-exclusive, transferable license to use the
+   Technology on the following terms and only for non-profit purposes
+   (see Section 3 below).
+   You may:
+
+   a. use the Technology on any computer in your possession;
+
+   b. make copies of the Technology; and
+
+   c. distribute the Technology (subject to the requirements of Section
+   3 and 4) only in the form originally furnished by KonTechs with no
+   modifications whatsoever. However, the Technology may be distributed
+   as part of another software product provided that the particular
+   distribution that contains the Technology is provided for non-profit
+   purposes as defined in Section 3 below. Making or distributing any
+   for-profit distributions, versions, revisions or releases of said
+   software product that contains the Technology is prohibited.
+   
+
+2. LIMITATIONS ON LICENSE. The license granted in Section 2 is subject
+   to the following restrictions:
+
+   a. The Technology is to be used only for non-profit purposes unless
+   you obtain prior written consent from KonTechs. Prohibited for-profit
+   and commercial purposes include, but are not limited to:
+
+     (i) Selling, licensing or renting the Technology to third parties
+     for a fee (by payment of money or otherwise, whether direct or
+     indirect);
+
+     (ii) Using the Technology to provide services or products to others
+     for which you are compensated in any manner (by payment of money
+     or otherwise, whether direct or indirect), including, without
+     limitation, providing support or maintenance for the Technology;
+
+     (iii) Distribution or use from which any form of income is received
+     regardless of profits therefrom, or from which any revenue or
+     promotional value is received, as well as any distribution to or
+     use in a corporate environment.  Use of the Technology to promote
+     or support a commercial venture is included in this restriction.
+
+   b. Media costs associated with the distribution of the Technology may
+   not be recovered. You shall use your best efforts to promptly notify
+   KonTechs upon learning of any violation of the above commercial
+   restrictions.
+
+   c. On each copy of the Technology you must conspicuously and
+   appropriately reproduce this license, copyright notice, and
+   disclaimer of warranty; keep intact this Agreement and all notices
+   that refer to this Agreement or any absence of warranty (whether
+   written or interactively displayed); and give any other recipients
+   of the Technology a copy of this Agreement.
+
+   d. Commercial software (as defined in this section 3) may not
+   contain any part of the Technology.
+   
+   e. No distribution may include the totality or part of the
+   Technology (including the Content encapsulated by the technology),
+   changed, unchanged, encrypted, archived, in whatever form, unless
+   according to the Licence or special agreement with KonTechs. This
+   Technology, including Content must never be found on any paid-for
+   medium.
+
+
+3. DISTRIBUTION: As used in this Agreement, the term "distribute" (and
+   its variants) includes making the Technology available (either
+   intentionally or unintentionally) to third parties for copying or
+   use, including providing timeshare access. Each time you distribute
+   the Technology, the recipient must expressly agree to comply with
+   these terms and conditions.  The recipient automatically receives
+   this license to use, copy, or distribute the Technology subject to
+   these terms and conditions. You may not impose any further
+   restrictions on the recipients' exercise of the rights granted
+   herein. You are not responsible for enforcing compliance with this
+   Agreement by recipients.
+
+
+4. TITLE. Title, ownership rights, and intellectual property rights in
+   and to the Technology, and each copy thereof (including all
+   copyrights therein), shall remain KonTechs'. The Technology is
+   protected by international copyright treaties.
+
+
+5. NO OBLIGATION for KonTechs. You are solely responsible for all of your
+   costs and expenses incurred in connection with the distribution of
+   the Technology, and KonTechs shall have no liability, obligation or
+   responsibility therefor. KonTechs shall have no obligation to
+   provide maintenance, support, upgrades or new releases to you or
+   to any distributee of the Technology.
+   
+
+6. NO WARRANTY. THE SOFTWARE IS LICENSED FREE OF CHARGE, AND THERE IS
+   NO WARRANTY FOR THE TECHNOLOGY. KONTECHS PROVIDES THE TECHNOLOGY
+   "AS IS," AND KONTECHS, AND ALL OTHER PERSONS WHO HAVE BEEN INVOLVED
+   IN THE CREATION, PRODUCTION, OR DELIVERY OF THE TECHNOLOGY, DISCLAIM
+   ALL CONDITIONS AND WARRANTIES OF ANY KIND, EITHER EXPRESS, IMPLIED,
+   STATUTORY, OR OTHERWISE, INCLUDING, BUT NOT LIMITED TO, ANY
+   CONDITIONS OR IMPLIED WARRANTIES OF MERCHANTABILITY, SATISFACTORY
+   QUALITY, AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO
+   THE RESULTS, QUALITY AND PERFORMANCE OF THE TECHNOLOGY IS WITH YOU
+   AND YOUR DISTRIBUTEES. SHOULD THE TECHNOLOGY PROVE DEFECTIVE, YOU
+   AND YOUR DISTRIBUTEES (AND NOT KONTECHS) ASSUME THE COST OF ALL
+   NECESSARY SERVICING, REPAIR OR CORRECTION. KONTECHS MAKES NO
+   WARRANTY OF NONINFRINGEMENT OF THE INTELLECTUAL PROPERTY RIGHTS OF
+   THIRD PARTIES.
+
+
+7. LIMITATION OF LIABILITY. UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL
+   THEORY, TORT, CONTRACT, OR OTHERWISE, SHALL KONTECHS, OR ANY OTHER
+   PERSON WHO HAS BEEN INVOLVED IN THE CREATION, PRODUCTION, OR
+   DELIVERY OF THE TECHNOLOGY BE LIABLE TO YOU OR ANY OTHER PERSON FOR
+   ANY GENERAL, DIRECT, INDIRECT, SPECIAL, INCIDENTAL, CONSEQUENTIAL,
+   OR OTHER DAMAGES OF ANY CHARACTER ARISING OUT OF THIS AGREEMENT OR
+   THE USE OF OR INABILITY TO USE THE TECHNOLOGY, INCLUDING BUT NOT
+   LIMITED TO PERSONAL INJURY, LOSS OF PROFITS, LOSS OF DATA, OUTPUT
+   FROM THE TECHNOLOGY OR DATA BEING RENDERED INACCURATE, FAILURE OF
+   THE TECHNOLOGY TO OPERATE WITH ANY OTHER PROGRAMS, DAMAGES FOR LOSS
+   OF GOODWILL, BUSINESS INTERRUPTION, COMPUTER FAILURE OR MALFUNCTION,
+   OR ANY AND ALL OTHER DAMAGES OR LOSSES OF WHATEVER NATURE, EVEN IF
+   KONTECHS HAS BEEN INFORMED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+
+8. INDEMNIFICATION. You and your distributees shall defend, indemnify
+   and hold harmless KonTechs, and all other persons who have been
+   involved in the creation, production, or delivery of the Technology,
+   from any claim, demand, liability, damage award, suit, judgement, or
+   other legal action (including reasonable attorney's fees) arising
+   out of your use, distribution, modification, or duplication of the
+   Technology.
+
+
+9.  TERMINATION. The license granted hereunder is effective until
+    terminated by KonTechs. You may terminate it at any time by
+    destroying the Technology. This license will terminate automatically
+    if you fail to comply with the limitations described above. On
+    termination, you must destroy all copies of the Technology. The
+    termination of your license will not result in the termination of
+    the licenses of any distributees who have received rights to the
+    Technology through you so long as they are in compliance with the
+    provisions of this Agreement.
+
+
+10. MISCELLANEOUS. This Agreement represents the complete agreement
+    concerning this license between the parties and supersedes all
+    prior agreements and representations between them. It may not be
+    amended. If any provision of this Agreement is held to be
+    unenforceable for any reason, this Agreement shall terminate.
+
+    The most current version of this license is kept on KonTechs'
+    web site. Due notice shall be given if ever the license changes,
+    then all versions of the Technology will be constrained by the
+    newer license.
+    
+    Anything else not covered by this agreement must be agreed with
+    us before any action can be taken by any party.
+
+    Address all correspondence regarding this license to:
+
+    KonTechs
+    http://kontechs.de/contact
+
+
+Copyright and Trademark Notices:
+--------------------------------
+The Technology is Copyright (c) KonTechs Ltd. 2007. All rights reserved.
+The documentation and all computer files are also Copyright
+(c) KonTechs Ltd. 2007. All rights reserved. These rights include but are
+not limited to any foreign language translations of the documentation
+or the Technology, and all derivative works of both. All other
+trademarks are the property of their respective owners.
+
+
+KonTechs Limited
+http://kontechs.de

@@ -1,0 +1,467 @@
+<skin name = "Default" author = "KonTechs" picture = "default.png" >
+	
+	<!-- =================================================
+	     
+	     Window
+	     
+	     ================================================= -->
+	
+	<item  name = "WIN_MAIN"             rect = " 96, 56,16,16" brd = "4,4,4,4" num = "2" />
+	<item  name = "WIN_MAIN_FRONT"       rect = "128, 56,16,16" brd = "4,4,4,4" num = "2" />
+	
+	<item  name = "WIN_MAIN_BORDER"      rect = " 96, 72,16,16" brd = "6,6,6,6" num = "2" />
+	<col   name = "WIN_MAIN"             rect = "128, 72,16,16" brd = "6,6,6,6" />
+	<item  name = "WINF_MAIN_BORDER"     rect = "144, 72,16,16" brd = "6,6,6,6" num = "2" />
+	<item  name = "WINM_MAIN_BORDER"     rect = "176, 72,16,16" brd = "6,6,6,6" num = "2" />
+	
+	<hitem name = "WIN_TITLEBAR"         rect = " 96, 88,16,26" brd = "6,6" num = "2" />
+	<hitem name = "WIN_TITLEBAR_BORDER"  rect = "128, 88,16,26" brd = "6,6" num = "2" />
+	<hcol  name = "WIN_TITLEBAR"         rect = "160, 88,16,26" brd = "6,6" />
+	<hitem name = "WINF_TITLEBAR"        rect = "176, 88,16,26" brd = "6,6" num = "2" />
+	<hitem name = "WINF_TITLEBAR_BORDER" rect = "208, 88,16,26" brd = "6,6" num = "2" />
+	
+	<cfg  name = "WINDOW">
+		layout_gadget_sepw = "4"
+		layout_gadget_seph = "2"
+		layout_label_sepw  = "4"
+		
+		titlebar_gadget_sepw      = "4"
+		titlebar_gadget_text_sepw = "4"
+		
+		main_brd     = "6, 6, 2, 6"
+		main_f_brd   = "6, 6, 6, 6"
+		main_m_brd   = "4, 4, 4, 4"
+		titlebar_brd = "6, 6, 6, 6"
+		
+		use_titlebar_colors_for_border = "1"
+	</cfg>
+	
+	<!-- =================================================
+	     
+	     Menu
+	     
+	     ================================================= -->
+	
+	<hitem name = "MENU_BAR"        rect = "  8,  38,16,25" brd = "4,4"     num = "2" />
+	<hitem name = "MENU_TITLE"      rect = "  8,  64,16,16" brd = "3,3"     num = "4" />
+	<item  name = "MENU_CATEGORY"   rect = "  8,  80,16,16" brd = "3,3,3,3" num = "2" />
+	<hitem name = "MENU_ENTRY"      rect = "  8,  96,16,16" brd = "3,3"     num = "4" />
+	<hitem name = "MENU_ENTRY_BAR"  rect = "  8, 112, 8, 5" brd = "0,0" />
+	<hcol  name = "MENU_BAR"        rect = " 40,  48,16,16" brd = "3,3" />
+	<hcol  name = "MENU_TITLE"      rect = " 72,  64,16,16" brd = "3,3" />
+	<col   name = "MENU_CATEGORY"   rect = " 40,  80,16,16" brd = "3,3,3,3" />
+	<hcol  name = "MENU_ENTRY"      rect = " 72,  96,16,16" brd = "3,3" />
+	<cfg   name = "MENU">
+		category_pos     = "0,0"
+		sub_category_pos = "0,0"
+		
+		title_seperation_width     = "2"
+		checkable_seperation_width = "4"
+		shortcut_seperation_width  = "8"
+		
+		entry_bar_height = "5"
+		
+		bar_brd      = "4,4,3,3"
+		title_brd    = "5,5,4,4"
+		category_brd = "3,3,3,3"
+		entry_brd    = "5,5,5,5"
+	</cfg>
+	
+	<!-- =================================================
+	     
+	     Gadgets
+	     
+	     ================================================= -->
+	
+	<!-- --------
+	    Button
+	--------- -->
+	<hitem name = "GT_BUTTON"     rect = "  8,136,16,23" brd = "5,5" num = "8" />
+	<hitem name = "GT_BUTTON_TAB" rect = "136,136,16,25" brd = "4,4" ext = "1,1,1,1" />
+	<hcol  name = "GT_BUTTON"     rect = "152,136,16,21" brd = "4,4" />
+	<cfg   name = "GT_BUTTON">
+		brd         = "4,4,5,7"
+		icon_height = "11"
+		text_pos    = "0,0,0,0,0,0,1,1"
+		icon_sepw   = "3"
+	</cfg>
+	
+	<!-- --------------
+	    Main Button
+	--------------- -->
+	<hitem name = "GT_MBUTTON"     rect = "  8,164,16,23" brd = "4,4" num = "8" />
+	<hitem name = "GT_MBUTTON_TAB" rect = "136,164,16,25" brd = "4,4" ext = "1,1,1,1" />
+	<hcol  name = "GT_MBUTTON"     rect = "152,164,16,23" brd = "4,4" />
+	<cfg   name = "GT_MBUTTON">
+		brd         = "4,4,5,7"
+		icon_height = "11"
+		text_pos    = "0,0,0,0,0,0,1,1"
+		icon_sepw   = "3"
+	</cfg>
+	
+	<!-- -------------
+	    Speedbutton
+	-------------- -->
+	<sitem name = "GT_SPEEDBUTTON" rect = "  8,448,20,20" num = "8" />
+	<scol  name = "GT_SPEEDBUTTON" rect = "168,448,20,20" />
+	<cfg   name = "GT_SPEEDBUTTON">
+		brd       = "4, 4, 4, 4"
+		icon_size = "12"
+		icon_pos  = "0, 0, 0, 0, 0, 0, 1, 1"
+	</cfg>
+	
+	<!-- --------------
+	    Window Close
+	--------------- -->
+	<sitem name = "GT_WINDOW_CLOSE" rect = "283,292,14,14" num = "12" />
+	<scol  name = "GT_WINDOW_CLOSE" rect = "432, 56,14,14" />
+	<cfg   name = "GT_WINDOW_CLOSE">
+		size = "14,14"
+	</cfg>
+	
+	<!-- -----------------
+	    Window Maximize
+	------------------ -->
+	<sitem name = "GT_WINDOW_MAXIMIZE" rect = "264, 80,14,14" num = "12" />
+	<scol  name = "GT_WINDOW_MAXIMIZE" rect = "432, 80,14,14" />
+	<cfg   name = "GT_WINDOW_MAXIMIZE">
+		size = "14,14"
+	</cfg>
+	
+	<!-- ---------------
+	    Window Resize
+	---------------- -->
+	<sitem name = "GT_WINDOW_RESIZE" rect = "264,104,12,12" num = "12" />
+	<scol  name = "GT_WINDOW_RESIZE" rect = "408,104,12,12" />
+	<cfg   name = "GT_WINDOW_RESIZE">
+		size = "12,12"
+	</cfg>
+	
+	<!-- ----------
+	    Checkbox
+	----------- -->
+	<sitem name = "GT_CHECKBOX"     rect = "  8,224,16,16" num = "8" />
+	<sitem name = "GT_CHECKBOX_TAB" rect = "136,224,18,18" ext = "1,1,1,1" />
+	<scol  name = "GT_CHECKBOX"     rect = "154,224,16,16" />
+	<cfg   name = "GT_CHECKBOX">
+		brd       = "4, 4, 4, 4"
+		spacing   = "8, 3"
+		text_sepw = "4"
+	</cfg>
+	
+	<!-- -----------
+	    Selectbox
+	------------ -->
+	<sitem name = "GT_SELECTBOX"     rect = "  8,248,16,16" num = "8" />
+	<sitem name = "GT_SELECTBOX_TAB" rect = "136,248,18,18" ext = "1,1,1,1" />
+	<scol  name = "GT_SELECTBOX"     rect = "154,248,16,16" />
+	<cfg   name = "GT_SELECTBOX">
+		brd       = "4, 4, 4, 4"
+		spacing   = "8, 3"
+		text_sepw = "4"
+	</cfg>
+	
+	<!-- -------------
+	    Checkbutton
+	-------------- -->
+	<hitem name = "GT_CHECKBUTTON"     rect = "  8,272,16,23" brd = "6,6" num = "8" />
+	<hitem name = "GT_CHECKBUTTON_CH"  rect = "  8,272,16,23" brd = "6,6" num = "8" />
+	<hitem name = "GT_CHECKBUTTON_TAB" rect = "136,272,16,25" brd = "6,6" ext = "1,1,1,1" />
+	<hcol  name = "GT_CHECKBUTTON"     rect = "152,272,16,23" brd = "6,6" />
+	<cfg   name = "GT_CHECKBUTTON">
+		brd     = "5, 5, 6, 8"
+		spacing = "2, 2"
+	</cfg>
+	
+	<!-- --------------
+	    Selectbutton
+	--------------- -->
+	<hitem name = "GT_SELECTBUTTON"     rect = "  8,312,16,16" brd = "6,6" num = "8" />
+	<hitem name = "GT_SELECTBUTTON_SEL" rect = "  8,328,16,16" brd = "6,6" num = "8" />
+	<hitem name = "GT_SELECTBUTTON_TAB" rect = "136,328,16,16" brd = "6,6" />
+	<hcol  name = "GT_SELECTBUTTON"     rect = "152,328,16,16" brd = "6,6" />
+	<cfg   name = "GT_SELECTBUTTON">
+		brd     = "4, 4, 5, 5"
+		spacing = "2, 2"
+	</cfg>
+	
+	<!-- -------
+	    Frame
+	-------- -->
+	<item  name = "GT_FRAME"            rect = "  8,376,16,16" brd = "4,4,4,4" num = "4" />
+	<item  name = "GT_FRAME_L"          rect = "  8,392,16,16" brd = "4,4,4,4" num = "4" />
+	<hitem name = "GT_FRAME_LABEL_RECT" rect = "  8,408,16,16" brd = "4,4"     num = "2" />
+	<cfg   name = "GT_FRAME">
+		brd            = "5, 5, 5, 5"
+		brd_l          = "5, 5, 3, 5"
+		label_rect_brd = "2, 2, 2, 0"
+		label_text_brd = "4, 4, 4, 2"
+	</cfg>
+	
+	<!-- --------
+	    HGauge
+	--------- -->
+	<hitem name = "GT_HGAUGE"         rect = " 80,376,16,16" brd = "4,4" num = "4" />
+	<hitem name = "GT_HGAUGE_FILLING" rect = "144,376,16,16" brd = "4,4" num = "2" />
+	<cfg   name = "GT_HGAUGE">
+		brd    = "2, 2, 2, 2"
+		height = "12"
+	</cfg>
+	
+	<!-- --------
+	    VGauge
+	--------- -->
+	<vitem name = "GT_VGAUGE"         rect = " 80,400,16,16" brd = "4,4" num = "2" />
+	<vitem name = "GT_VGAUGE_FILLING" rect = "144,400,16,16" brd = "4,4" num = "2" />
+	<cfg   name = "GT_VGAUGE">
+		brd   = "2, 2, 2, 2"
+		width = "12"
+	</cfg>
+	
+	<!-- -------------
+	    ProgressBar
+	-------------- -->
+	<hitem name = "GT_PROGRESSBAR"         rect = " 80,424,16,16" brd = "4,4" num = "2" />
+	<hitem name = "GT_PROGRESSBAR_FILLING" rect = "144,424,16,16" brd = "4,4" num = "2" />
+	<cfg   name = "GT_PROGRESSBAR">
+		brd      = "2, 2, 2, 2"
+		text_brd = "2, 0"
+	</cfg>
+	
+	<!-- ---------
+	    HSlider
+	---------- -->
+	<hitem name = "GT_HSLIDER"       rect = "184,360,16, 8" brd = "4,4" num = "4" />
+	<hcol  name = "GT_HSLIDER"       rect = "248,360,16, 8" brd = "4,4" />
+	<hitem name = "GT_HSLIDER_GRIP"  rect = "408,360, 7,16" brd = "2,2" num = "4" />
+	<hcol  name = "GT_HSLIDER_GRIP"  rect = "436,360, 7,16" brd = "2,2" />
+	<sitem name = "GT_HSLIDER_LEFT"  rect = "264,360,16,16" num = "8" />
+	<scol  name = "GT_HSLIDER_LEFT"  rect = "392,360,16,16" />
+	<sitem name = "GT_HSLIDER_RIGHT" rect = "264,360,16,16" num = "8" />
+	<scol  name = "GT_HSLIDER_RIGHT" rect = "392,360,16,16" />
+	<cfg   name = "GT_HSLIDER">
+		main          = "8, 1, 1, 4"
+		brd           = "2, 2, 4, 4"
+		min_width     = "100"
+		grip_in_front = "1"
+		btn_brd       = "4, 4, 4, 4"
+		btn_icon_pos  = "0, 0, 0, 0, 0, 0, 1, 1"
+	</cfg>
+	
+	<!-- ---------
+	    VSlider
+	---------- -->
+	<vitem name = "GT_VSLIDER"      rect = "184,400,16,16" brd = "4,4"     num = "4" />
+	<vcol  name = "GT_VSLIDER"      rect = "240,400,16,16" brd = "4,4" />
+	<vitem name = "GT_VSLIDER_GRIP" rect = "272,400, 8, 8" brd = "2,2"     num = "4" />
+	<vcol  name = "GT_VSLIDER_GRIP" rect = "336,400, 8, 8" brd = "2,2" />
+	<sitem name = "GT_VSLIDER_UP"   rect = "352,400, 8, 8" num = "8" />
+	<scol  name = "GT_VSLIDER_UP"   rect = "416,400, 8, 8" />
+	<sitem name = "GT_VSLIDER_DOWN" rect = "432,400, 8, 8" num = "8" />
+	<scol  name = "GT_VSLIDER_DOWN" rect = "416,400, 8, 8" />
+	<cfg   name = "GT_VSLIDER">
+		main          = "8, 4, 4, 4"
+		brd           = "3, 3, 3, 3"
+		min_height    = "100"
+		grip_in_front = "1"
+		btn_brd       = "3, 3, 3, 3"
+		btn_icon_pos  = "0, 0, 0, 0, 0, 0, 1, 1"
+	</cfg>
+	
+	<!-- ------------
+	    HScrollBar
+	------------- -->
+	<hitem name = "GT_HSCRBAR"       rect = "192,408,19,18" brd = "4,4" num = "4" />
+	<hcol  name = "GT_HSCRBAR"       rect = "268,408,19,18" brd = "4,4" />
+	<hitem name = "GT_HSCRBAR_GRIP"  rect = "192,426,23,16" brd = "4,4" num = "8" />
+	<hcol  name = "GT_HSCRBAR_GRIP"  rect = "376,426,23,16" brd = "4,4" />
+	<sitem name = "GT_HSCRBAR_LEFT"  rect = "289,408,16,18" num = "8" />
+	<scol  name = "GT_HSCRBAR_LEFT"  rect = "417,408,16,18" />
+	<sitem name = "GT_HSCRBAR_RIGHT" rect = "289,408,16,18" num = "8" />
+	<scol  name = "GT_HSCRBAR_RIGHT" rect = "416,408,16,18" />
+	<cfg   name = "GT_HSCRBAR">
+		main         = "16, 23, 2"
+		brd          = "1, 1, 1, 1"
+		btn_brd      = "4, 4, 5, 5"
+		btn_icon_pos = "0, 0, 0, 0, 0, 0, 1, 1"
+	</cfg>
+	
+	<!-- ------------
+	    VScrollBar
+	------------- -->
+	<vitem name = "GT_VSCRBAR"      rect = "192,448,18,19" brd = "4,4" num = "4" />
+	<vcol  name = "GT_VSCRBAR"      rect = "260,448,18,19" brd = "4,4" />
+	<vitem name = "GT_VSCRBAR_GRIP" rect = "192,468,16,23" brd = "10,11" num = "8" />
+	<vcol  name = "GT_VSCRBAR_GRIP" rect = "320,468,16,23" brd = "2,2" />
+	<sitem name = "GT_VSCRBAR_UP"   rect = "280,448,18,16" num = "8" />
+	<scol  name = "GT_VSCRBAR_UP"   rect = "424,448,18,16" />
+	<sitem name = "GT_VSCRBAR_DOWN" rect = "280,448,18,16" num = "8" />
+	<scol  name = "GT_VSCRBAR_DOWN" rect = "424,448,18,16" />
+	<cfg   name = "GT_VSCRBAR">
+		main         = "16, 23, 2"
+		brd          = "1, 1, 1, 1"
+		btn_brd      = "5, 5, 4, 4"
+		btn_icon_pos = "0, 0, 0, 0, 0, 0, 1, 1"
+	</cfg>
+	
+	<!-- -----------
+	    TextLine
+	------------ -->
+	<hitem name = "GT_TEXTLINE"        rect = "192,224,16,21" brd = "4,4" num = "4" />
+	<hitem name = "GT_TEXTLINE_CUR"    rect = "256,224, 2,16" brd = "0,0" num = "2" />
+	<hitem name = "GT_TEXTLINE_SEL"    rect = "264,224,16,16" brd = "2,2" num = "2" />
+	<hitem name = "GT_TEXTLINE_RO"     rect = "192,245,16,21" brd = "4,4" num = "4" />
+	<hitem name = "GT_TEXTLINE_RO_CUR" rect = "256,240, 2,16" brd = "0,0" num = "2" />
+	<hitem name = "GT_TEXTLINE_RO_SEL" rect = "264,240,16,16" brd = "2,2" num = "2" />
+	<hcol  name = "GT_TEXTLINE"        rect = "296,224,16,16" brd = "4,4" />
+	<sitem name = "GT_TEXTLINE_PLUS"   rect = "336,224,16,11" num = "8" />
+	<scol  name = "GT_TEXTLINE_PLUS"   rect = "464,235,16,11" />
+	<sitem name = "GT_TEXTLINE_MINUS"  rect = "336,235,16,11" num = "8" />
+	<scol  name = "GT_TEXTLINE_MINUS"  rect = "464,232,16,11" />
+	<cfg   name = "GT_TEXTLINE">
+		cursor_size  = "2, 16"
+		sel_in_front = "0"
+		brd          = "3, 3, 4, 4"
+		clip_brd     = "1, 1"
+		btn_sepw     = "3"
+		btn_brd      = "4, 4, 2, 2"
+		btn_icon_pos = "0, 0, 0, 0, 0, 0, 1, 1"
+	</cfg>
+	
+	<!-- -----------
+	    TextField
+	------------ -->
+	<item  name = "GT_TEXTFIELD"        rect = "192,320,16,16" brd = "4,4,4,4" num = "4" />
+	<hitem name = "GT_TEXTFIELD_CUR"    rect = "256,320, 2,16" brd = "0,0" num = "2" />
+	<hitem name = "GT_TEXTFIELD_SEL"    rect = "264,320,16,16" brd = "2,2" num = "2" />
+	<item  name = "GT_TEXTFIELD_RO"     rect = "192,336,16,16" brd = "4,4,4,4" num = "4" />
+	<hitem name = "GT_TEXTFIELD_RO_CUR" rect = "256,336, 2,16" brd = "0,0" num = "2" />
+	<hitem name = "GT_TEXTFIELD_RO_SEL" rect = "264,336,16,16" brd = "2,2" num = "2" />
+	<col   name = "GT_TEXTFIELD"        rect = "296,320,16,16" brd = "4,4,4,4" />
+	<cfg   name = "GT_TEXTFIELD">
+		cursor_size  = "2, 16"
+		sel_in_front = "0"
+		hscrbar_seph = "3"
+		vscrbar_sepw = "3"
+		clip_brd = "1, 1, 1, 1"
+		brd      = "3, 3, 3, 3"
+	</cfg>
+	
+	<!-- ------
+	    List
+	------- -->
+	<item  name = "GT_LIST_BORDER" rect = "192,144,16,16" brd = "4,4,4,4" num = "2" />
+	<item  name = "GT_LIST_BG"     rect = "192,160,16,16" brd = "4,4,4,4" num = "2" />
+	<hitem name = "GT_LIST_COLUMN" rect = "192,176,16,16" brd = "4,4"     num = "4" />
+	<hitem name = "GT_LIST_LINE_R" rect = "192,192,16,16" brd = "4,4"     num = "4" />
+	<col   name = "GT_LIST_BG"     rect = "224,160,16,16" brd = "4,4,4,4" />
+	<hcol  name = "GT_LIST_LINE"   rect = "256,192,16,16" brd = "4,4" />
+	<cfg   name = "GT_LIST">
+		brd             = "2, 2, 2, 2"
+		col_brd         = "6, 6, 3, 3"
+		entry_brd       = "3, 3, 2, 2"
+		entry_icon_sepw = "3"
+		vscrbar_sepw    = "2"
+	</cfg>
+	
+	<!-- -------
+	    Image
+	-------- -->
+	<item name = "GT_IMAGE_BORDER"     rect = "288,144,16,16" brd = "4,4,4,4" num = "2" />
+	<item name = "GT_IMAGE_RECT_STD"   rect = "288,160,16,16" brd = "2,2,2,2" anim = "2, 20" />
+	<item name = "GT_IMAGE_RECT_STD_D" rect = "320,160,16,16" brd = "2,2,2,2" />
+	<item name = "GT_IMAGE_RECT_STD_T" rect = "336,160,16,16" brd = "2,2,2,2" anim = "2, 20" />
+	<item name = "GT_IMAGE_RECT_BRD"   rect = "288,176,16,16" brd = "2,2,2,2" num = "3" />
+	<item name = "GT_IMAGE_RECT_FILL"  rect = "288,192,16,16" brd = "2,2,2,2" num = "3" />
+	<cfg  name = "GT_IMAGE">
+		brd          = "2, 2, 2, 2"
+		hscrbar_seph = "3"
+		vscrbar_sepw = "3"
+	</cfg>
+	
+	<!-- -----------
+	    HSpaceBar
+	------------ -->
+	<vitem name = "GT_HSPACE_BAR" rect = " 16,480, 2, 8" brd = "2, 2" />
+	<cfg  name = "GT_HSPACE_BAR">
+		brd   = "1, 1"
+		width = "2"
+	</cfg>
+	
+	<!-- -----------
+	    VSpaceBar
+	------------ -->
+	<hitem name = "GT_VSPACE_BAR" rect = " 16,496, 8, 2" brd = "2, 2" />
+	<cfg  name = "GT_VSPACE_BAR">
+		brd    = "1, 1"
+		height = "2"
+	</cfg>
+	
+	<!-- =================================================
+	     
+	     Icons
+	     
+	     ================================================= -->
+	
+	<icon name = "MOUSE"                  rect = "  8,  8,17,17" ctype = "single" />
+	<icon name = "MOUSE_BUSY"             rect = " 26,  8,11,18" ctype = "single" />
+	<icon name = "MOUSE_LINK"             rect = " 38,  8,15,18" ctype = "single" />
+	<icon name = "GT_CHECKBOX_CHECKED"    rect = " 64,  8, 8, 8" ctype = "single" />
+	<icon name = "GT_SELECTBOX_SELECTED"  rect = " 72,  8, 8, 8" ctype = "single" />
+	<icon name = "GT_HSCRBAR_LEFT"        rect = " 80,  8, 8, 8" ctype = "single" />
+	<icon name = "GT_HSCRBAR_RIGHT"       rect = " 88,  8, 8, 8" ctype = "single" />
+	<icon name = "GT_VSCRBAR_UP"          rect = " 96,  8, 8, 8" ctype = "single" />
+	<icon name = "GT_VSCRBAR_DOWN"        rect = "104,  8, 8, 8" ctype = "single" />
+	<icon name = "GT_HSLIDER_LEFT"        rect = "112,  8, 8, 8" ctype = "single" />
+	<icon name = "GT_HSLIDER_RIGHT"       rect = "120,  8, 8, 8" ctype = "single" />
+	<icon name = "GT_VSLIDER_UP"          rect = "128,  8, 8, 8" ctype = "single" />
+	<icon name = "GT_VSLIDER_DOWN"        rect = "136,  8, 8, 8" ctype = "single" />
+	<icon name = "GT_TEXTLINE_FINE_PLUS"  rect = "144,  8, 8, 7" ctype = "single" />
+	<icon name = "GT_TEXTLINE_FINE_MINUS" rect = "152,  8, 8, 7" ctype = "single" />
+	<icon name = "GT_TEXTLINE_PLUS"       rect = "160,  8, 8, 7" ctype = "single" />
+	<icon name = "GT_TEXTLINE_MINUS"      rect = "168,  8, 8, 7" ctype = "single" />
+	<icon name = "MENU_ENTRY_CHECKED"     rect = "176,  8, 8, 8" ctype = "single" />
+	<icon name = "MENU_ENTRY_SELECTED"    rect = "184,  8, 8, 8" ctype = "single" />
+	<icon name = "MENU_ENTRY_SUBMENU"     rect = "192,  8, 8, 8" ctype = "single" />
+	<icon name = "PLUS"                   rect = " 64, 24,12,12" ctype = "single" />
+	<icon name = "MINUS"                  rect = " 76, 24,12,12" ctype = "single" />
+	<icon name = "LEFT"                   rect = " 88, 24,12,12" ctype = "single" />
+	<icon name = "RIGHT"                  rect = "100, 24,12,12" ctype = "single" />
+	<icon name = "UP"                     rect = "112, 24,12,12" ctype = "single" />
+	<icon name = "DOWN"                   rect = "124, 24,12,12" ctype = "single" />
+	
+	<!-- =================================================
+	     
+	     Fonts
+	     
+	     ================================================= -->
+	
+	<font name = "WIN_TITLE"       filename = "arial.ttf"  size = "13" />
+	<font name = "GT_LABEL"        filename = "arial.ttf"  size = "11" />
+	<font name = "GT_BUTTON"       filename = "arial.ttf"  size = "11" />
+	<font name = "GT_MBUTTON"      filename = "arial.ttf"  size = "11" />
+	<font name = "GT_CHECKBOX"     filename = "arial.ttf"  size = "11" />
+	<font name = "GT_SELECTBOX"    filename = "arial.ttf"  size = "11" />
+	<font name = "GT_CHECKBUTTON"  filename = "arial.ttf"  size = "11" />
+	<font name = "GT_SELECTBUTTON" filename = "arial.ttf"  size = "11" />
+	<font name = "GT_FRAME_LABEL"  filename = "arial.ttf"  size = "11" />
+	<font name = "GT_PROGRESSBAR"  filename = "arial.ttf"  size = "11" />
+	<font name = "GT_TEXTLINE"     filename = "arial.ttf"  size = "11" />
+	<font name = "GT_TEXTLINE_P"   filename = "cour.ttf"   size = "11" />
+	<font name = "GT_TEXTFIELD"    filename = "arial.ttf"  size = "11" />
+	<font name = "GT_TEXTFIELD_P"  filename = "cour.ttf"   size = "11" />
+	<font name = "GT_LIST_COL"     filename = "arial.ttf"  size = "11" />
+	<font name = "GT_LIST_ENTRY"   filename = "arial.ttf"  size = "11" />
+	<font name = "GT_LIST_ENTRY_P" filename = "cour.ttf"   size = "12" />
+	<font name = "MENU_TITLE"      filename = "arial.ttf"  size = "11" />
+	<font name = "MENU_ITEM"       filename = "arial.ttf"  size = "11" />
+	
+	<!-- =================================================
+	     
+	     Themes
+	     
+	     ================================================= -->
+	
+	<include_themes name = "default_themes.themes" />
+	
+</skin>

@@ -1,0 +1,6 @@
+GUI initialization error.
+
+Exception type: Library load exception
+Exception info: Could not load library
+Info 1: 5
+Info 2: 2

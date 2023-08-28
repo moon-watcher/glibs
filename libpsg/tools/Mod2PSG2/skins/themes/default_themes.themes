@@ -1,0 +1,357 @@
+theme {
+	name   = "Default"
+	author = "KonTechs GbR"
+	colors {
+		MOUSE                      = 0xFFFF8080
+		
+		BG_LT                      = 0xFFFFFFFF
+		BG_RT                      = 0xFFFFFFFF
+		BG_LB                      = 0xFFFFFFFF
+		BG_RB                      = 0xFFFFFFFF
+		
+		WIN_MAIN                   = 0xFF707890
+		WIN_MAIN2                  = 0xFF808080
+		WIN_MAIN_FRONT             = lighten(WIN_MAIN, 0x20)
+		WIN_MAIN_FRONT2            = lighten(WIN_MAIN2, 0x20)
+		WIN_MAIN_BACK              = darken(WIN_MAIN, 0x20)
+		WIN_MAIN_BACK2             = darken(WIN_MAIN2, 0x20)
+		WIN_BORDER                 = 0xFFB0B0B0
+		WIN_BORDER_I               = 0xFF808080
+		WIN_BORDER2                = 0xFF808080
+		WIN_BORDER2_I              = 0xFF808080
+		WIN_TITLEBAR               = 0xFFA8C8FF
+		WIN_TITLEBAR_I             = 0xFF808080
+		WIN_TITLEBAR2              = 0xFF808080
+		WIN_TITLEBAR2_I            = 0xFF808080
+		WIN_TITLEBAR_TEXT          = 0xFF000000
+		WIN_TITLEBAR_TEXT_I        = 0xFF000000
+		
+		GT_ACTIVE_BORDER           = 0xFF000000
+		
+		GT_LABEL                   = 0xFF000000
+		GT_LABEL_D                 = 0x40000000
+		
+		GT_BUTTON                  = 0xFFC0C0C0
+		GT_BUTTON_R                = 0xFFD0D0FF
+		GT_BUTTON_D                = alphaset(GT_BUTTON,   0x40)
+		GT_BUTTON_P                = darken  (GT_BUTTON_R, 0x40)
+		GT_BUTTON2                 = 0xFF000000
+		GT_BUTTON2_R               = 0xFF000000
+		GT_BUTTON2_D               = alphaset(GT_BUTTON2,   0x40)
+		GT_BUTTON2_P               = darken  (GT_BUTTON2_R, 0x40)
+		GT_BUTTON_TEXT             = 0xFF000000
+		GT_BUTTON_TEXT_R           = copy    (GT_BUTTON_TEXT)
+		GT_BUTTON_TEXT_D           = alphaset(GT_BUTTON_TEXT, 0x40)
+		GT_BUTTON_TEXT_P           = copy    (GT_BUTTON_TEXT)
+		
+		GT_MBUTTON                 = copy(GT_BUTTON)
+		GT_MBUTTON_R               = copy(GT_BUTTON_R)
+		GT_MBUTTON_D               = copy(GT_BUTTON_D)
+		GT_MBUTTON_P               = copy(GT_BUTTON_P)
+		GT_MBUTTON2                = copy(GT_BUTTON2)
+		GT_MBUTTON2_R              = copy(GT_BUTTON2_R)
+		GT_MBUTTON2_D              = copy(GT_BUTTON2_D)
+		GT_MBUTTON2_P              = copy(GT_BUTTON2_P)
+		GT_MBUTTON_TEXT            = copy(GT_BUTTON_TEXT)
+		GT_MBUTTON_TEXT_R          = copy(GT_BUTTON_TEXT_R)
+		GT_MBUTTON_TEXT_D          = copy(GT_BUTTON_TEXT_D)
+		GT_MBUTTON_TEXT_P          = copy(GT_BUTTON_TEXT_P)
+		
+		GT_SPEEDBUTTON             = copy(GT_BUTTON)
+		GT_SPEEDBUTTON_R           = copy(GT_BUTTON_R)
+		GT_SPEEDBUTTON_D           = copy(GT_BUTTON_D)
+		GT_SPEEDBUTTON_P           = copy(GT_BUTTON_P)
+		GT_SPEEDBUTTON2            = copy(GT_BUTTON2)
+		GT_SPEEDBUTTON2_R          = copy(GT_BUTTON2_R)
+		GT_SPEEDBUTTON2_D          = copy(GT_BUTTON2_D)
+		GT_SPEEDBUTTON2_P          = copy(GT_BUTTON2_P)
+		GT_SPEEDBUTTON_SEL         = 0xFFFFFF00
+		GT_SPEEDBUTTON_SEL_R       = 0xFFFFFF80
+		GT_SPEEDBUTTON_SEL_D       = 0x60FFFF00
+		GT_SPEEDBUTTON_SEL_P       = 0xFFC0C000
+		GT_SPEEDBUTTON2_SEL        = 0xFF808080
+		GT_SPEEDBUTTON2_SEL_R      = 0xFFC0C0C0
+		GT_SPEEDBUTTON2_SEL_D      = 0x60808080
+		GT_SPEEDBUTTON2_SEL_P      = 0xFF404040
+		
+		GT_TITLEBAR_BUTTON         = copy(WIN_TITLEBAR)
+		GT_TITLEBAR_BUTTON_R       = copy(WIN_TITLEBAR)
+		GT_TITLEBAR_BUTTON_D       = copy(WIN_TITLEBAR)
+		GT_TITLEBAR_BUTTON_P       = copy(WIN_TITLEBAR)
+		GT_TITLEBAR_BUTTON2        = copy(WIN_TITLEBAR2)
+		GT_TITLEBAR_BUTTON2_R      = copy(WIN_TITLEBAR2)
+		GT_TITLEBAR_BUTTON2_D      = copy(WIN_TITLEBAR2)
+		GT_TITLEBAR_BUTTON2_P      = copy(WIN_TITLEBAR2)
+		GT_TITLEBAR_BUTTON_I       = copy(WIN_TITLEBAR_I)
+		GT_TITLEBAR_BUTTON_I_R     = copy(WIN_TITLEBAR_I)
+		GT_TITLEBAR_BUTTON_I_D     = copy(WIN_TITLEBAR_I)
+		GT_TITLEBAR_BUTTON2_I      = copy(WIN_TITLEBAR2_I)
+		GT_TITLEBAR_BUTTON2_I_R    = copy(WIN_TITLEBAR2_I)
+		GT_TITLEBAR_BUTTON2_I_D    = copy(WIN_TITLEBAR2_I)
+		
+		GT_BORDER_BUTTON           = copy(WIN_BORDER)
+		GT_BORDER_BUTTON_R         = copy(WIN_BORDER)
+		GT_BORDER_BUTTON_D         = copy(WIN_BORDER)
+		GT_BORDER_BUTTON_P         = copy(WIN_BORDER)
+		GT_BORDER_BUTTON2          = copy(WIN_BORDER2)
+		GT_BORDER_BUTTON2_R        = copy(WIN_BORDER2)
+		GT_BORDER_BUTTON2_D        = copy(WIN_BORDER2)
+		GT_BORDER_BUTTON2_P        = copy(WIN_BORDER2)
+		GT_BORDER_BUTTON_I         = copy(WIN_BORDER_I)
+		GT_BORDER_BUTTON_I_R       = copy(WIN_BORDER_I)
+		GT_BORDER_BUTTON_I_D       = copy(WIN_BORDER_I)
+		GT_BORDER_BUTTON2_I        = copy(WIN_BORDER2_I)
+		GT_BORDER_BUTTON2_I_R      = copy(WIN_BORDER2_I)
+		GT_BORDER_BUTTON2_I_D      = copy(WIN_BORDER2_I)
+		
+		GT_WIN_CLOSE_S             = 0xFF808080
+		GT_WIN_CLOSE_S_R           = 0xFF808080
+		GT_WIN_CLOSE_S_D           = 0x40808080
+		GT_WIN_CLOSE_S_P           = 0xFF808080
+		
+		GT_WIN_RESIZE_S            = 0xFF808080
+		GT_WIN_RESIZE_S_R          = 0xFF808080
+		GT_WIN_RESIZE_S_D          = 0x40808080
+		GT_WIN_RESIZE_S_P          = 0xFF808080
+		
+		GT_WIN_MAXIMIZE_S          = 0xFF808080
+		GT_WIN_MAXIMIZE_S_R        = 0xFF808080
+		GT_WIN_MAXIMIZE_S_D        = 0x40808080
+		GT_WIN_MAXIMIZE_S_P        = 0xFF808080
+		
+		GT_CHECKBOX                = 0xFFFFFFFF
+		GT_CHECKBOX_R              = 0xFFD0D0FF
+		GT_CHECKBOX_D              = 0x40FFFFFF
+		GT_CHECKBOX_P              = 0xFFA0A0D0
+		GT_CHECKBOX2               = 0xFF808080
+		GT_CHECKBOX2_R             = 0xFF808080
+		GT_CHECKBOX2_D             = 0x40808080
+		GT_CHECKBOX2_P             = 0xFF808080
+		GT_CHECKBOX_TEXT           = 0xFF000000
+		GT_CHECKBOX_TEXT_D         = 0x40000000
+		
+		GT_SELECTBOX               = copy(GT_CHECKBOX)
+		GT_SELECTBOX_R             = copy(GT_CHECKBOX_R)
+		GT_SELECTBOX_D             = copy(GT_CHECKBOX_D)
+		GT_SELECTBOX_P             = copy(GT_CHECKBOX_P)
+		GT_SELECTBOX2              = copy(GT_CHECKBOX2)
+		GT_SELECTBOX2_R            = copy(GT_CHECKBOX2_R)
+		GT_SELECTBOX2_D            = copy(GT_CHECKBOX2_D)
+		GT_SELECTBOX2_P            = copy(GT_CHECKBOX2_P)
+		GT_SELECTBOX_TEXT          = copy(GT_CHECKBOX_TEXT)
+		GT_SELECTBOX_TEXT_D        = copy(GT_CHECKBOX_TEXT_D)
+		
+		GT_CHECKBUTTON             = copy(GT_BUTTON)
+		GT_CHECKBUTTON_R           = copy(GT_BUTTON_R)
+		GT_CHECKBUTTON_D           = copy(GT_BUTTON_D)
+		GT_CHECKBUTTON_P           = copy(GT_BUTTON_P)
+		GT_CHECKBUTTON2            = copy(GT_BUTTON2)
+		GT_CHECKBUTTON2_R          = copy(GT_BUTTON2_R)
+		GT_CHECKBUTTON2_D          = copy(GT_BUTTON2_D)
+		GT_CHECKBUTTON2_P          = copy(GT_BUTTON2_P)
+		GT_CHECKBUTTON_TEXT        = copy(GT_BUTTON_TEXT)
+		GT_CHECKBUTTON_TEXT_R      = copy(GT_BUTTON_TEXT_R)
+		GT_CHECKBUTTON_TEXT_D      = copy(GT_BUTTON_TEXT_D)
+		GT_CHECKBUTTON_TEXT_P      = copy(GT_BUTTON_TEXT_P)
+		GT_CHECKBUTTON_CH          = 0xFFE0E090
+		GT_CHECKBUTTON_CH_R        = 0xFFE8E8C0
+		GT_CHECKBUTTON_CH_D        = alphaset(GT_CHECKBUTTON_CH, 0x40)
+		GT_CHECKBUTTON_CH_P        = darken(GT_CHECKBUTTON_CH, 0x40)
+		GT_CHECKBUTTON2_CH         = 0xFF808080
+		GT_CHECKBUTTON2_CH_R       = 0xFF808080
+		GT_CHECKBUTTON2_CH_D       = 0x40808080
+		GT_CHECKBUTTON2_CH_P       = 0xFF808080
+		GT_CHECKBUTTON_CH_TEXT     = 0xFF000000
+		GT_CHECKBUTTON_CH_TEXT_R   = 0xFF000000
+		GT_CHECKBUTTON_CH_TEXT_D   = 0x40000000
+		GT_CHECKBUTTON_CH_TEXT_P   = 0xFF000000
+		
+		GT_SELECTBUTTON            = copy(GT_CHECKBUTTON)
+		GT_SELECTBUTTON_R          = copy(GT_CHECKBUTTON_R)
+		GT_SELECTBUTTON_D          = copy(GT_CHECKBUTTON_D)
+		GT_SELECTBUTTON_P          = copy(GT_CHECKBUTTON_P)
+		GT_SELECTBUTTON2           = copy(GT_CHECKBUTTON2)
+		GT_SELECTBUTTON2_R         = copy(GT_CHECKBUTTON2_R)
+		GT_SELECTBUTTON2_D         = copy(GT_CHECKBUTTON2_D)
+		GT_SELECTBUTTON2_P         = copy(GT_CHECKBUTTON2_P)
+		GT_SELECTBUTTON_TEXT       = copy(GT_CHECKBUTTON_TEXT)
+		GT_SELECTBUTTON_TEXT_R     = copy(GT_CHECKBUTTON_TEXT_R)
+		GT_SELECTBUTTON_TEXT_D     = copy(GT_CHECKBUTTON_TEXT_D)
+		GT_SELECTBUTTON_TEXT_P     = copy(GT_CHECKBUTTON_TEXT_P)
+		GT_SELECTBUTTON_SEL        = copy(GT_CHECKBUTTON_CH)
+		GT_SELECTBUTTON_SEL_R      = copy(GT_CHECKBUTTON_CH_R)
+		GT_SELECTBUTTON_SEL_D      = copy(GT_CHECKBUTTON_CH_D)
+		GT_SELECTBUTTON_SEL_P      = copy(GT_CHECKBUTTON_CH_P)
+		GT_SELECTBUTTON2_SEL       = copy(GT_CHECKBUTTON2_CH)
+		GT_SELECTBUTTON2_SEL_R     = copy(GT_CHECKBUTTON2_CH_R)
+		GT_SELECTBUTTON2_SEL_D     = copy(GT_CHECKBUTTON2_CH_D)
+		GT_SELECTBUTTON2_SEL_P     = copy(GT_CHECKBUTTON2_CH_P)
+		GT_SELECTBUTTON_SEL_TEXT   = copy(GT_CHECKBUTTON_CH_TEXT)
+		GT_SELECTBUTTON_SEL_TEXT_R = copy(GT_CHECKBUTTON_CH_TEXT_R)
+		GT_SELECTBUTTON_SEL_TEXT_D = copy(GT_CHECKBUTTON_CH_TEXT_D)
+		GT_SELECTBUTTON_SEL_TEXT_P = copy(GT_CHECKBUTTON_CH_TEXT_P)
+		
+		GT_FRAME                   = 0xFF808090
+		GT_FRAME_D                 = 0xFF808090
+		GT_FRAME2                  = 0xFF808080
+		GT_FRAME2_D                = 0xFF808080
+		GT_FRAME_LABEL_RECT        = 0x808080FF
+		GT_FRAME_LABEL_RECT_D      = 0x208080FF
+		GT_FRAME_LABEL_TEXT        = 0xFF000000
+		GT_FRAME_LABEL_TEXT_D      = 0x40000000
+		
+		GT_GAUGE                   = 0xFF909090
+		GT_GAUGE_D                 = alphaset(GT_GAUGE, 0x40)
+		GT_GAUGE2                  = 0xFF808080
+		GT_GAUGE2_D                = alphaset(GT_GAUGE2, 0x40)
+		GT_GAUGE_FILLING           = 0xFF50B050
+		GT_GAUGE_FILLING_D         = alphaset(GT_GAUGE_FILLING, 0x40)
+		
+		GT_PROGRESSBAR             = 0xFF909090
+		GT_PROGRESSBAR_D           = alphaset(GT_PROGRESSBAR, 0x40)
+		GT_PROGRESSBAR2            = 0xFF808080
+		GT_PROGRESSBAR2_D          = alphaset(GT_PROGRESSBAR2, 0x40)
+		GT_PROGRESSBAR_FILLING     = 0xFF8080FF
+		GT_PROGRESSBAR_FILLING_D   = alphaset(GT_PROGRESSBAR_FILLING, 0x40)
+		GT_PROGRESSBAR_TEXT        = 0xFFFFFFFF
+		GT_PROGRESSBAR_TEXT_D      = alphaset(GT_PROGRESSBAR_TEXT, 0x40)
+		
+		GT_SLIDER                  = 0xFF000000
+		GT_SLIDER_D                = alphaset(GT_SLIDER, 0x40)
+		GT_SLIDER2                 = 0xFF808080
+		GT_SLIDER2_D               = alphaset(GT_SLIDER2, 0x40)
+		GT_SLIDER_GRIP             = copy(GT_BUTTON)
+		GT_SLIDER_GRIP_R           = copy(GT_BUTTON_R)
+		GT_SLIDER_GRIP_D           = copy(GT_BUTTON_D)
+		GT_SLIDER_GRIP_P           = copy(GT_BUTTON_P)
+		GT_SLIDER_BTN              = copy(GT_BUTTON)
+		GT_SLIDER_BTN_R            = copy(GT_BUTTON_R)
+		GT_SLIDER_BTN_D            = copy(GT_BUTTON_D)
+		GT_SLIDER_BTN_P            = copy(GT_BUTTON_P)
+		GT_SLIDER_BTN2             = copy(GT_BUTTON2)
+		GT_SLIDER_BTN2_R           = copy(GT_BUTTON2_R)
+		GT_SLIDER_BTN2_D           = copy(GT_BUTTON2_D)
+		GT_SLIDER_BTN2_P           = copy(GT_BUTTON2_P)
+		
+		GT_SCRBAR                  = 0xFFFFFFFF
+		GT_SCRBAR_D                = alphaset(GT_SCRBAR, 0x40)
+		GT_SCRBAR2                 = 0xFF000000
+		GT_SCRBAR2_D               = alphaset(GT_SCRBAR2, 0x40)
+		GT_SCRBAR_GRIP             = copy(GT_BUTTON)
+		GT_SCRBAR_GRIP_R           = copy(GT_BUTTON_R)
+		GT_SCRBAR_GRIP_D           = copy(GT_BUTTON_D)
+		GT_SCRBAR_GRIP_P           = copy(GT_BUTTON_P)
+		GT_SCRBAR_BTN              = copy(GT_BUTTON)
+		GT_SCRBAR_BTN_R            = copy(GT_BUTTON_R)
+		GT_SCRBAR_BTN_D            = copy(GT_BUTTON_D)
+		GT_SCRBAR_BTN_P            = copy(GT_BUTTON_P)
+		GT_SCRBAR_BTN2             = copy(GT_BUTTON2)
+		GT_SCRBAR_BTN2_R           = copy(GT_BUTTON2_R)
+		GT_SCRBAR_BTN2_D           = copy(GT_BUTTON2_D)
+		GT_SCRBAR_BTN2_P           = copy(GT_BUTTON2_P)
+		
+		GT_TEXTLINE                = 0xFFFFFFFF
+		GT_TEXTLINE_D              = alphaset(GT_TEXTLINE, 0x40)
+		GT_TEXTLINE2               = 0xFF808080
+		GT_TEXTLINE2_D             = alphaset(GT_TEXTLINE2, 0x40)
+		GT_TEXTLINE_TEXT           = 0xFF000000
+		GT_TEXTLINE_TEXT_D         = alphaset(GT_TEXTLINE_TEXT, 0x40)
+		GT_TEXTLINE_CUR            = 0xFF404040
+		GT_TEXTLINE_CUR_D          = alphaset(GT_TEXTLINE_CUR, 0x40)
+		GT_TEXTLINE_SEL            = 0x80C0C0C0
+		GT_TEXTLINE_SEL_D          = alphaset(GT_TEXTLINE_SEL, 0x40)
+		
+		GT_TEXTLINE_RO             = 0xFFD0D0D0
+		GT_TEXTLINE_RO_D           = alphaset(GT_TEXTLINE_RO, 0x40)
+		GT_TEXTLINE_RO2            = 0xFF808080
+		GT_TEXTLINE_RO2_D          = alphaset(GT_TEXTLINE_RO2, 0x40)
+		GT_TEXTLINE_RO_TEXT        = 0xFF000000
+		GT_TEXTLINE_RO_TEXT_D      = alphaset(GT_TEXTLINE_RO_TEXT, 0x40)
+		GT_TEXTLINE_RO_CUR         = 0xFF404040
+		GT_TEXTLINE_RO_CUR_D       = alphaset(GT_TEXTLINE_RO_CUR, 0x40)
+		GT_TEXTLINE_RO_SEL         = 0x80C0C0C0
+		GT_TEXTLINE_RO_SEL_D       = alphaset(GT_TEXTLINE_RO_SEL, 0x40)
+		
+		GT_TEXTLINE_BTN            = copy(GT_BUTTON)
+		GT_TEXTLINE_BTN_R          = copy(GT_BUTTON_R)
+		GT_TEXTLINE_BTN_D          = copy(GT_BUTTON_D)
+		GT_TEXTLINE_BTN_P          = copy(GT_BUTTON_P)
+		GT_TEXTLINE_BTN2           = copy(GT_BUTTON2)
+		GT_TEXTLINE_BTN2_R         = copy(GT_BUTTON2_R)
+		GT_TEXTLINE_BTN2_D         = copy(GT_BUTTON2_D)
+		GT_TEXTLINE_BTN2_P         = copy(GT_BUTTON2_P)
+		
+		GT_TEXTFIELD               = 0xFFFFFFFF
+		GT_TEXTFIELD_D             = alphaset(GT_TEXTFIELD, 0x40)
+		GT_TEXTFIELD2              = 0xFF808080
+		GT_TEXTFIELD2_D            = alphaset(GT_TEXTFIELD2, 0x40)
+		GT_TEXTFIELD_TEXT          = 0xFF000000
+		GT_TEXTFIELD_TEXT_D        = alphaset(GT_TEXTFIELD_TEXT, 0x40)
+		GT_TEXTFIELD_CUR           = 0xFF000000
+		GT_TEXTFIELD_CUR_D         = alphaset(GT_TEXTFIELD_CUR, 0x40)
+		GT_TEXTFIELD_SEL           = 0x80C0C0C0
+		GT_TEXTFIELD_SEL_D         = alphaset(GT_TEXTFIELD_SEL, 0x40)
+		
+		GT_TEXTFIELD_RO            = 0xFFD0D0D0
+		GT_TEXTFIELD_RO_D          = alphaset(GT_TEXTFIELD_RO, 0x40)
+		GT_TEXTFIELD_RO2           = 0xFF808080
+		GT_TEXTFIELD_RO2_D         = alphaset(GT_TEXTFIELD_RO2, 0x40)
+		GT_TEXTFIELD_RO_TEXT       = 0xFF000000
+		GT_TEXTFIELD_RO_TEXT_D     = alphaset(GT_TEXTFIELD_RO_TEXT, 0x40)
+		GT_TEXTFIELD_RO_CUR        = 0xFF000000
+		GT_TEXTFIELD_RO_CUR_D      = alphaset(GT_TEXTFIELD_RO_CUR, 0x40)
+		GT_TEXTFIELD_RO_SEL        = 0x80C0C0C0
+		GT_TEXTFIELD_RO_SEL_D      = alphaset(GT_TEXTFIELD_RO_SEL, 0x40)
+		
+		GT_LIST_BG                 = 0xFFFFFFFF
+		GT_LIST_BG_D               = alphaset(GT_LIST_BG, 0x40)
+		GT_LIST_BORDER             = 0xFF808080
+		GT_LIST_BORDER_D           = alphaset(GT_LIST_BORDER, 0x40)
+		GT_LIST_COLUMN             = 0xFF808080
+		GT_LIST_COLUMN_D           = alphaset(GT_LIST_COLUMN, 0x40)
+		GT_LIST_COLUMN2            = 0xFF808080
+		GT_LIST_COLUMN2_D          = alphaset(GT_LIST_COLUMN2, 0x40)
+		GT_LIST_LINE_R             = 0xFFFFFFC0
+		GT_LIST_LINE_S             = 0xFFFFFF00
+		GT_LIST_LINE_SD            = alphaset(GT_LIST_LINE_S, 0x40)
+		GT_LIST_LINE_TEXT          = 0xFF000000
+		GT_LIST_LINE_TEXT_R        = 0xFF000000
+		GT_LIST_LINE_TEXT_I        = alphaset(GT_LIST_LINE_TEXT, 0x40)
+		GT_LIST_LINE_TEXT_S        = 0xFF000000
+		GT_LIST_LINE_TEXT_D        = alphaset(GT_LIST_LINE_TEXT, 0x40)
+		GT_LIST_LINE_TEXT_ID       = alphaset(GT_LIST_LINE_TEXT_D, 0x20)
+		GT_LIST_LINE_TEXT_SD       = alphaset(GT_LIST_LINE_TEXT_S, 0x40)
+		
+		GT_IMAGE_BORDER            = 0xFF808080
+		GT_IMAGE_BORDER_D          = alphaset(GT_IMAGE_BORDER, 0x40)
+		
+		GT_HVSPACE_BAR             = 0xFF808080
+		
+		MENU_BAR                   = 0xFFFFFFFF
+		MENU_BAR2                  = 0xFF808080
+		MENU_TITLE                 = 0xFFFFFFFF
+		MENU_TITLE_R               = 0xFFFFFFC0
+		MENU_TITLE_D               = alphaset(MENU_TITLE, 0x40)
+		MENU_TITLE_P               = 0xFFFFFF00
+		MENU_TITLE_TEXT            = 0xFF000000
+		MENU_TITLE_TEXT_R          = 0xFF000000
+		MENU_TITLE_TEXT_D          = alphaset(MENU_TITLE_TEXT, 0x40)
+		MENU_TITLE_TEXT_P          = 0xFF000000
+		MENU_CATEGORY              = 0xFFFFFFFF
+		MENU_CATEGORY2             = 0xFF808080
+		MENU_ENTRY                 = 0xFFFFFFFF
+		MENU_ENTRY_R               = 0xFFFFFFC0
+		MENU_ENTRY_D               = alphaset(MENU_ENTRY, 0x40)
+		MENU_ENTRY_P               = 0xFFFFFF00
+		MENU_ENTRY_TEXT            = 0xFF000000
+		MENU_ENTRY_TEXT_R          = 0xFF000000
+		MENU_ENTRY_TEXT_D          = alphaset(MENU_ENTRY_TEXT, 0x40)
+		MENU_ENTRY_TEXT_P          = 0xFF000000
+		MENU_ENTRY_BAR             = 0xFF808080
+		
+		ICONS_S                    = 0xFF000000
+		ICONS_S_D                  = alphaset(ICONS_S, 0x40)
+		ICONS_M                    = 0xFF808080
+		ICONS_M_D                  = alphaset(ICONS_M, 0x40)
+	}
+}

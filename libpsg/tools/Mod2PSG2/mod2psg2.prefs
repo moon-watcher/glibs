@@ -1,0 +1,53 @@
+;
+; Mod2PSG2 V2.04 preferences
+; 
+; This file is rewritten completly every time you quit Mod2PSG2.
+; If you want to reset an entry to its default, simply delete it.
+; You can also delete the whole file to reset everything.
+;
+appeareance {
+	;
+	; Resolutions:
+	; 640x480
+	; 800x600
+	; The default is 800x600.
+	; 
+	; Color depths:
+	; 16
+	; 32
+	; 
+	; Texture qualities:
+	; low
+	; normal
+	;
+	fullscreen             = false
+	windowed_resolution    = 800x600
+	fullscreen_resolution  = 800x600
+	fullscreen_color_depth = 32
+	texture_quality        = normal
+	theme                  = 0
+}
+sound_output {
+	volume = 51
+}
+midi_in {
+	midi_in_device = ""
+}
+editing {
+	wrap_volume        = false
+	paste_delete_notes = true
+}
+files_and_directories {
+	last_module_dir = "C:\Users\Daniel\Desktop\BalubaBalok\source\sfx"
+	last_export_dir = "D:\MDDev\Works\AbbayeMD2016\game\data\all\psg"
+	last_module1    = "C:\Users\Daniel\Desktop\BalubaBalok\source\sfx\finish.psgmod"
+	last_module2    = "C:\Users\Daniel\Desktop\BalubaBalok\source\sfx\gameover.psgmod"
+	last_module3    = "D:\MDDev\Works\AbbayeMD2016\game\data\all\psg\jump.psgmod"
+	last_module4    = "D:\MDDev\Works\AbbayeMD2016\game\data\all\psg\misc\sfx\uwpsgfx.psgmod"
+	last_module5    = "D:\MDDev\Works\AbbayeMD2016\game\data\all\psg\misc\sfx\fx5.psgmod"
+	last_module6    = "D:\MDDev\Works\AbbayeMD2016\game\data\all\psg\misc\01 - system of a master.psgmod"
+	last_module7    = "D:\MDDev\Works\AbbayeMD2016\game\data\all\psg\misc\sfx\quinto.psgmod"
+	last_module8    = "D:\MDDev\Works\AbbayeMD2016\game\data\all\psg\misc\chain.psgmod"
+	last_module9    = "D:\MDDev\Works\AbbayeMD2016\game\data\all\psg\misc\fx5.psgmod"
+	last_module10   = "D:\MDDev\Works\AbbayeMD2016\game\data\all\sfx\otros\jeanjump.psgmod"
+}
