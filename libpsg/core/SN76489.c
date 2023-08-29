@@ -1,11 +1,11 @@
 /**
  *  PSG multichannel sound effects player v1.0 by Shiru, 03.11.07
- * 
+ *
  * gcc version 12.12.07
  *
  * @MoonWatcherMD at 20151019. Thanks, Shiru!
  * @MoonWatcherMD at 20230822. Refactor
-*/
+ */
 
 #include "SN76489.h"
 
@@ -20,7 +20,7 @@ static void addchn(struct SN76489 *const sn, unsigned int chn, unsigned int off)
 			unsigned int vcnt = 0;
 
 			for (int j = 0; j < SN76489_VCH_MAX; j++)
-				if (sn->chn[i].slot[j].ptr >= 0)
+				if (sn->slot[i][j].ptr >= 0)
 					vcnt++;
 
 			if (vcnt == 0)
@@ -40,7 +40,7 @@ static void addchn(struct SN76489 *const sn, unsigned int chn, unsigned int off)
 	int vchn = -1;
 
 	for (int i = 0; i < SN76489_VCH_MAX; i++)
-		if (sn->chn[chn].slot[i].ptr < 0)
+		if (sn->slot[chn][i].ptr < 0)
 		{
 			vchn = i;
 			break;
@@ -53,7 +53,7 @@ static void addchn(struct SN76489 *const sn, unsigned int chn, unsigned int off)
 
 		for (int i = 0; i < SN76489_VCH_MAX; i++)
 		{
-			int ntime = sn->chn[chn].slot[i].time;
+			int ntime = sn->slot[chn][i].time;
 
 			if (ntime > tmax)
 			{
@@ -63,7 +63,7 @@ static void addchn(struct SN76489 *const sn, unsigned int chn, unsigned int off)
 		}
 	}
 
-	struct SN76489_slot *const slot = &sn->chn[chn].slot[vchn];
+	struct SN76489_slot *const slot = &sn->slot[chn][vchn];
 	slot->ptr = off;
 	slot->wait = 0;
 	slot->time = 0;
@@ -83,7 +83,7 @@ void SN76489_play(struct SN76489 *const sn, unsigned char track)
 	for (unsigned int i = 0; i < SN76489_CHN_MAX; i++)
 		for (unsigned int j = 0; j < SN76489_VCH_MAX; j++)
 		{
-			struct SN76489_slot *const slot = &sn->chn[i].slot[j];
+			struct SN76489_slot *const slot = &sn->slot[i][j];
 
 			slot->ptr = -1;
 			slot->wait = 0;
@@ -113,7 +113,7 @@ void SN76489_update(struct SN76489 *const sn)
 	{
 		for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
 		{
-			struct SN76489_slot *const slot = &sn->chn[pchn].slot[vchn];
+			struct SN76489_slot *const slot = &sn->slot[pchn][vchn];
 
 			if (slot->ptr < 0)
 				continue;
@@ -131,19 +131,19 @@ void SN76489_update(struct SN76489 *const sn)
 
 			switch (mbyte & 0xc0)
 			{
-			case 0x00: /*0=eof 1..31=wait*/
+			case 0x00: // 0=eof 1..31=wait
 				if (!mbyte)
 					slot->ptr = -1;
 				else
 					slot->wait = mbyte - 1;
 				break;
-			case 0x40: /*vol only*/
+			case 0x40: // vol only
 				slot->vol = mbyte & 0x0f;
 				break;
-			case 0x80: /*div only*/
+			case 0x80: // div only
 				slot->div = ((unsigned int)mbyte << 8) | data[slot->ptr++];
 				break;
-			case 0xc0: /*vol and div*/
+			case 0xc0: // vol and div
 				slot->vol = (mbyte >> 2) & 0x0f;
 				slot->div = ((unsigned int)(mbyte & 0x03) << 8) | data[slot->ptr++];
 				break;
@@ -155,10 +155,10 @@ void SN76489_update(struct SN76489 *const sn)
 
 		for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
 		{
-			if (sn->chn[pchn].slot[vchn].ptr < 0)
+			if (sn->slot[pchn][vchn].ptr < 0)
 				continue;
 
-			unsigned char nvol = sn->chn[pchn].slot[vchn].vol;
+			unsigned char nvol = sn->slot[pchn][vchn].vol;
 
 			if (nvol < mvol)
 			{
@@ -171,8 +171,8 @@ void SN76489_update(struct SN76489 *const sn)
 		{
 			unsigned int vchn = rchn;
 			rchn = pchn << 5;
-			*pb = 0x80 | 0x10 | rchn | sn->chn[pchn].slot[vchn].vol;
-			unsigned int div = sn->chn[pchn].slot[vchn].div;
+			*pb = 0x80 | 0x10 | rchn | sn->slot[pchn][vchn].vol;
+			unsigned int div = sn->slot[pchn][vchn].div;
 			*pb = 0x80 | rchn | (div & 0x0f);
 			*pb = div >> 4;
 		}
