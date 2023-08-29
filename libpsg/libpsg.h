@@ -4,7 +4,7 @@
 
 struct libpsg
 {
-	unsigned char *data;
+	const unsigned char *data;
 	unsigned long vtimer;
 	unsigned int isPlaying : 1;
 	unsigned int isPAL : 1;
