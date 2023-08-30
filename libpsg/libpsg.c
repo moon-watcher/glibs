@@ -1,12 +1,11 @@
 #include "core/SN76489.h"
-#include "libpsg.h"
 
-static unsigned int isPAL = 0;
+static unsigned char isPAL = 0;
 static unsigned long vtimer = 0;
-static unsigned int isPlaying = 0;
+static unsigned char isPlaying = 0;
 static unsigned char *data = 0;
 
-void libpsg_init(unsigned int isPALSystem)
+void libpsg_init(unsigned char isPALSystem)
 {
 	isPAL = isPALSystem;
 }
@@ -14,15 +13,15 @@ void libpsg_init(unsigned int isPALSystem)
 void libpsg_play(const unsigned char *const stream, unsigned char track)
 {
 	vtimer = 0;
-	isPlaying = 1;
 	data = stream;
+	libpsg_resume();
 	SN76489_play(data, track);
 }
 
 void libpsg_stop()
 {
-	isPlaying = 0;
 	data = 0;
+	libpsg_pause();
 }
 
 void libpsg_update()
