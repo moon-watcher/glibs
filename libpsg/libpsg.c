@@ -1,43 +1,42 @@
 #include "core/SN76489.h"
 #include "libpsg.h"
 
-void libpsg_init(struct libpsg *const psg, unsigned char *data, unsigned char isPAL)
-{
-	psg->isPAL = isPAL;
-	psg->data = data;
-	psg->isPlaying = 0;
+static unsigned int isPAL = 0;
+static unsigned long vtimer = 0;
+static unsigned int isPlaying = 0;
+static unsigned char *data = 0;
 
-	SN76489_init();
+void libpsg_init(unsigned int isPALSystem)
+{
+	isPAL = isPALSystem;
 }
 
-void libpsg_play(struct libpsg *const psg, unsigned char track)
+void libpsg_play(const unsigned char *const stream, unsigned char track)
 {
-	psg->vtimer = 0;
-	psg->isPlaying = 1;
-
-	SN76489_play(psg->data, track);
+	vtimer = 0;
+	isPlaying = 1;
+	data = stream;
+	SN76489_play(data, track);
 }
 
-void libpsg_stop(struct libpsg *const psg)
+void libpsg_stop()
 {
-	psg->data = 0;
-	psg->isPlaying = 0;
+	isPlaying = 0;
+	data = 0;
 }
 
-void libpsg_update(struct libpsg *const psg)
+void libpsg_update()
 {
-	if (psg->isPlaying && (psg->isPAL || (psg->vtimer % 6)))
-		SN76489_update(psg->data);
-
-	++psg->vtimer;
+	if (((vtimer++ % 6) || isPAL) && isPlaying)
+		SN76489_update(data);
 }
 
-void libpsg_pause(struct libpsg *const psg)
+void libpsg_pause()
 {
-	psg->isPlaying = 0;
+	isPlaying = 0;
 }
 
-void libpsg_resume(struct libpsg *const psg)
+void libpsg_resume()
 {
-	psg->isPlaying = 1;
+	isPlaying = 1;
 }

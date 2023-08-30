@@ -21,27 +21,13 @@ struct Slot
 };
 
 static struct Slot slots[SN76489_CHN_MAX][SN76489_VCH_MAX] = {};
-static void addch(unsigned int, unsigned int);
-
-void SN76489_init()
-{
-	for (unsigned int pchn = 0; pchn < SN76489_CHN_MAX; pchn++)
-		for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
-		{
-			struct Slot *const slot = &slots[pchn][vchn];
-
-			slot->ptr = -1;
-			slot->wait = -1;
-			slot->time = -1;
-			slot->div = 0;
-			slot->vol = 0;
-		}
-}
 
 void SN76489_update(const unsigned char *const data)
 {
 	if (!data)
+	{
 		return;
+	}
 
 	for (unsigned int pchn = 0; pchn < SN76489_CHN_MAX; pchn++)
 	{
@@ -50,7 +36,9 @@ void SN76489_update(const unsigned char *const data)
 			struct Slot *const slot = &slots[pchn][vchn];
 
 			if (slot->ptr < 0)
+			{
 				continue;
+			}
 
 			slot->time++;
 
@@ -64,22 +52,22 @@ void SN76489_update(const unsigned char *const data)
 
 			switch (mbyte & 0xc0)
 			{
-			case 0x00: // 0=eof 1..31=wait
-				if (!mbyte)
-					slot->ptr = -1;
-				else
-					slot->wait = mbyte - 1;
-				break;
-			case 0x40: // vol only
-				slot->vol = mbyte & 0x0f;
-				break;
-			case 0x80: // div only
-				slot->div = ((unsigned int)mbyte << 8) | data[slot->ptr++];
-				break;
-			case 0xc0: // vol and div
-				slot->vol = (mbyte >> 2) & 0x0f;
-				slot->div = ((unsigned int)(mbyte & 0x03) << 8) | data[slot->ptr++];
-				break;
+				case 0x00: // 0=eof 1..31=wait
+					if (!mbyte)
+						slot->ptr = -1;
+					else
+						slot->wait = mbyte - 1;
+					break;
+				case 0x40: // vol only
+					slot->vol = mbyte & 0x0f;
+					break;
+				case 0x80: // div only
+					slot->div = ((unsigned int)mbyte << 8) | data[slot->ptr++];
+					break;
+				case 0xc0: // vol and div
+					slot->vol = (mbyte >> 2) & 0x0f;
+					slot->div = ((unsigned int)(mbyte & 0x03) << 8) | data[slot->ptr++];
+					break;
 			}
 		}
 
@@ -119,84 +107,88 @@ void SN76489_play(const unsigned char *const data, unsigned char track)
 	*pb = 0xdf;
 	*pb = 0xff;
 
-	for (unsigned int i = 0; i < SN76489_CHN_MAX; i++)
-		for (unsigned int j = 0; j < SN76489_VCH_MAX; j++)
+	for (unsigned int pchn = 0; pchn < SN76489_CHN_MAX; pchn++)
+	{
+		for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
 		{
-			struct Slot *const slot = &slots[i][j];
+			struct Slot *const slot = &slots[pchn][vchn];
 
 			slot->ptr = -1;
 			slot->wait = 0;
+			slot->time = 0;
 		}
+	}
 
 	unsigned int eoff = 2 + (track << 1);
 	unsigned int doff = (data[eoff] << 8) + data[eoff + 1];
 	unsigned int chcnt = data[doff++];
 
-	for (unsigned int i = 0; i < chcnt; i++)
+	while (chcnt--)
 	{
 		eoff = (data[doff++] << 8);
 		eoff += data[doff++];
 		unsigned int chn = data[eoff++];
-		addch(chn, eoff);
-	}
-}
+		unsigned int maxvch = SN76489_VCH_MAX;
+		int tmax = -1;
+		int value = -1;
 
-static void addch(unsigned int chn, unsigned int eoff)
-{
-	if (chn < 2)
-	{
-		unsigned int tmax = SN76489_VCH_MAX;
-
-		for (int i = 2; i >= 0; i--)
+		if (chn < 2)
 		{
-			unsigned int vcnt = 0;
-
-			for (unsigned int j = 0; j < SN76489_VCH_MAX; j++)
-				if (slots[i][j].ptr >= 0)
-					vcnt++;
-
-			if (vcnt == 0)
+			for (int i = 2; i >= 0; i--)
 			{
-				chn = i;
+				unsigned int vcnt = 0;
+
+				for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
+				{
+					struct Slot *const slot = &slots[i][vchn];
+
+					if (slot->ptr >= 0)
+					{
+						vcnt++;
+					}
+				}
+
+				if (vcnt == 0)
+				{
+					chn = i;
+					break;
+				}
+
+				if (vcnt < maxvch)
+				{
+					maxvch = vcnt;
+					chn = i;
+				}
+			}
+		}
+
+		for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
+		{
+			struct Slot *const slot = &slots[chn][vchn];
+
+			if (slot->ptr < 0)
+			{
+				value = vchn;
 				break;
 			}
+		}
 
-			if (vcnt < tmax)
+		if (value < 0)
+		{
+			for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
 			{
-				tmax = vcnt;
-				chn = i;
+				struct Slot *const slot = &slots[chn][vchn];
+
+				if (slot->time > tmax)
+				{
+					tmax = slot->time;
+					value = vchn;
+				}
 			}
 		}
+
+		struct Slot *const slot = &slots[chn][value];
+
+		slot->ptr = eoff;
 	}
-
-	int vchn = -1;
-
-	for (unsigned int i = 0; i < SN76489_VCH_MAX; i++)
-		if (slots[chn][i].ptr < 0)
-		{
-			vchn = i;
-			break;
-		}
-
-	if (vchn < 0)
-	{
-		int tmax = -1;
-
-		for (unsigned int i = 0; i < SN76489_VCH_MAX; i++)
-		{
-			struct Slot *const slot = &slots[chn][i];
-
-			if (slot->time > tmax)
-			{
-				tmax = slot->time;
-				vchn = i;
-			}
-		}
-	}
-
-	struct Slot *const slot = &slots[chn][vchn];
-
-	slot->ptr = eoff;
-	slot->wait = 0;
-	slot->time = 0;
 }
