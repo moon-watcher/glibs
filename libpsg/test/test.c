@@ -14,14 +14,11 @@
 
 void libpsgTest()
 {
-    struct libpsg x;
+    libpsg_play(&back_data, 0);
 
-    libpsg_init(&x, &back_data, SYS_isPAL());
-    libpsg_play(&x, 0);
-
-    while(1)
+    while (1)
     {
-        libpsg_update(&x);
+        libpsg_update();
         SYS_doVBlankProcess();
     }
 }

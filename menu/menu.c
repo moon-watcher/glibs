@@ -1,8 +1,8 @@
 #include "menu.h"
 
-#include "config/free.h"
-#include "config/malloc.h"
-#include "config/memcpy.h"
+#include "../_config/free.h"
+#include "../_config/malloc.h"
+#include "../_config/memcpy.h"
 
 struct menu *menu_create(void (*handler)(), int (*selected)(), int (*draw)())
 {

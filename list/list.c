@@ -1,7 +1,10 @@
 // Borrowed from http://pseudomuto.com/development/2013/05/02/implementing-a-generic-linked-list-in-c/ Thanks!
 
-#include <genesis.h>
 #include "list.h"
+
+#include "../_config/free.h"
+#include "../_config/malloc.h"
+#include "../_config/memcpy.h"
 
 static void remove(List_t *list, ListNode_t *node)
 {
