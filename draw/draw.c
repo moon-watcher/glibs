@@ -43,8 +43,7 @@ void drawFix16(fix16 nb, u8 x, u8 y, u8 zeros)
 void drawImage(int plan, const Image *const img, int pal)
 {
     SYS_disableInts();
-    // PAL_setPalette(pal, img->palette->data, CPU);
-    VDP_drawImageEx(plan, img, TILE_ATTR_FULL(pal, 0, FALSE, FALSE, vrampos_get(img->tileset->numTile)), 0, 0, FALSE, TRUE);
+    VDP_drawImageEx(plan, img, TILE_ATTR_FULL(pal, 0, FALSE, FALSE, vraminc_get(img->tileset->numTile)), 0, 0, FALSE, TRUE);
     SYS_enableInts();
 }
 
