@@ -2,7 +2,7 @@
 
 static unsigned char isPAL = 0;
 static unsigned long vtimer = 0;
-static unsigned char isPlaying = 0;
+static unsigned char paused = 0;
 static unsigned char *data = 0;
 
 void libpsg_init(unsigned char isPALSystem)
@@ -26,16 +26,16 @@ void libpsg_stop()
 
 void libpsg_update()
 {
-	if (((vtimer++ % 6) || isPAL) && isPlaying)
+	if (((vtimer++ % 6) || isPAL) && paused == 0)
 		SN76489_update(data);
 }
 
 void libpsg_pause()
 {
-	isPlaying = 0;
+	paused = 1;
 }
 
 void libpsg_resume()
 {
-	isPlaying = 1;
+	paused = 0;
 }
