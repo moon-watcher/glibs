@@ -1,6 +1,6 @@
 #include "allocator.h"
-#include "config/free.h"
-#include "config/malloc.h"
+#include "../_config/free.h"
+#include "../_config/malloc.h"
 
 void allocator_init(allocator *const a, unsigned int base)
 {
