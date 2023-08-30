@@ -29,6 +29,8 @@ void SN76489_update(const unsigned char *const data)
 		return;
 	}
 
+	volatile unsigned char *pb = (unsigned char *)SN76489_DATA;
+
 	for (unsigned int pchn = 0; pchn < SN76489_CHN_MAX; pchn++)
 	{
 		for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
@@ -87,7 +89,6 @@ void SN76489_update(const unsigned char *const data)
 
 		if (rchn >= 0)
 		{
-			volatile unsigned char *pb = (unsigned char *)SN76489_DATA;
 			struct Slot *const slot = &slots[pchn][rchn];
 
 			rchn = pchn << 5;
