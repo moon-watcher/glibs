@@ -8,9 +8,9 @@ typedef struct
     unsigned int plan;
     unsigned int pal;
     unsigned int prio;
-    unsigned int (*vramPos_f)(unsigned int);
+    unsigned int (*vrampos_f)(unsigned int);
 } multifont;
 
-void multifont_init(multifont *const mf, const Image *image, unsigned int plan, unsigned int pal, unsigned int (*vramPos_f)(unsigned int));
+void multifont_init(multifont *const, const Image *, unsigned int, unsigned int, unsigned int (*)(unsigned int));
 
 #include "multifontText.h"

@@ -1,31 +1,23 @@
 #include <genesis.h>
+
 #include "multifontText.h"
+#include "config.h"
 
 void multifont_text_init(multifontText *const mft, multifont *const mf, unsigned int pos)
 {
     mft->mf = mf;
     mft->pos_in_tileset = pos;
-    mft->width = 1;
-    mft->height = 1;
-    memset(mft->chars_vrampos, 0, 128 * 2);
-}
-
-void multifont_text_setWidth(multifontText *const mft, unsigned int size)
-{
-    mft->width = size;
-}
-
-void multifont_text_setHeight(multifontText *const mft, unsigned int size)
-{
-    mft->height = size;
+    mft->char_width = 1;
+    mft->char_height = 1;
+    memset(mft->chars_vrampos, 0, MULTIFONTTEXT_FONT_CHARS * 2);
 }
 
 void multifont_text_writeCharEx(multifontText *const mft, char chr, unsigned int x, unsigned int y, int plan, int pal, int prio)
 {
     multifont *const mf = mft->mf;
     u32 *const ptr_tiles = mf->image->tileset->tiles + (mft->pos_in_tileset << 3);
-    unsigned int (*vramPos_f)(unsigned int) = mf->vramPos_f;
-    unsigned int tiles = mft->width * mft->height;
+    unsigned int (*vrampos_f)(unsigned int) = mf->vrampos_f;
+    unsigned int tiles = mft->char_width * mft->char_height;
 
     if (plan < 0) plan = mf->plan;
     if (pal  < 0) pal  = mf->pal;
@@ -36,7 +28,7 @@ void multifont_text_writeCharEx(multifontText *const mft, char chr, unsigned int
 
     if (!*vrampos)
     {
-        *vrampos = vramPos_f(tiles);
+        *vrampos = vrampos_f(tiles);
         VDP_loadTileData(ptr_tiles + (chr << 3), *vrampos, tiles, CPU);
         // DMA_transfer(tm, DMA_VRAM, (void*) data, index * 32, num * 16, 2);
         // DMA_doCPUCopy(location, from, to, len, step);
@@ -64,7 +56,7 @@ void multifont_text_writeEx(multifontText *const mft, const char *const text, un
     while ((chr = *string++))
     {
         multifont_text_writeCharEx(mft, chr, x, y, plan, pal, prio);
-        x += mft->width;
+        x += mft->char_width;
     }
 }
 
