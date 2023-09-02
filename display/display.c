@@ -2,52 +2,36 @@
 #include "display.h"
 #include "../multifont/multifont.h"
 
-static u16 status;
-static u16 cache[64];
-static const u16 blacks[64] = {[0 ... 63] = 0x0000};
-
-static void display(u16 frames, u16 *colors)
-{
-    SYS_doVBlankProcess();
-    SYS_disableInts();
-
-    if (frames)
-        PAL_fadeTo(0, 63, (u16 *)colors, frames, 0);
-    else
-        PAL_setColors(0, (u16 *)colors, 64, DMA);
-
-    SYS_enableInts();
-}
-
-////////////////////////////////////////////////////////////////////////////////
+static unsigned int status = 0;
+static unsigned int cache[64];
 
 void display_init()
 {
     status = 0;
-    memcpy(cache, blacks, 64 * 2);
+    memset(cache, 0, sizeof(cache));
 }
 
-void display_on(u16 frames)
+void display_on(unsigned int frames)
 {
     if (status)
         return;
 
     status = !status;
-    display(frames, cache);
+    display_fade(frames, cache);
 }
 
-void display_off(u16 frames)
+void display_off(unsigned int frames)
 {
     if (!status)
         return;
 
     display_init();
-    display(frames, blacks);
+    display_fade(frames, 0);
 }
 
-void display_prepare(void *ptr, s16 pal, u16 type)
+void display_prepare(void *const ptr, int pal, unsigned int type)
 {
-    u16 *colors = ptr;
+    unsigned int *colors = ptr;
 
     if (type == DISPLAY_MULTIFONT)
     {
@@ -67,5 +51,18 @@ void display_prepare(void *ptr, s16 pal, u16 type)
     else if (type == DISPLAY_IMAGE)
         colors = ((Image *)ptr)->palette->data;
 
-    memcpy(cache + pal * 16, colors, 16 * 2);
+    memcpy(cache + (pal << 4), colors, 32);
+}
+
+void display_fade(unsigned int frames, unsigned int *const colors)
+{
+    SYS_doVBlankProcess();
+    SYS_disableInts();
+
+    if (frames)
+        PAL_fadeTo(0, 63, (unsigned int *)colors, frames, 0);
+    else
+        PAL_setColors(0, (unsigned int *)colors, 64, DMA);
+
+    SYS_enableInts();
 }
