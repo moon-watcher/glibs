@@ -1,6 +1,6 @@
 #include <genesis.h>
 
-void SGDK_fade(unsigned int frames, unsigned int *colors)
+void FADE_FUNCTION(unsigned int frames, unsigned int *colors)
 {
     SYS_doVBlankProcess();
     SYS_disableInts();

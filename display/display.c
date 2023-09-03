@@ -5,10 +5,10 @@ static unsigned int cache[64];
 
 void display_on(unsigned int frames)
 {
-    #include "config/fade.h";
-    #include FILE
+    #include "config/fade.h"
+    #include FADE_FILE
 
-    FADE(frames, cache);
+    FADE_FUNCTION(frames, cache);
 }
 
 void display_off(unsigned int frames)

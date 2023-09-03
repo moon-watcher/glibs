@@ -1,4 +1,4 @@
 #pragma once
 
-#define FILE "implement/SGDK/fade.c"
-#define FADE SGDK_fade
+#define FADE_FILE "implement/SGDK/fade.c"
+#define FADE_FUNCTION SGDK_fade
