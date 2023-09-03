@@ -1,23 +1,25 @@
+#include "config/display.h"
+
 #include "../_config/memcpy.h"
 #include "../_config/memset.h"
 
-static unsigned int cache[64];
+static unsigned short cache[GLIBS_DISPLAY_PALETTE_COLORS * GLIBS_DISPLAY_PALETTES];
 
-void display_on(unsigned int frames)
+void display_on(unsigned char frames)
 {
     #include "config/fade.h"
-    #include FADE_FILE
+    #include GLIBS_DISPLAY_FADE_FILE
 
-    FADE_FUNCTION(frames, cache);
+    GLIBS_DISPLAY_FADE_FUNCTION(frames, cache);
 }
 
-void display_off(unsigned int frames)
+void display_off(unsigned char frames)
 {
-    memset(cache, 0, 128);
+    memset(cache, 0, sizeof(cache));
     display_on(frames);
 }
 
-void display_prepare(unsigned int *colors, unsigned int pal)
+void display_prepare(unsigned short *colors, unsigned char pal)
 {
-    memcpy(cache + (pal << 3), colors, 32);
+    memcpy(cache + pal * GLIBS_DISPLAY_PALETTE_COLORS, colors, sizeof(cache) / GLIBS_DISPLAY_PALETTES);
 }
