@@ -12,5 +12,3 @@ void joyreader_init(joyreader *const, unsigned int, unsigned int (*)(unsigned in
 void joyreader_update(joyreader *const);
 void joyreader_reset(joyreader *const);
 void joyreader_press(joyreader *const, unsigned int);
-
-#include "helper.h"
