@@ -1,10 +1,18 @@
 #include "multifont.h"
 
-void multifont_init(multifont *const mf, const Image *image, unsigned int plan, unsigned int pal, unsigned int (*vrampos_f)(unsigned int))
+void multifont_init(multifont *const mf, const unsigned long *tiles_ptr, const unsigned int *palette_data, unsigned int plan, unsigned int pal, unsigned int (*vrampos_f)(unsigned int), unsigned int chars_number)
 {
-    mf->image = image;
+    if (chars_number > MULTIFONT_MAX_CHARS)
+        chars_number = MULTIFONT_MAX_CHARS;
+
+    mf->tiles_ptr = tiles_ptr;
+    mf->palette_data = palette_data;
+    mf->nb_plan = plan;
     mf->pal = pal;
-    mf->plan = plan;
     mf->prio = 1;
     mf->vrampos_f = vrampos_f;
+    mf->chars_number = chars_number ?: MULTIFONT_MAX_CHARS;
+    mf->pal_counter = 0;
+    mf->char_width = 1;
+    mf->char_height = 1;
 }

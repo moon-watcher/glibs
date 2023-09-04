@@ -1,3 +1,3 @@
 #pragma once
 
-#define MULTIFONTTEXT_FONT_CHARS 128
+#define MULTIFONT_MAX_CHARS 96
