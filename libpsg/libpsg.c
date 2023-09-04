@@ -10,6 +10,16 @@ void libpsg_init(unsigned char isPALSystem)
 	isPAL = isPALSystem;
 }
 
+void libpsg_pause()
+{
+	paused = 1;
+}
+
+void libpsg_resume()
+{
+	paused = 0;
+}
+
 void libpsg_play(const unsigned char *const stream, unsigned char track)
 {
 	vtimer = 0;
@@ -28,14 +38,4 @@ void libpsg_update()
 {
 	if (((vtimer++ % 6) || isPAL) && paused == 0)
 		SN76489_update(data);
-}
-
-void libpsg_pause()
-{
-	paused = 1;
-}
-
-void libpsg_resume()
-{
-	paused = 0;
 }

@@ -13,10 +13,10 @@
 
 struct Slot
 {
-	int ptr;
-	int wait;
-	int time;
-	unsigned int div;
+	short ptr;
+	short wait;
+	short time;
+	unsigned short div;
 	unsigned char vol;
 };
 
@@ -31,9 +31,9 @@ void SN76489_update(const unsigned char *const data)
 
 	volatile unsigned char *pb = (unsigned char *)SN76489_DATA;
 
-	for (unsigned int pchn = 0; pchn < SN76489_CHN_MAX; pchn++)
+	for (unsigned short pchn = 0; pchn < SN76489_CHN_MAX; pchn++)
 	{
-		for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
+		for (unsigned short vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
 		{
 			struct Slot *const slot = &slots[pchn][vchn];
 
@@ -64,19 +64,19 @@ void SN76489_update(const unsigned char *const data)
 					slot->vol = mbyte & 0x0f;
 					break;
 				case 0x80: // div only
-					slot->div = ((unsigned int)mbyte << 8) | data[slot->ptr++];
+					slot->div = ((unsigned short)mbyte << 8) | data[slot->ptr++];
 					break;
 				case 0xc0: // vol and div
 					slot->vol = (mbyte >> 2) & 0x0f;
-					slot->div = ((unsigned int)(mbyte & 0x03) << 8) | data[slot->ptr++];
+					slot->div = ((unsigned short)(mbyte & 0x03) << 8) | data[slot->ptr++];
 					break;
 			}
 		}
 
-		int rchn = -1;
-		unsigned int mvol = 16;
+		short rchn = -1;
+		unsigned short mvol = 16;
 
-		for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
+		for (unsigned short vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
 		{
 			struct Slot *const slot = &slots[pchn][vchn];
 
@@ -108,9 +108,9 @@ void SN76489_play(const unsigned char *const data, unsigned char track)
 	*pb = 0xdf;
 	*pb = 0xff;
 
-	for (unsigned int pchn = 0; pchn < SN76489_CHN_MAX; pchn++)
+	for (unsigned short pchn = 0; pchn < SN76489_CHN_MAX; pchn++)
 	{
-		for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
+		for (unsigned short vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
 		{
 			struct Slot *const slot = &slots[pchn][vchn];
 
@@ -120,26 +120,26 @@ void SN76489_play(const unsigned char *const data, unsigned char track)
 		}
 	}
 
-	unsigned int eoff = 2 + (track << 1);
-	unsigned int doff = (data[eoff] << 8) + data[eoff + 1];
-	unsigned int chcnt = data[doff++];
+	unsigned short eoff = 2 + (track << 1);
+	unsigned short doff = (data[eoff] << 8) + data[eoff + 1];
+	unsigned short chcnt = data[doff++];
 
 	while (chcnt--)
 	{
 		eoff = (data[doff++] << 8);
 		eoff += data[doff++];
-		unsigned int chn = data[eoff++];
-		unsigned int maxvch = SN76489_VCH_MAX;
-		int tmax = -1;
-		int value = -1;
+		unsigned short chn = data[eoff++];
+		unsigned short maxvch = SN76489_VCH_MAX;
+		short tmax = -1;
+		short value = -1;
 
 		if (chn < 2)
 		{
-			for (int i = 2; i >= 0; i--)
+			for (short i = 2; i >= 0; i--)
 			{
-				unsigned int vcnt = 0;
+				unsigned short vcnt = 0;
 
-				for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
+				for (unsigned short vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
 				{
 					struct Slot *const slot = &slots[i][vchn];
 
@@ -163,7 +163,7 @@ void SN76489_play(const unsigned char *const data, unsigned char track)
 			}
 		}
 
-		for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
+		for (unsigned short vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
 		{
 			struct Slot *const slot = &slots[chn][vchn];
 
@@ -176,7 +176,7 @@ void SN76489_play(const unsigned char *const data, unsigned char track)
 
 		if (value < 0)
 		{
-			for (unsigned int vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
+			for (unsigned short vchn = 0; vchn < SN76489_VCH_MAX; vchn++)
 			{
 				struct Slot *const slot = &slots[chn][vchn];
 
