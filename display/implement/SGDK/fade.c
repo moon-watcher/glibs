@@ -1,6 +1,6 @@
 #include <genesis.h>
 
-void GLIBS_DISPLAY_FADE_FUNCTION(unsigned short frames, unsigned short *colors)
+void SGDK_fade(unsigned short frames, unsigned short *colors)
 {
     SYS_doVBlankProcess();
     SYS_disableInts();
