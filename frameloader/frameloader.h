@@ -1,7 +1,5 @@
 #pragma once
 
-// #include <genesis.h>
-
 typedef struct
 {
     unsigned int timer;
