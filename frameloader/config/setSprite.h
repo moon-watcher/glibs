@@ -1,0 +1,4 @@
+#pragma once
+
+#define GLIBS_FRAMELOADER_SETSPRITE_FILE "implement/SGDK/setSprite.c"
+#define GLIBS_FRAMELOADER_SETSPRITE_FUNCTION SGDK_setSprite
