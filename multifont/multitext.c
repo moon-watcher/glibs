@@ -32,9 +32,9 @@ void multitext_writeEx(multitext *const mt, const char *const text, unsigned int
     if (plan < 0) plan = mf->nb_plan;
     if (pal  < 0) pal  = mf->pal;
     if (prio < 0) prio = mf->prio;
- 
+
     #include "config/writeEx.h"
-    #include GLIBS_MULTITEXT_WRITEEX_FILE        
+    #include GLIBS_MULTITEXT_WRITE_FILE
 
     while ((chr = *string++))
     {
@@ -43,16 +43,15 @@ void multitext_writeEx(multitext *const mt, const char *const text, unsigned int
         if (chr >= chars_number)
             continue;
 
-        int load = 0;
         unsigned int *const vrampos = &mt->chars_vrampos[(unsigned int)chr];
-        
-        if (!*vrampos)
+        int load = !*vrampos;
+
+        if (*vrampos == 0)
         {
-            load = 1;
             *vrampos = mf->vrampos_f(tiles);
         }
 
-        GLIBS_MULTITEXT_WRITEEX_FUNCTION(tiles_ptr, pos_in_tileset, chr, x, y, plan, pal, prio, width, height, vrampos, load);
+        GLIBS_MULTITEXT_WRITE_FUNCTION(tiles_ptr, pos_in_tileset, chr, x, y, plan, pal, prio, width, height, vrampos, load);
         x += width;
     }
 }
