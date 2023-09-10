@@ -8,7 +8,7 @@ static void SGDK_update(frameloader *const fl)
     AnimationFrame *const frame = animation->frames[fl->frame];
 
     fl->timer = frame->timer;
-
+    
     if (++fl->frame == animation->numFrame)
         fl->frame = 0;
 
