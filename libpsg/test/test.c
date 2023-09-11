@@ -1,4 +1,4 @@
-#include "../src/include.h"
+#include <genesis.h>
 
 #include "files/back.h"
 #include "files/flechas.h"

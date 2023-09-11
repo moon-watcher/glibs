@@ -16,3 +16,22 @@ void multifont_init(multifont *const mf, const unsigned long *tiles_ptr, const u
     mf->char_width = 1;
     mf->char_height = 1;
 }
+
+
+// void multifont_sample()
+// {
+//     multifont mf;
+//     multitext mft1;
+//     multitext mft2;
+
+//     vraminc_init();
+
+//     multifont_init(&mf, MULTIFONT_TILES(&resource_palette_font_main), MULTIFONT_PAL(&resource_palette_font_main), BG_B, PAL0, &vraminc_get, 128);
+//     // multifont_setPalette(&mf);
+
+//     multifont_init_pal(&mft1, &mf);
+//     multifont_init_pal(&mft2, &mf);
+
+//     multitext_write(&mft1, "ABA C", 10, 10);
+//     multitext_write(&mft2, "QERXX", 20, 11);
+// }
