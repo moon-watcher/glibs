@@ -3,9 +3,10 @@
 #include "../_config/memset.h"
 #include "config/multitext.h"
 
-void multitext_init(multitext *const mt, multifont *const mf)
+void multitext_init(multitext *const mt, multifont *const mf, unsigned int chars_number)
 {
     mt->mf = mf;
+    mt->chars_number = chars_number ?: mf->chars_number;
     mt->pos_in_tileset = mf->pal_counter * mf->chars_number;
     multitext_reset(mt);
 
@@ -26,7 +27,7 @@ void multitext_writeEx(multitext *const mt, const char *const text, unsigned int
     unsigned char const height = mf->char_height;
     unsigned int const pos_in_tileset = mt->pos_in_tileset;
     const unsigned long *tiles_ptr = mf->tiles_ptr;
-    unsigned int chars_number = mf->chars_number;
+    unsigned int chars_number = mt->chars_number;
     unsigned int tiles = width * height;
 
     if (plan < 0) plan = mf->nb_plan;
