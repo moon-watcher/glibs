@@ -15,7 +15,7 @@ void multitext_init(multitext *const mt, multifont *const mf, unsigned int chars
 
 void multitext_reset(multitext *const mt)
 {
-    memset(mt->chars_vrampos, 0, mt->mf->chars_number);
+    memset(mt->chars_vrampos, 0, mt->mf->chars_number*sizeof(unsigned int));
 }
 
 void multitext_writeEx(multitext *const mt, const char *const text, unsigned int x, unsigned int y, int plan, int pal, int prio)
