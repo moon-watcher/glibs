@@ -14,3 +14,7 @@ void frameloader_update(frameloader *const);
 void frameloader_setSprite(frameloader *const, void *const);
 void frameloader_setAnim(frameloader *const, unsigned int);
 void frameloader_reset(frameloader *const);
+
+
+#include "config/helper.h"
+#include GLIBS_FRAMELOADER_HELPER_FILE
