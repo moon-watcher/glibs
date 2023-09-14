@@ -1,6 +1,6 @@
 #include "multitext.h"
 
-#include "../_config/memset.h"
+#include "../../config/memset.h"
 #include "config/multitext.h"
 
 void multitext_init(multitext *const mt, multifont *const mf, unsigned int chars_number)

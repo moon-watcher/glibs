@@ -2,9 +2,9 @@
 
 #include "list.h"
 
-#include "../_config/free.h"
-#include "../_config/malloc.h"
-#include "../_config/memcpy.h"
+#include "../../config/free.h"
+#include "../../config/malloc.h"
+#include "../../config/memcpy.h"
 
 static void remove(List_t *list, ListNode_t *node)
 {

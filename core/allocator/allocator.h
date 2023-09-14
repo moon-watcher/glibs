@@ -1,14 +1,10 @@
 #pragma once
 
+#include "node.h"
+
 typedef struct
 {
-	struct allocatorNode
-	{
-		unsigned int index;
-		unsigned int size;
-		struct allocatorNode *next;
-	} *list;
-
+	struct allocatorNode *list;
 	unsigned int base;
 	unsigned int count;
 } allocator;

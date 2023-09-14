@@ -1,7 +1,7 @@
 #include "config/display.h"
 
-#include "../_config/memcpy.h"
-#include "../_config/memset.h"
+#include "../../config/memcpy.h"
+#include "../../config/memset.h"
 
 static unsigned short cache[GLIBS_DISPLAY_PALETTE_COLORS * GLIBS_DISPLAY_PALETTES];
 
