@@ -13,7 +13,7 @@ void allocator_destroy(allocator *const a)
 {
 	while (a->list)
 	{
-		struct allocatorList *aux = a->list->next;
+		struct allocatorNode *aux = a->list->next;
 
 		free(a->list);
 		a->list = aux;
@@ -27,9 +27,9 @@ void allocator_destroy(allocator *const a)
 unsigned int allocator_new(allocator *const a, unsigned int chunk_size)
 {
 	unsigned int pos = a->base;
-	struct allocatorList *node = a->list;
-	struct allocatorList *new = malloc(sizeof(struct allocatorList));
-	struct allocatorList *next = NULL;
+	struct allocatorNode *node = a->list;
+	struct allocatorNode *new = malloc(sizeof(struct allocatorNode));
+	struct allocatorNode *next = NULL;
 
 	if (node)
 	{
@@ -63,8 +63,8 @@ void allocator_delete(allocator *const a, unsigned int pos)
 	if (pos < a->base)
 		return;
 
-	struct allocatorList *node = a->list;
-	struct allocatorList *prev = NULL;
+	struct allocatorNode *node = a->list;
+	struct allocatorNode *prev = NULL;
 
 	while (node)
 	{
@@ -91,7 +91,7 @@ void allocator_delete(allocator *const a, unsigned int pos)
 
 // void allocator_info ()
 //{
-//	struct allocatorList *aux = list;
+//	struct allocatorNode *aux = list;
 //
 //	char i = 3;
 //	char str[10];

@@ -2,11 +2,11 @@
 
 typedef struct
 {
-	struct allocatorList
+	struct allocatorNode
 	{
 		unsigned int index;
 		unsigned int size;
-		struct allocatorList *next;
+		struct allocatorNode *next;
 	} *list;
 
 	unsigned int base;
