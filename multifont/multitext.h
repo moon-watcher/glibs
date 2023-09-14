@@ -13,5 +13,5 @@ typedef struct
 
 void multitext_init(multitext *const, multifont *const, unsigned int);
 void multitext_reset(multitext *const);
-void multitext_writeEx(multitext *const, const char *const, unsigned int, unsigned int, int, int, int);
-void multitext_write(multitext *const, const char *const, unsigned int, unsigned int);
+void multitext_writeEx(multitext *const, char *const, unsigned int, unsigned int, int, int, int);
+void multitext_write(multitext *const, char *const, unsigned int, unsigned int);

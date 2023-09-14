@@ -18,7 +18,7 @@ void multitext_reset(multitext *const mt)
     memset(mt->chars_vrampos, 0, mt->chars_number * sizeof(mt->chars_number));
 }
 
-void multitext_writeEx(multitext *const mt, const char *const text, unsigned int x, unsigned int y, int plan, int pal, int prio)
+void multitext_writeEx(multitext *const mt, char *const text, unsigned int x, unsigned int y, int plan, int pal, int prio)
 {
     char chr;
     const char *string = text;
@@ -29,7 +29,7 @@ void multitext_writeEx(multitext *const mt, const char *const text, unsigned int
     const unsigned long *tiles_ptr = mf->tiles_ptr;
     unsigned int const chars_number = mt->chars_number;
     unsigned int const tiles = width * height;
-    unsigned int const (*vrampos_f)(unsigned int) = mf->vrampos_f;
+    unsigned int (*vrampos_f)(unsigned int) = mf->vrampos_f;
 
     if (plan < 0) plan = mf->nb_plan;
     if (pal  < 0) pal  = mf->pal;
@@ -58,7 +58,7 @@ void multitext_writeEx(multitext *const mt, const char *const text, unsigned int
     }
 }
 
-void multitext_write(multitext *const mt, const char *const text, unsigned int x, unsigned int y)
+void multitext_write(multitext *const mt, char *const text, unsigned int x, unsigned int y)
 {
     multitext_writeEx(mt, text, x, y, -1, -1, -1);
 }

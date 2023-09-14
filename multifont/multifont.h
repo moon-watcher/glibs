@@ -18,8 +18,5 @@ void multifont_init(multifont *const, const unsigned long *, const unsigned int 
 
 #include "multitext.h"
 
-#define MULTIFONT_TILES(X) \
-    X.tileset->tiles
-
-#define MULTIFONT_PAL(X) \
-    X.palette->data
+#include "config/helper.h"
+#include GLIBS_MULTIFONT_HELPER_FILE
