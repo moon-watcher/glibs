@@ -18,5 +18,5 @@ void multifont_init(multifont *const, const unsigned long *, const unsigned int 
 
 #include "multitext.h"
 
-#include "config/helper.h"
+#include "../../config/multifont/helper.h"
 #include GLIBS_MULTIFONT_HELPER_FILE

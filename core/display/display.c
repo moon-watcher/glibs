@@ -1,4 +1,4 @@
-#include "../../config/display/display.h"
+#include "../../config/display/config.h"
 
 #include "../../config/memcpy.h"
 #include "../../config/memset.h"
