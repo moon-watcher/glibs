@@ -1,4 +1,4 @@
-#include "config/display.h"
+#include "../../config/display/display.h"
 
 #include "../../config/memcpy.h"
 #include "../../config/memset.h"
@@ -7,7 +7,7 @@ static unsigned short cache[GLIBS_DISPLAY_PALETTE_COLORS * GLIBS_DISPLAY_PALETTE
 
 void display_on(unsigned char frames)
 {
-    #include "config/fade.h"
+    #include "../../config/display/fade.h"
     #include GLIBS_DISPLAY_FADE_FILE
 
     GLIBS_DISPLAY_FADE_FUNCTION(frames, cache);

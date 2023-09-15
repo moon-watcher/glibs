@@ -1,6 +1,6 @@
 #include <genesis.h>
 
-#include "../../frameloader.h"
+#include "../../../core/frameloader/frameloader.h"
 
 static void SGDK_initTimer(frameloader *const fl)
 {

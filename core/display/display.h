@@ -1,6 +1,6 @@
 #pragma once
 
-#include "config/helper.h"
+#include "../../config/display/helper.h"
 #include GLIBS_DISPLAY_HELPER_FILE
 
 void display_on(unsigned char);
