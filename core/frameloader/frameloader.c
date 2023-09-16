@@ -1,8 +1,6 @@
 #include "frameloader.h"
 
-#include "../../config/frameloader/update.h"
-#include "../../config/frameloader/setSprite.h"
-#include "../../config/frameloader/initTimer.h"
+#include "../../config/frameloader.h"
 
 #include GLIBS_FRAMELOADER_UPDATE_FILE
 #include GLIBS_FRAMELOADER_SETSPRITE_FILE

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../config/menu/config.h"
+#include "../../config/menu.h"
 
 struct menu;
 

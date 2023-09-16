@@ -1,7 +1,7 @@
 #pragma once
 
 #include "multifont.h"
-#include "../../config/multifont/config.h"
+#include "../../config/multifont.h"
 
 typedef struct
 {

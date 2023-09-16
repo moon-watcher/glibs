@@ -1,7 +1,7 @@
 #include "multitext.h"
 
 #include "../../config/memset.h"
-#include "../../config/multifont/config.h"
+#include "../../config/multifont.h"
 
 void multitext_init(multitext *const mt, multifont *const mf, unsigned int chars_number)
 {
@@ -35,10 +35,10 @@ void multitext_writeEx(multitext *const mt, char *const text, unsigned int x, un
     if (pal  < 0) pal  = mf->pal;
     if (prio < 0) prio = mf->prio;
 
-    #include "../../config/multifont/load.h"
+    #include "../../config/multifont.h"
     #include GLIBS_MULTITEXT_LOAD_FILE
 
-    #include "../../config/multifont/write.h"
+    #include "../../config/multifont.h"
     #include GLIBS_MULTITEXT_WRITE_FILE
 
     while ((chr = *string++))

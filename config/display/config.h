@@ -1,4 +1,0 @@
-#pragma once
-
-#define GLIBS_DISPLAY_PALETTE_COLORS 16
-#define GLIBS_DISPLAY_PALETTES  4
