@@ -6,7 +6,7 @@
 #define DISPLAY_MULTIFONT(X) \
     ((multifont *)X)->palette_data, ((multifont *)X)->pal
 
-#define DISPLAY_SPRITEDEFINITION(X) \
+#define DISPLAY_SD(X) \
     ((SpriteDefinition *)X)->palette->data
 
 #define DISPLAY_PALETTE(X) \
