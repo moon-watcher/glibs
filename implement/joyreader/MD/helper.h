@@ -3,20 +3,23 @@
 joyreader joy1;
 joyreader joy2;
 
-#define joy_init(J)     joyreader_init(J, ((joyreader *)J)->port, &JOY_readJoypad)
-#define joy_update(J)   joyreader_update(J)
-#define joy_reset(J)    joyreader_reset(J)
-#define joy_press(J, B) joyreader_press(J, B)
+#define joy_init(J)          joyreader_init(J, ((joyreader *)J)->port, &JOY_readJoypad)
+#define joy_update(J)        joyreader_update(J)
+#define joy_reset(J)         joyreader_reset(J)
+#define joy_press(J, B)      joyreader_press(J, B)
+#define joy_isPressed(J, B)  ((joy_pressed(J) >> B) & 1)
 
-#define joy1_init()     joy1.port = PORT_1; joy_init(&joy1)
-#define joy1_update()   joy_update(&joy1)
-#define joy1_reset()    joy_reset(&joy1)
-#define joy1_press(B)   joy_press(&joy1, B)
+#define joy1_init()          joy1.port = PORT_1; joy_init(&joy1)
+#define joy1_update()        joy_update(&joy1)
+#define joy1_reset()         joy_reset(&joy1)
+#define joy1_press(B)        joy_press(&joy1, B)
+#define joy1_isPressed(B)    ((joy1_pressed >> B) & 1)
 
-#define joy2_init()     joy2.port = PORT_2; joy_init(&joy2)
-#define joy2_update()   joy_update(&joy2)
-#define joy2_reset()    joy_reset(&joy2)
-#define joy2_press(B)   joy_press(&joy2, B)
+#define joy2_init()          joy2.port = PORT_2; joy_init(&joy2)
+#define joy2_update()        joy_update(&joy2)
+#define joy2_reset()         joy_reset(&joy2)
+#define joy2_press(B)        joy_press(&joy2, B)
+#define joy2_isPressed(B)    ((joy2_pressed >> B) & 1)
 
 
 #define JOYREADER_U 0
