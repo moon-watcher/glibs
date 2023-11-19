@@ -39,3 +39,9 @@ void frameloader_reset(frameloader *const fl)
     fl->frame = 0;
     GLIBS_FRAMELOADER_INITTIMER_FUNCTION(fl);
 }
+
+unsigned int frameloader_getVRAM(frameloader *const fl)
+{
+    return fl->vram;
+}
+
