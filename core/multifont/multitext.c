@@ -18,7 +18,7 @@ void multitext_reset(multitext *const mt)
     memset(mt->chars_vrampos, 0, mt->chars_number * sizeof(mt->chars_number));
 }
 
-void multitext_writeEx(multitext *const mt, char *const text, unsigned int x, unsigned int y, int plan, int pal, int prio)
+void multitext_writeEx(multitext *const mt, char *text, unsigned int x, unsigned int y, int plan, int pal, int prio)
 {
     char chr;
     const char *string = text;
@@ -58,7 +58,7 @@ void multitext_writeEx(multitext *const mt, char *const text, unsigned int x, un
     }
 }
 
-void multitext_write(multitext *const mt, char *const text, unsigned int x, unsigned int y)
+void multitext_write(multitext *const mt, char *text, unsigned int x, unsigned int y)
 {
     multitext_writeEx(mt, text, x, y, -1, -1, -1);
 }
