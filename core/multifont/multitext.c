@@ -37,8 +37,6 @@ void multitext_writeEx(multitext *const mt, char *text, unsigned int x, unsigned
 
     #include "../../config/multifont.h"
     #include GLIBS_MULTITEXT_LOAD_FILE
-
-    #include "../../config/multifont.h"
     #include GLIBS_MULTITEXT_WRITE_FILE
 
     while ((chr = *string++))
