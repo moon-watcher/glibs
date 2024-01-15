@@ -14,7 +14,6 @@ void frameloader_update(frameloader *const);
 void frameloader_setSprite(frameloader *const, void *const);
 void frameloader_setAnim(frameloader *const, unsigned int);
 void frameloader_reset(frameloader *const);
-unsigned int frameloader_getVRAM(frameloader *const);
 
 
 #include "../../config/frameloader.h"
