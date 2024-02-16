@@ -1,6 +1,6 @@
 #include "joyreader.h"
 
-void joyreader_init(joyreader *const joy, unsigned int port, unsigned int (*reader_f)(unsigned int))
+void joyreader_init(joyreader *const joy, unsigned port, unsigned (*reader_f)(unsigned))
 {
     joy->port = port;
     joy->reader_f = reader_f;
@@ -10,7 +10,7 @@ void joyreader_init(joyreader *const joy, unsigned int port, unsigned int (*read
 
 void joyreader_update(joyreader *const joy)
 {
-    unsigned int const active = joy->reader_f(joy->port);
+    unsigned const active = joy->reader_f(joy->port);
 
     joy->changed = active ^ joy->active;
     joy->active = active;
@@ -22,7 +22,7 @@ void joyreader_reset(joyreader *const joy)
     joy->active = 0;
 }
 
-void joyreader_press(joyreader *const joy, unsigned int value)
+void joyreader_press(joyreader *const joy, unsigned value)
 {
     joy->active = value;
 }
