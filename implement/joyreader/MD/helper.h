@@ -1,9 +1,9 @@
 #pragma once
 
-#define joy_init(J)         joyreader_init(J, ((joyreader *)J)->port, &JOY_readJoypad)
-#define joy_update(J)       joyreader_update(J)
-#define joy_reset(J)        joyreader_reset(J)
-#define joy_key_press(J, B) joyreader_press(J, B)
+#define joy_init(J)     joyreader_init(J, ((joyreader *)J)->port, &JOY_readJoypad)
+#define joy_update(J)   joyreader_update(J)
+#define joy_reset(J)    joyreader_reset(J)
+#define joy_press(J, B) joyreader_press(J, B)
 
 #define joy_active(J)          ( J->active )
 #define joy_active_u(J)      ( ( joy_active(J)   >>  0 ) & 1 )
