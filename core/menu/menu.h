@@ -4,10 +4,10 @@
 
 struct menu
 {
-    int (*handler)(struct menu *const, struct menuOption *const, int);
+    int (*handler)(struct menu*, struct menuOption*, int);
 
-    int (*drawOption)(void *const);
-    int (*drawSelected)(void *const);
+    int (*drawOption)(void*);
+    int (*drawSelected)(void*);
 
     unsigned int round : 1;
     unsigned int oneOption : 1;
@@ -17,22 +17,21 @@ struct menu
     struct menuOption *selectedOption;
 };
 
-struct menu *menu_create(void (*)(), int (*)(), int (*)());
-void menu_destroy(struct menu *);
-struct menuOption *menu_addOption(struct menu *const, void *const, struct menu *const);
-void menu_drawAll(struct menu *const);
-int menu_update(struct menu *const);
-struct menuOption *menu_incOption(struct menu *const);
-struct menuOption *menu_decOption(struct menu *const);
-int menu_drawSelected(struct menu *const);
-int menu_drawOption(struct menu *const, struct menuOption *const);
-struct menu *menu_getSubmenu(struct menu *const);
-void menu_selectOption(struct menu *const, struct menuOption *const);
-struct menuOption *menu_getOptionByIndex(struct menu *const, unsigned int);
-struct menuOption *menu_getSelected(struct menu *const);
-int menu_getIndex(struct menu *const);
-void menu_deactivate(struct menu *const, unsigned int);
-void menu_activate(struct menu *const, unsigned int);
+void menu_init(struct menu*, void (*)(), int (*)(), int (*)());
+void menu_addOption(struct menu*, struct menuOption* mo, void*, struct menu*);
+void menu_drawAll(struct menu*);
+int menu_update(struct menu*);
+struct menuOption *menu_incOption(struct menu*);
+struct menuOption *menu_decOption(struct menu*);
+int menu_drawSelected(struct menu*);
+int menu_drawOption(struct menu*, struct menuOption*);
+struct menu *menu_getSubmenu(struct menu*);
+void menu_selectOption(struct menu*, struct menuOption*);
+struct menuOption *menu_getOptionByIndex(struct menu*, unsigned int);
+struct menuOption *menu_getSelected(struct menu*);
+int menu_getIndex(struct menu*);
+void menu_deactivate(struct menu*, unsigned int);
+void menu_activate(struct menu*, unsigned int);
 
 enum
 {
