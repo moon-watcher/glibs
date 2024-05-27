@@ -1,6 +1,6 @@
 #include <genesis.h>
 
-#include "../../../core/frameloader/frameloader.h"
+#include "../frameloader.h"
 
 static void SGDK_setSprite(frameloader *const fl, Sprite *const sp)
 {

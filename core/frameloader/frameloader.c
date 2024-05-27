@@ -1,12 +1,10 @@
 #include "frameloader.h"
 
-#include "../../config/frameloader.h"
+#include FRAMELOADER_UPDATE_FILE
+#include FRAMELOADER_SETSPRITE_FILE
+#include FRAMELOADER_INITTIMER_FILE 
 
-#include GLIBS_FRAMELOADER_UPDATE_FILE
-#include GLIBS_FRAMELOADER_SETSPRITE_FILE
-#include GLIBS_FRAMELOADER_INITTIMER_FILE 
-
-void frameloader_init(frameloader *const fl, void **animations, unsigned int maxNumTile, unsigned int (*vrampos_f)(unsigned int))
+void frameloader_init(frameloader *const fl, void **animations, unsigned maxNumTile, unsigned (*vrampos_f)(unsigned))
 {
     if (fl->animations != animations)
     {
@@ -21,15 +19,15 @@ void frameloader_init(frameloader *const fl, void **animations, unsigned int max
 void frameloader_update(frameloader *const fl)
 {
     if (1 == fl->timer--)
-        GLIBS_FRAMELOADER_UPDATE_FUNCTION(fl);
+        FRAMELOADER_UPDATE_FUNCTION(fl);
 }
 
 void frameloader_setSprite(frameloader *const fl, void *const sp)
 {
-    GLIBS_FRAMELOADER_SETSPRITE_FUNCTION(fl, sp);
+    FRAMELOADER_SETSPRITE_FUNCTION(fl, sp);
 }
 
-void frameloader_setAnim(frameloader *const fl, unsigned int anim)
+void frameloader_setAnim(frameloader *const fl, unsigned anim)
 {
     fl->anim = anim;
 }
@@ -37,5 +35,5 @@ void frameloader_setAnim(frameloader *const fl, unsigned int anim)
 void frameloader_reset(frameloader *const fl)
 {
     fl->frame = 0;
-    GLIBS_FRAMELOADER_INITTIMER_FUNCTION(fl);
+    FRAMELOADER_INITTIMER_FUNCTION(fl);
 }
