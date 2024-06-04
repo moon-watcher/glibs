@@ -1,0 +1,11 @@
+#pragma once
+
+#define MULTITEXT_MAX_CHARS 96
+
+#define MULTIFONT_HELPER_FILE "SGDK/helper.h"
+
+#define MULTITEXT_LOAD_FILE "SGDK/load.c"
+#define MULTITEXT_LOAD_FUNCTION SGDK_load
+
+#define MULTITEXT_WRITE_FILE "SGDK/write.c"
+#define MULTITEXT_WRITE_FUNCTION SGDK_write
