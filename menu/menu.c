@@ -15,7 +15,7 @@ void menu_init(struct menu *this, void (*handler)(), int (*selected)(), int (*dr
 void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct menu *submenu)
 {
     if (this == 0)
-        return 0;
+        return;
 
     memcpy(&mo->data, data, MENU_CONFIG_DATASIZE);
 

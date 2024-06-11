@@ -5,7 +5,8 @@ static unsigned char *data;
 
 void libpsg_play(const unsigned char *const stream, unsigned char track)
 {
-	SN76489_play(data = stream, track);
+	data = stream;
+	SN76489_play(data, track);
 }
 
 void libpsg_update()
