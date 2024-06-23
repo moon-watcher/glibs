@@ -1,7 +1,6 @@
 #pragma once
 
 #include "config.h"
-#include MULTIFONT_HELPER
 
 typedef struct
 {
@@ -30,4 +29,3 @@ void multifont_text_prepare(multifont_text *const, multifont *const, unsigned);
 void multifont_text_reset(multifont_text *const);
 void multifont_text_writeEx(multifont_text *const, char *, unsigned, unsigned, int, int, int);
 void multifont_text_write(multifont_text *const, char *, unsigned, unsigned);
-
