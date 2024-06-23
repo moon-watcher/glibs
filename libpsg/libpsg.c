@@ -3,10 +3,9 @@
 
 static unsigned char *data;
 
-void libpsg_play(const unsigned char *const stream, unsigned char track)
+void libpsg_play(unsigned char *stream, unsigned char track)
 {
-	data = stream;
-	SN76489_play(data, track);
+	SN76489_play(data = stream, track);
 }
 
 void libpsg_update()
