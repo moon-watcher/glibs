@@ -1,9 +1,10 @@
 #include "multifont.h"
+#include MULTIFONT_FUNCTIONS
 
-void multifont_init(multifont *const mf, const unsigned long *tiles_ptr, const unsigned int *palette_data, unsigned int plan, unsigned int pal, unsigned int (*vrampos_f)(unsigned int), unsigned int chars_number)
+void multifont_init(multifont *const mf, const unsigned long *tiles_ptr, const unsigned *palette_data, unsigned plan, unsigned pal, unsigned (*vrampos_f)(unsigned), unsigned chars_number)
 {
-    if (chars_number > MULTITEXT_MAX_CHARS)
-        chars_number = MULTITEXT_MAX_CHARS;
+    if (chars_number > MULTIFONT_MAXCHARS)
+        chars_number = MULTIFONT_MAXCHARS;
 
     mf->tiles_ptr = tiles_ptr;
     mf->palette_data = palette_data;
@@ -11,18 +12,72 @@ void multifont_init(multifont *const mf, const unsigned long *tiles_ptr, const u
     mf->pal = pal;
     mf->prio = 1;
     mf->vrampos_f = vrampos_f;
-    mf->chars_number = chars_number ?: MULTITEXT_MAX_CHARS;
+    mf->chars_number = chars_number ?: MULTIFONT_MAXCHARS;
     mf->pal_counter = 0;
     mf->char_width = 1;
     mf->char_height = 1;
+}
+
+void multifont_text_prepare(multifont_text *const mt, multifont *const mf, unsigned chars_number)
+{
+    mt->mf = mf;
+    mt->chars_number = chars_number ?: mf->chars_number;
+    mt->pos_in_tileset = mf->pal_counter * mf->chars_number;
+    multifont_text_reset(mt);
+
+    ++mf->pal_counter;
+}
+
+void multifont_text_reset(multifont_text *const mt)
+{
+    memset(mt->chars_vrampos, 0, mt->chars_number * sizeof(mt->chars_number));
+}
+
+void multifont_text_writeEx(multifont_text *const mt, char *text, unsigned x, unsigned y, int plan, int pal, int prio)
+{
+    char chr;
+    const char *string = text;
+    multifont *const mf = mt->mf;
+    unsigned const width = mf->char_width;
+    unsigned char const height = mf->char_height;
+    unsigned const pos_in_tileset = mt->pos_in_tileset;
+    const unsigned long *tiles_ptr = mf->tiles_ptr;
+    unsigned const chars_number = mt->chars_number;
+    unsigned const tiles = width * height;
+    unsigned (*vrampos_f)(unsigned) = mf->vrampos_f;
+
+    if (plan < 0) plan = mf->nb_plan;
+    if (pal  < 0) pal  = mf->pal;
+    if (prio < 0) prio = mf->prio;
+
+    while ((chr = *string++))
+    {
+        chr -= 32;
+
+        if (chr >= chars_number)
+            continue;
+
+        unsigned *const vrampos = &mt->chars_vrampos[(unsigned)chr];
+
+        if (*vrampos == 0)
+            _load(*vrampos = vrampos_f(tiles), tiles_ptr, pos_in_tileset, chr, tiles);
+
+        _write(plan, pal, prio, *vrampos, x, y, width, height);
+        x += width;
+    }
+}
+
+void multifont_text_write(multifont_text *const mt, char *text, unsigned x, unsigned y)
+{
+    multifont_text_writeEx(mt, text, x, y, -1, -1, -1);
 }
 
 
 // void multifont_sample()
 // {
 //     multifont mf;
-//     multitext mft1;
-//     multitext mft2;
+//     multifont_text mft1;
+//     multifont_text mft2;
 
 //     vraminc_init();
 
@@ -32,6 +87,6 @@ void multifont_init(multifont *const mf, const unsigned long *tiles_ptr, const u
 //     multifont_init_pal(&mft1, &mf);
 //     multifont_init_pal(&mft2, &mf);
 
-//     multitext_write(&mft1, "ABA C", 10, 10);
-//     multitext_write(&mft2, "QERXX", 20, 11);
+//     multifont_text_write(&mft1, "ABA C", 10, 10);
+//     multifont_text_write(&mft2, "QERXX", 20, 11);
 // }
