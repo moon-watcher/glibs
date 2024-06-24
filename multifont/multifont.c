@@ -30,11 +30,6 @@ void multifont_write(multifont *const mt, char *text, unsigned x, unsigned y)
     unsigned width = mt->char_width;
     unsigned height = mt->char_height;
     unsigned nb_tiles = width * height;
-    int plan = -1, pal = -1, prio = -1;
-
-    if (plan < 0) plan = mt->plan;
-    if (pal  < 0) pal  = mt->pal;
-    if (prio < 0) prio = mt->prio;
 
     while ((chr = *string++))
     {
@@ -48,7 +43,7 @@ void multifont_write(multifont *const mt, char *text, unsigned x, unsigned y)
         if (*vrampos == 0)
             _load(*vrampos = mt->vrampos_f(nb_tiles), mt->tiles_ptr, mt->pos_in_tileset, chr, nb_tiles);
 
-        _write(plan, pal, prio, *vrampos, x, y, width, height);
+        _write(mt->plan, mt->pal, mt->prio, *vrampos, x, y, width, height);
         x += width;
     }
 }
