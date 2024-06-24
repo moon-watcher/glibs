@@ -1,31 +1,26 @@
 #include "multifont.h"
 #include MULTIFONT_IMPLEMENTATION
 
-void multifont_init(multifont *const mf, const unsigned long *tiles_ptr, const unsigned *palette_data, unsigned plan, unsigned pal, unsigned (*vrampos_f)(unsigned), unsigned chars_number)
+void multifont_init(multifont *const mf, const unsigned long *tiles_ptr, unsigned plan, unsigned pal, unsigned (*vrampos_f)(unsigned))
 {
-    if (chars_number > MULTIFONT_MAXCHARS)
-        chars_number = MULTIFONT_MAXCHARS;
-
     mf->tiles_ptr = tiles_ptr;
-    mf->palette_data = palette_data;
-    mf->nb_plan = plan;
+    mf->plan = plan;
     mf->pal = pal;
     mf->prio = 1;
     mf->vrampos_f = vrampos_f;
-    mf->chars_number = chars_number ?: MULTIFONT_MAXCHARS;
-    mf->pal_counter = 0;
     mf->char_width = 1;
     mf->char_height = 1;
 }
 
-void multifont_text_prepare(multifont_text *const mt, multifont *const mf, unsigned chars_number)
+void multifont_text_prepare(multifont_text *const mt, multifont *const mf, unsigned pos_in_tileset, unsigned chars_number)
 {
-    mt->mf = mf;
-    mt->chars_number = chars_number ?: mf->chars_number;
-    mt->pos_in_tileset = mf->pal_counter * mf->chars_number;
-    multifont_text_reset(mt);
+    if (chars_number > MULTIFONT_MAXCHARS)
+        chars_number = MULTIFONT_MAXCHARS;
 
-    ++mf->pal_counter;
+    mt->mf = mf;
+    mt->chars_number = chars_number ?: MULTIFONT_MAXCHARS;
+    mt->pos_in_tileset = pos_in_tileset;
+    multifont_text_reset(mt);
 }
 
 void multifont_text_reset(multifont_text *const mt)
@@ -46,7 +41,7 @@ void multifont_text_writeEx(multifont_text *const mt, char *text, unsigned x, un
     unsigned const tiles = width * height;
     unsigned (*vrampos_f)(unsigned) = mf->vrampos_f;
 
-    if (plan < 0) plan = mf->nb_plan;
+    if (plan < 0) plan = mf->plan;
     if (pal  < 0) pal  = mf->pal;
     if (prio < 0) prio = mf->prio;
 
