@@ -2,9 +2,9 @@
 
 typedef struct
 {
-    unsigned int index;
-    unsigned int size;
+    unsigned index;
+    unsigned size;
 } incremental;
 
-void incremental_init(incremental *const, unsigned int);
-unsigned int incremental_get(incremental *const, unsigned int);
+void incremental_init(incremental *const, unsigned);
+unsigned incremental_get(incremental *const, unsigned);
