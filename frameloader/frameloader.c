@@ -1,8 +1,6 @@
 #include "frameloader.h"
-
-#include FRAMELOADER_UPDATE_FILE
-#include FRAMELOADER_SETSPRITE_FILE
-#include FRAMELOADER_INITTIMER_FILE 
+#include "config.h"
+#include FRAMELOADER_FUNCS
 
 void frameloader_init(frameloader *const fl, void **animations, unsigned maxNumTile, unsigned (*vrampos_f)(unsigned))
 {
@@ -19,12 +17,12 @@ void frameloader_init(frameloader *const fl, void **animations, unsigned maxNumT
 void frameloader_update(frameloader *const fl)
 {
     if (1 == fl->timer--)
-        FRAMELOADER_UPDATE_FUNCTION(fl);
+        _update(fl);
 }
 
 void frameloader_setSprite(frameloader *const fl, void *const sp)
 {
-    FRAMELOADER_SETSPRITE_FUNCTION(fl, sp);
+    _setSprite(fl, sp);
 }
 
 void frameloader_setAnim(frameloader *const fl, unsigned anim)
@@ -35,5 +33,5 @@ void frameloader_setAnim(frameloader *const fl, unsigned anim)
 void frameloader_reset(frameloader *const fl)
 {
     fl->frame = 0;
-    FRAMELOADER_INITTIMER_FUNCTION(fl);
+    _initTimer(fl);
 }

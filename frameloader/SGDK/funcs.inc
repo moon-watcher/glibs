@@ -1,14 +1,12 @@
 #include <genesis.h>
 
-#include "../frameloader.h"
-
-static void SGDK_update(frameloader *const fl)
+static void _update(frameloader *const fl)
 {
     Animation *const animation = fl->animations[fl->anim];
     AnimationFrame *const frame = animation->frames[fl->frame];
 
     fl->timer = frame->timer;
-    
+
     if (++fl->frame == animation->numFrame)
         fl->frame = 0;
 
@@ -28,4 +26,17 @@ static void SGDK_update(frameloader *const fl)
     }
     else
         DMA_queueDma(DMA_VRAM, from, vrampos, lenInWord, 2);
+}
+
+static void _initTimer(frameloader *const fl)
+{
+    Animation *const animation = fl->animations[fl->anim];
+    fl->timer = animation->frames[fl->frame]->timer;
+}
+
+static void _setSprite(frameloader *const fl, Sprite *const sp)
+{
+    SPR_setAnimAndFrame(sp, fl->anim, 0);
+    SPR_setVRAMTileIndex(sp, fl->vram);
+    SPR_setAutoTileUpload(sp, FALSE);
 }

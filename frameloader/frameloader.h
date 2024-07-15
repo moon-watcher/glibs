@@ -14,7 +14,3 @@ void frameloader_update(frameloader *const);
 void frameloader_setSprite(frameloader *const, void *const);
 void frameloader_setAnim(frameloader *const, unsigned);
 void frameloader_reset(frameloader *const);
-
-
-#include "config.h"
-#include FRAMELOADER_HELPER_FILE
