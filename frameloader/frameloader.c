@@ -1,15 +1,11 @@
 #include "frameloader.h"
 #include "config.h"
 
-void frameloader_init(frameloader *const fl, void **animations, unsigned maxNumTile, unsigned (*vrampos_f)())
+void frameloader_init(frameloader *const fl, void **animations, unsigned vram)
 {
-    if (fl->animations != animations)
-    {
-        fl->animations = animations;
-        fl->vram = vrampos_f(maxNumTile);
-    }
-
-    frameloader_setAnim(fl, 0);
+    fl->animations = animations;
+    fl->vram = vram;
+    frameloader_anim(fl, 0);
     frameloader_reset(fl);
 }
 
@@ -21,14 +17,15 @@ void frameloader_update(frameloader *const fl)
     #include FRAMELOADER_UPDATE
 }
 
-void frameloader_setSprite(frameloader *const fl, void *const sp)
+void frameloader_sprite(frameloader *const fl, void *const sp)
 {
     #include FRAMELOADER_SPRITE
 }
 
-void frameloader_setAnim(frameloader *const fl, unsigned anim)
+void frameloader_anim(frameloader *const fl, unsigned anim)
 {
     fl->anim = anim;
+    #include FRAMELOADER_ANIM
 }
 
 void frameloader_reset(frameloader *const fl)

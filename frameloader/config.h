@@ -5,3 +5,4 @@
 #define FRAMELOADER_UPDATE "SGDK/update.inc"
 #define FRAMELOADER_SPRITE "SGDK/sprite.inc"
 #define FRAMELOADER_RESET "SGDK/reset.inc"
+#define FRAMELOADER_ANIM "SGDK/anim.inc"
