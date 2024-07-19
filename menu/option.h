@@ -10,5 +10,5 @@ struct menuOption
     struct menuOption *next;
     struct menuOption *prev;
 
-    unsigned char data[MENU_CONFIG_DATASIZE];
+    unsigned char *data;
 };
