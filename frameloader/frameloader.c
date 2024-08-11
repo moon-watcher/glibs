@@ -1,32 +1,26 @@
 #include "frameloader.h"
-#include "implement/SGDK.h"
+#include "config.h"
 
 void frameloader_init(frameloader *const fl, void **animations, unsigned vram)
 {
-    fl->anim = fl->frame = 0;
-    fl->animations = animations;
+    fl->timer = fl->anim = fl->frame = 0;
+    fl->animations = animations;    
     fl->vram = vram;
 
-    FRAMELOADER_ANIM
+    FRAMELOADER_ANIM(fl, 0);
 }
 
 void frameloader_update(frameloader *const fl)
 {
-    if (1 != fl->timer--)
-        return;
-
-    FRAMELOADER_UPDATE
+    FRAMELOADER_UPDATE(fl);
 }
 
 void frameloader_setSprite(frameloader *const fl, void *const sp)
 {
-    FRAMELOADER_SPRITE
+    FRAMELOADER_SPRITE(fl, sp);
 }
 
 void frameloader_setAnim(frameloader *const fl, unsigned anim)
 {
-    fl->frame = 0;
-    fl->anim = anim;
-
-    FRAMELOADER_ANIM
+    FRAMELOADER_ANIM(fl, anim);
 }
