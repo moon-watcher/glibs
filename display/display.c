@@ -1,11 +1,10 @@
 #include "display.h"
+#include "config.h"
 
 static unsigned short cache[DISPLAY_PALETTE_COLORS * DISPLAY_PALETTES];
 
 void display_on(unsigned char frames)
 {
-    #include DISPLAY_FADE_FILE
-
     DISPLAY_FADE_FUNCTION(frames, cache);
 }
 
