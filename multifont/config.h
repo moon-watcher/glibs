@@ -2,4 +2,4 @@
 
 #define MULTIFONT_MAXCHARS 96
 
-#define MULTIFONT_IMPLEMENTATION "implements/SGDK.inc"
+#include "implement/SGDK.inc"

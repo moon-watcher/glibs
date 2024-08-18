@@ -1,6 +1,5 @@
 #include "allocator.h"
 #include "config.h"
-#include ALLOCATOR_CONFIG_FILE
 
 void allocator_init(allocator *const a, unsigned base)
 {

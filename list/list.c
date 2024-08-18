@@ -2,7 +2,6 @@
 
 #include "list.h"
 #include "config.h"
-#include LIST_CONFIG_FILE
 
 static void remove(List_t *list, ListNode_t *node)
 {

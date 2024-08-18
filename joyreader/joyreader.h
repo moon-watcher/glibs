@@ -11,5 +11,3 @@ void joyreader_update(joyreader *const, unsigned);
 void joyreader_press(joyreader *const, unsigned);
 
 #include "config.h"
-
-#include JOYREADER_HELPER_FILE

@@ -1,5 +1,4 @@
 #include "multifont.h"
-#include MULTIFONT_IMPLEMENTATION
 
 void multifont_init(multifont *const mt, const unsigned long *tiles_ptr, unsigned plan, unsigned pal, unsigned (*vrampos_f)(unsigned), unsigned pos_in_tileset, unsigned chars_number)
 {
