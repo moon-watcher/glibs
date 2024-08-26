@@ -1,0 +1,98 @@
+#include "joyreader.h"
+
+// void joyreader_init(joyreader *const joy)
+// {
+//     joy->changed = joy->active = 0;
+// }
+
+// void joyreader_update(joyreader *const joy, unsigned active)
+// {
+//     joy->changed = active ^ joy->active;
+//     joy->active = active;
+// }
+
+// void joyreader_press(joyreader *const joy, unsigned value)
+// {
+//     joy->active = value;
+// }
+
+
+
+// #include "joyreader.h"
+
+// static struct st
+// {
+//     unsigned changed : 16;
+//     unsigned active : 16;
+// } st;
+
+// void joyreader_init(joyreader *joy)
+// {
+//     joy = 0;
+// }
+
+// void joyreader_update(joyreader *joy, unsigned value)
+// {
+//     st.changed = value ^ *joy;
+//     st.active = value;
+
+//     *joy = *(unsigned *)&st;
+// }
+
+// void joyreader_press(joyreader *joy, unsigned value)
+// {
+//     // st.changed = *joy >> 16;
+//     // st.active = *joy;
+
+//     st.active = value;
+
+//     *joy = *(unsigned *)&st;
+// }
+
+
+
+
+
+#include "joyreader.h"
+
+void joyreader_init(joyreader *joy)
+{
+    joy = 0;
+}
+
+void joyreader_update(joyreader *joy, unsigned value)
+{
+    *joy = *(unsigned *)&(struct { unsigned c : 16, a : 16; }){value ^ *joy, value};
+}
+
+void joyreader_press(joyreader *joy, unsigned value)
+{
+    // // st.changed = *joy >> 16;
+    // // st.active = *joy;
+
+    // st.active = value;
+
+    // *joy = *(unsigned *)&st;
+}
+
+
+
+
+
+// typedef struct
+// {
+//     unsigned changed;
+//     unsigned active;
+// } joyreader;
+
+// void joyreader_init(joyreader *const);
+// void joyreader_update(joyreader *const, unsigned);
+// void joyreader_press(joyreader *const, unsigned);
+
+// #include "config.h"
+
+// typedef unsigned joyreader;
+
+// void joyreader_init(joyreader *const);
+// void joyreader_update(joyreader *const, unsigned);
+// void joyreader_press(joyreader *const, unsigned);
