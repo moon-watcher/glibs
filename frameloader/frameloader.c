@@ -1,13 +1,12 @@
 #include "frameloader.h"
 #include "config.h"
 
-void frameloader_init(frameloader *const fl, void **animations, unsigned vram)
+void frameloader_init(frameloader *const fl, void **animations, unsigned vrampos)
 {
-    fl->timer = fl->anim = fl->frame = 0;
+    frameloader_setAnim(fl, 0);
+    
     fl->animations = animations;    
-    fl->vram = vram;
-
-    FRAMELOADER_ANIM(fl, 0);
+    fl->vrampos = vrampos;
 }
 
 void frameloader_update(frameloader *const fl)

@@ -6,7 +6,7 @@ typedef struct
     unsigned char anim;
     void **animations;
     unsigned char frame;
-    unsigned vram;
+    unsigned vrampos;
 } frameloader;
 
 void frameloader_init(frameloader *const, void **, unsigned);
