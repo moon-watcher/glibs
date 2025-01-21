@@ -3,7 +3,7 @@
 typedef struct
 {
     unsigned timer;
-    void *definition;
+    void *resource;
     unsigned char anim;
     unsigned char frame;
     unsigned vrampos;

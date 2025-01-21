@@ -1,9 +1,9 @@
 #include "frameloader.h"
 #include "config.h"
 
-void frameloader_init(frameloader *const fl, void *const definition, unsigned vrampos)
+void frameloader_init(frameloader *const fl, void *const resource, unsigned vrampos)
 {
-    fl->definition = definition;
+    fl->resource = resource;
     fl->vrampos = vrampos;
 
     frameloader_setAnim(fl, 0);
