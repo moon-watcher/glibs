@@ -1,6 +1,10 @@
 #include "frameloader.h"
 #include "config.h"
 
+/**
+ * TODO: Add thrid param to frameloader_init() to use SPR_loadAllFrames()
+ */
+
 void frameloader_init(frameloader *const fl, void *const resource, unsigned vrampos)
 {
     fl->resource = resource;
