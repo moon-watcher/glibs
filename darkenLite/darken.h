@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../uclist/uclist.h"
+#include "../dclist/dclist.h"
 
 typedef void *(*de_state)();
 
@@ -18,7 +18,7 @@ de_entity *de_entity_delete(de_entity *const);
 
 //
 
-typedef uclist de_manager;
+typedef dclist de_manager;
 
 void de_manager_init(de_manager *const, unsigned);
 de_entity *de_manager_new(de_manager *const, de_state);

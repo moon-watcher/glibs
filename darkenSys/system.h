@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../uclist/uclist.h"
+#include "../dclist/dclist.h"
 
-typedef uclist de_system;
+typedef dclist de_system;
 
 void de_system_init(de_system *const);
 void *de_system_add(de_system *const, void *const);
