@@ -16,11 +16,8 @@ void frameloader_init(frameloader *const fl, void *const resource, unsigned vram
 
 void frameloader_update(frameloader *const fl)
 {
-    if (fl->timer > 0)
-    {
-        fl->timer--;
+    if (fl->timer > 0 && --fl->timer)
         return;
-    }
 
     FRAMELOADER_UPDATE(fl);
 }

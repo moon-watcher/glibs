@@ -16,19 +16,13 @@
         u16 const vrampos = FL->vrampos << 5;                                                                   \
                                                                                                                 \
         if (tileset->compression)                                                                               \
-        {                                                                                                       \
             unpack(tileset->compression, (u8 *)from, DMA_allocateAndQueueDma(DMA_VRAM, vrampos, lenInWord, 2)); \
-        }                                                                                                       \
         else                                                                                                    \
-        {                                                                                                       \
             DMA_queueDma(DMA_VRAM, from, vrampos, lenInWord, 2);                                                \
-        }                                                                                                       \
     }                                                                                                           \
                                                                                                                 \
     if (++FL->frame == animation->numFrame)                                                                     \
-    {                                                                                                           \
-        FL->frame = 0;                                                                                          \
-    }
+        FL->frame = 0;
 
 #define FRAMELOADER_SET_SPRITE(FL, SP)               \
     SPR_setAnimAndFrame((Sprite *)SP, FL->anim, 0);  \
