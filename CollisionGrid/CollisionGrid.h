@@ -2,22 +2,22 @@
 
 typedef struct
 {
-    unsigned hCells;
-    unsigned vCells;
+    unsigned hCells, vCells;
     unsigned totalBytes;
+
     struct CG_RECT
     {
-        int left;
-        int top;
-        int right;
-        int bottom;
+        int left, top;
+        int right, bottom;
     } area;
+
     struct CG_CELL
     {
         void **items;
         unsigned char size;
         unsigned char capacity;
     } **cells;
+
     unsigned char *lookupTableCellX;
     unsigned char *lookupTableCellY;
 } CollisionGrid;
