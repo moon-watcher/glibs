@@ -24,9 +24,9 @@ typedef struct
 
 //
 
-CollisionGrid *cg_init(struct CG_RECT, unsigned, unsigned, unsigned);
+unsigned cg_size(struct CG_RECT gridArea, unsigned items, unsigned hCells, unsigned vCells);
+void cg_init(CollisionGrid * cg, struct CG_RECT gridArea, unsigned items, unsigned hCells, unsigned vCells);
 void cg_reset(CollisionGrid *const);
-void cg_end(CollisionGrid *);
 
 struct CG_CELL *cg_CELL_get(CollisionGrid *const, unsigned, unsigned);
 void *cg_CELL_addItem(struct CG_CELL *const, void *const);

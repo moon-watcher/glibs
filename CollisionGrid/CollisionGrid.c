@@ -1,22 +1,34 @@
 #include "CollisionGrid.h"
-#include "config.h"
 
-CollisionGrid *cg_init(struct CG_RECT gridArea, unsigned items, unsigned hCells, unsigned vCells)
+
+unsigned cg_size(struct CG_RECT gridArea, unsigned items, unsigned hCells, unsigned vCells)
 {
     unsigned width  = gridArea.right  - gridArea.left + 1;
     unsigned height = gridArea.bottom - gridArea.top  + 1;
-    unsigned totalBytes = sizeof(CollisionGrid) +
+    return sizeof(CollisionGrid) +
                           vCells * sizeof(struct CG_CELL *) +
                           width * sizeof(unsigned char) +
                           height * sizeof(unsigned char) +
                           vCells * hCells * sizeof(struct CG_CELL) +
                           vCells * hCells * items * sizeof(void *);
+}
 
-    CollisionGrid *cg = malloc(totalBytes);
-    if (!cg) return 0;
+void cg_init(CollisionGrid * cg, struct CG_RECT gridArea, unsigned items, unsigned hCells, unsigned vCells) 
+{
+    unsigned width  = gridArea.right  - gridArea.left + 1;
+    unsigned height = gridArea.bottom - gridArea.top  + 1;
+    // unsigned totalBytes = sizeof(CollisionGrid) +
+    //                       vCells * sizeof(struct CG_CELL *) +
+    //                       width * sizeof(unsigned char) +
+    //                       height * sizeof(unsigned char) +
+    //                       vCells * hCells * sizeof(struct CG_CELL) +
+    //                       vCells * hCells * items * sizeof(void *);
 
-    memset(cg, 0, totalBytes);
-    cg->totalBytes       = totalBytes;
+    // CollisionGrid *cg = malloc(totalBytes);
+    // if (!cg) return 0;
+
+    // memset(cg, 0, totalBytes);
+    // cg->totalBytes       = totalBytes;
     cg->area             = gridArea;
     cg->hCells           = hCells;
     cg->vCells           = vCells;
@@ -39,18 +51,11 @@ CollisionGrid *cg_init(struct CG_RECT gridArea, unsigned items, unsigned hCells,
             cg->cells[i][j].capacity = items;
         }
     }
-
-    return cg;
 }
 
 void cg_reset(CollisionGrid *const this)
 {
     memset(this->cells, 0, this->vCells * this->hCells * sizeof(struct CG_CELL));
-}
-
-void cg_end(CollisionGrid *this)
-{
-    free(this);
 }
 
 //
