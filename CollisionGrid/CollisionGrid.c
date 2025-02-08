@@ -2,8 +2,8 @@
 
 unsigned cg_size(struct CG_DEF *const def)
 {
-    unsigned width  = def->area.right  - def->area.left + 1;
-    unsigned height = def->area.bottom - def->area.top  + 1;
+    unsigned width  = def->right  - def->left + 1;
+    unsigned height = def->bottom - def->top  + 1;
 
     return sizeof(CollisionGrid) +
            def->vCells * sizeof(struct CG_CELL *) +
@@ -15,10 +15,17 @@ unsigned cg_size(struct CG_DEF *const def)
 
 void cg_init(CollisionGrid *const this, struct CG_DEF *const def) 
 {
-    unsigned width  = def->area.right  - def->area.left + 1;
-    unsigned height = def->area.bottom - def->area.top  + 1;
+    unsigned width  = def->right  - def->left + 1;
+    unsigned height = def->bottom - def->top  + 1;
 
-    this->definition       = *def;
+    this->capacity = def->capacity;
+    this->hCells   = def->hCells;
+    this->vCells   = def->vCells;
+    this->left     = def->left;
+    this->top      = def->top;
+    this->right    = def->right;
+    this->bottom   = def->bottom;
+    
     this->cells            = (struct CG_CELL **)((char *)this + sizeof(CollisionGrid));
     this->lookupTableCellX = (unsigned char *)((char *)this->cells + def->vCells * sizeof(struct CG_CELL *));
     this->lookupTableCellY = (unsigned char *)((char *)this->lookupTableCellX + width * sizeof(unsigned char));
@@ -42,7 +49,7 @@ void cg_init(CollisionGrid *const this, struct CG_DEF *const def)
 
 void cg_reset(CollisionGrid *const this)
 {
-    memset(this->cells, 0, this->definition.vCells * this->definition.hCells * sizeof(struct CG_CELL));
+    memset(this->cells, 0, this->vCells * this->hCells * sizeof(struct CG_CELL));
 }
 
 //
@@ -51,12 +58,12 @@ inline struct CG_CELL *cg_CELL_get(CollisionGrid *const this, unsigned x, unsign
 {
     int a_left, a_top;
 
-    if ((x < (a_left = this->definition.area.left)) || (y < (a_top  = this->definition.area.top))) return 0;
+    if ((x < (a_left = this->left)) || (y < (a_top  = this->top))) return 0;
 
     unsigned cellX = this->lookupTableCellX[x - a_left];
     unsigned cellY = this->lookupTableCellY[y - a_top ];
     
-    return (cellX < this->definition.hCells && cellY < this->definition.vCells) ? &this->cells[cellY][cellX] : 0;
+    return (cellX < this->hCells && cellY < this->vCells) ? &this->cells[cellY][cellX] : 0;
 }
 
 inline void *cg_CELL_addItem(struct CG_CELL *const this, void *const ptr)
@@ -83,15 +90,15 @@ unsigned cg_RECT_get(CollisionGrid *const this, struct CG_RECT *const rect, stru
 
     if ((r_left = rect->left) >= (r_right = rect->right) || (r_top = rect->top) >= (r_bottom = rect->bottom)) return 0;
 
-    int a_left         = this->definition.area.left;
-    int a_top          = this->definition.area.top;
+    int a_left         = this->left;
+    int a_top          = this->top;
     unsigned cellX_min = this->lookupTableCellX[r_left   - a_left];
     unsigned cellY_min = this->lookupTableCellY[r_top    - a_top ];
     unsigned cellX_max = this->lookupTableCellX[r_right  - a_left];
     unsigned cellY_max = this->lookupTableCellY[r_bottom - a_top ];
 
-    if (cellX_max >= this->definition.hCells) cellX_max = this->definition.hCells - 1;
-    if (cellY_max >= this->definition.vCells) cellY_max = this->definition.vCells - 1;
+    if (cellX_max >= this->hCells) cellX_max = this->hCells - 1;
+    if (cellY_max >= this->vCells) cellY_max = this->vCells - 1;
 
     unsigned count = 0;
 

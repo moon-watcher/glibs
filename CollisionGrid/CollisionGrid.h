@@ -8,7 +8,7 @@ struct CG_RECT
 
 struct CG_DEF
 {
-    struct CG_RECT area;
+    struct CG_RECT;
     unsigned capacity;
     unsigned hCells;
     unsigned vCells;
@@ -23,7 +23,7 @@ struct CG_CELL
 
 typedef struct
 {
-    struct CG_DEF definition;
+    struct CG_DEF;
     struct CG_CELL **cells;
 
     unsigned char *lookupTableCellX;
