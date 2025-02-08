@@ -33,14 +33,15 @@ typedef struct
 //
 
 unsigned cg_size(struct CG_DEF *const);
+
 void cg_init(CollisionGrid *const, struct CG_DEF *const);
+struct CG_CELL *cg_get_CELL(CollisionGrid *const, unsigned, unsigned);
+unsigned cg_get_RECT(CollisionGrid *const, struct CG_RECT *const, struct CG_CELL *[]);
 void cg_reset(CollisionGrid *const);
 
-struct CG_CELL *cg_CELL_get(CollisionGrid *const, unsigned, unsigned);
 void *cg_CELL_addItem(struct CG_CELL *const, void *const);
 unsigned cg_CELL_removeItem(struct CG_CELL *const, void *const);
 
-unsigned cg_RECT_get(CollisionGrid *const, struct CG_RECT *const, struct CG_CELL *[]);
 void cg_RECT_addItem(struct CG_CELL *[], unsigned, void *const);
 unsigned cg_RECT_getItems(struct CG_CELL *[], unsigned, void *[]);
 void cg_RECT_removeItem(struct CG_CELL *[], unsigned, void *const);

@@ -13,6 +13,8 @@ unsigned cg_size(struct CG_DEF *const def)
            def->vCells * def->hCells * def->capacity * sizeof(void *);
 }
 
+//
+
 void cg_init(CollisionGrid *const this, struct CG_DEF *const def) 
 {
     unsigned width  = def->right  - def->left + 1;
@@ -47,14 +49,7 @@ void cg_init(CollisionGrid *const this, struct CG_DEF *const def)
     }
 }
 
-void cg_reset(CollisionGrid *const this)
-{
-    memset(this->cells, 0, this->vCells * this->hCells * sizeof(struct CG_CELL));
-}
-
-//
-
-inline struct CG_CELL *cg_CELL_get(CollisionGrid *const this, unsigned x, unsigned y)
+inline struct CG_CELL *cg_get_CELL(CollisionGrid *const this, unsigned x, unsigned y)
 {
     int a_left, a_top;
 
@@ -66,25 +61,7 @@ inline struct CG_CELL *cg_CELL_get(CollisionGrid *const this, unsigned x, unsign
     return (cellX < this->hCells && cellY < this->vCells) ? &this->cells[cellY][cellX] : 0;
 }
 
-inline void *cg_CELL_addItem(struct CG_CELL *const this, void *const ptr)
-{
-    return (this->size < this->capacity) ? (this->items[this->size++] = ptr) : 0;
-}
-
-unsigned cg_CELL_removeItem(struct CG_CELL *const this, void *const ptr)
-{
-    unsigned size = this->size;
-
-    for (unsigned i = 0; i < size; i++)
-        if (this->items[i] == ptr)
-            return this->items[i] = this->items[--this->size];
-    
-    return 0;
-}
-
-//
-
-unsigned cg_RECT_get(CollisionGrid *const this, struct CG_RECT *const rect, struct CG_CELL *cell_list[])
+unsigned cg_get_RECT(CollisionGrid *const this, struct CG_RECT *const rect, struct CG_CELL *cell_list[])
 {
     int r_left, r_top, r_right, r_bottom;
 
@@ -108,6 +85,31 @@ unsigned cg_RECT_get(CollisionGrid *const this, struct CG_RECT *const rect, stru
     
     return count;
 }
+
+void cg_reset(CollisionGrid *const this)
+{
+    memset(this->cells, 0, this->vCells * this->hCells * sizeof(struct CG_CELL));
+}
+
+//
+
+inline void *cg_CELL_addItem(struct CG_CELL *const this, void *const ptr)
+{
+    return (this->size < this->capacity) ? (this->items[this->size++] = ptr) : 0;
+}
+
+unsigned cg_CELL_removeItem(struct CG_CELL *const this, void *const ptr)
+{
+    unsigned size = this->size;
+
+    for (unsigned i = 0; i < size; i++)
+        if (this->items[i] == ptr)
+            return this->items[i] = this->items[--this->size];
+    
+    return 0;
+}
+
+//
 
 void cg_RECT_addItem(struct CG_CELL *cell_list[], unsigned total, void *const ptr)
 {
