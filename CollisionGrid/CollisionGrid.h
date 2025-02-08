@@ -8,24 +8,23 @@ struct CG_RECT
 
 struct CG_DEF
 {
-    struct CG_RECT gridArea;
+    struct CG_RECT area;
     unsigned capacity;
     unsigned hCells;
     unsigned vCells;
 };
 
+struct CG_CELL
+{
+    void **items;
+    unsigned char size;
+    unsigned char capacity;
+};
+
 typedef struct
 {
-    unsigned hCells, vCells;
-
-    struct CG_RECT area;
-
-    struct CG_CELL
-    {
-        void **items;
-        unsigned char size;
-        unsigned char capacity;
-    } **cells;
+    struct CG_DEF definition;
+    struct CG_CELL **cells;
 
     unsigned char *lookupTableCellX;
     unsigned char *lookupTableCellY;
@@ -33,8 +32,8 @@ typedef struct
 
 //
 
-unsigned cg_size(struct CG_DEF *const def);
-void cg_init(CollisionGrid * cg, struct CG_RECT gridArea, unsigned items, unsigned hCells, unsigned vCells);
+unsigned cg_size(struct CG_DEF *const);
+void cg_init(CollisionGrid *const, struct CG_DEF *const);
 void cg_reset(CollisionGrid *const);
 
 struct CG_CELL *cg_CELL_get(CollisionGrid *const, unsigned, unsigned);
