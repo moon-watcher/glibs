@@ -1,22 +1,30 @@
 #pragma once
 
+struct CG_RECT
+{
+    int left, top;
+    int right, bottom;
+};
+
+struct CG_DEF
+{
+    struct CG_RECT;
+    unsigned capacity;
+    unsigned hCells;
+    unsigned vCells;
+};
+
+struct CG_CELL
+{
+    void **items;
+    unsigned char size;
+    unsigned char capacity;
+};
+
 typedef struct
 {
-    unsigned hCells, vCells;
-    unsigned totalBytes;
-
-    struct CG_RECT
-    {
-        int left, top;
-        int right, bottom;
-    } area;
-
-    struct CG_CELL
-    {
-        void **items;
-        unsigned char size;
-        unsigned char capacity;
-    } **cells;
+    struct CG_DEF;
+    struct CG_CELL **cells;
 
     unsigned char *lookupTableCellX;
     unsigned char *lookupTableCellY;
@@ -24,9 +32,9 @@ typedef struct
 
 //
 
-CollisionGrid *cg_init(struct CG_RECT, unsigned, unsigned, unsigned);
+unsigned cg_size(struct CG_DEF *const);
+void cg_init(CollisionGrid *const, struct CG_DEF *const);
 void cg_reset(CollisionGrid *const);
-void cg_end(CollisionGrid *);
 
 struct CG_CELL *cg_CELL_get(CollisionGrid *const, unsigned, unsigned);
 void *cg_CELL_addItem(struct CG_CELL *const, void *const);
