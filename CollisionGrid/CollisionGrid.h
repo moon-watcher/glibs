@@ -1,15 +1,24 @@
 #pragma once
 
+struct CG_RECT
+{
+    int left, top;
+    int right, bottom;
+};
+
+struct CG_DEF
+{
+    struct CG_RECT gridArea;
+    unsigned capacity;
+    unsigned hCells;
+    unsigned vCells;
+};
+
 typedef struct
 {
     unsigned hCells, vCells;
-    unsigned totalBytes;
 
-    struct CG_RECT
-    {
-        int left, top;
-        int right, bottom;
-    } area;
+    struct CG_RECT area;
 
     struct CG_CELL
     {
@@ -24,7 +33,7 @@ typedef struct
 
 //
 
-unsigned cg_size(struct CG_RECT gridArea, unsigned items, unsigned hCells, unsigned vCells);
+unsigned cg_size(struct CG_DEF *const def);
 void cg_init(CollisionGrid * cg, struct CG_RECT gridArea, unsigned items, unsigned hCells, unsigned vCells);
 void cg_reset(CollisionGrid *const);
 

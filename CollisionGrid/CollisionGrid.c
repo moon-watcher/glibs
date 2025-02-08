@@ -1,34 +1,24 @@
 #include "CollisionGrid.h"
 
 
-unsigned cg_size(struct CG_RECT gridArea, unsigned items, unsigned hCells, unsigned vCells)
+// unsigned cg_size(struct CG_RECT gridArea, unsigned items, unsigned hCells, unsigned vCells)
+unsigned cg_size(struct CG_DEF *const def)
 {
-    unsigned width  = gridArea.right  - gridArea.left + 1;
-    unsigned height = gridArea.bottom - gridArea.top  + 1;
+    unsigned width  = def->gridArea.right  - def->gridArea.left + 1;
+    unsigned height = def->gridArea.bottom - def->gridArea.top  + 1;
     return sizeof(CollisionGrid) +
-                          vCells * sizeof(struct CG_CELL *) +
+                          def->vCells * sizeof(struct CG_CELL *) +
                           width * sizeof(unsigned char) +
                           height * sizeof(unsigned char) +
-                          vCells * hCells * sizeof(struct CG_CELL) +
-                          vCells * hCells * items * sizeof(void *);
+                          def->vCells * def->hCells * sizeof(struct CG_CELL) +
+                          def->vCells * def->hCells * def->capacity * sizeof(void *); 
 }
 
-void cg_init(CollisionGrid * cg, struct CG_RECT gridArea, unsigned items, unsigned hCells, unsigned vCells) 
+void cg_init(CollisionGrid * cg, struct CG_RECT gridArea, unsigned capacity, unsigned hCells, unsigned vCells) 
 {
     unsigned width  = gridArea.right  - gridArea.left + 1;
     unsigned height = gridArea.bottom - gridArea.top  + 1;
-    // unsigned totalBytes = sizeof(CollisionGrid) +
-    //                       vCells * sizeof(struct CG_CELL *) +
-    //                       width * sizeof(unsigned char) +
-    //                       height * sizeof(unsigned char) +
-    //                       vCells * hCells * sizeof(struct CG_CELL) +
-    //                       vCells * hCells * items * sizeof(void *);
 
-    // CollisionGrid *cg = malloc(totalBytes);
-    // if (!cg) return 0;
-
-    // memset(cg, 0, totalBytes);
-    // cg->totalBytes       = totalBytes;
     cg->area             = gridArea;
     cg->hCells           = hCells;
     cg->vCells           = vCells;
@@ -47,8 +37,8 @@ void cg_init(CollisionGrid * cg, struct CG_RECT gridArea, unsigned items, unsign
     for (unsigned i = 0; i < vCells; ++i) {
         cg->cells[i] = &cellMemory[i * hCells];
         for (unsigned j = 0; j < hCells; ++j) {
-            cg->cells[i][j].items = (void **)((char *)cellMemory + vCells * hCells * sizeof(struct CG_CELL) + (i * hCells + j) * items * sizeof(void *));
-            cg->cells[i][j].capacity = items;
+            cg->cells[i][j].items = (void **)((char *)cellMemory + vCells * hCells * sizeof(struct CG_CELL) + (i * hCells + j) * capacity * sizeof(void *));
+            cg->cells[i][j].capacity = capacity;
         }
     }
 }
