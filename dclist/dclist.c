@@ -6,6 +6,7 @@
 void dclist_init(dclist *const this)
 {
     memset(this, 0, sizeof(dclist));
+    this->ordered = 1;
 }
 
 void *dclist_add(dclist *const this, void *const ptr)
@@ -77,13 +78,15 @@ int dclist_removeByIndex(dclist *const this, unsigned index)
 
     this->size--;
 
-    for (unsigned i = index; i < this->size; ++i)
-        this->list[i] = this->list[i + 1];
-
-    // // Unordered delete
-    // void *const swap = this->list[index];
-    // this->list[index] = this->list[this->size];
-    // this->list[this->size] = swap;
+    if (this->ordered)
+        for (unsigned i = index; i < this->size; ++i)
+            this->list[i] = this->list[i + 1];
+    else
+    {
+        void *const swap = this->list[index];
+        this->list[index] = this->list[this->size];
+        this->list[this->size] = swap;
+    }
 
     return index;
 }

@@ -9,6 +9,7 @@ typedef struct dclist
     void **list;
     unsigned size;
     unsigned capacity;
+    unsigned ordered;
 } dclist;
 
 void dclist_init(dclist *conss);

@@ -9,8 +9,8 @@ typedef struct dcalloc
     void **list;
     unsigned size;
     unsigned capacity;
-    unsigned itemSize;
     unsigned ordered;
+    unsigned itemSize;
 } dcalloc;
 
 void dcalloc_init(dcalloc *const, unsigned);
