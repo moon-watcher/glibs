@@ -3,79 +3,48 @@
 #include "dclist.h"
 #include "config.h"
 
-void dclist_init(dclist *const this, unsigned maxItemSize)
+void dclist_init(dclist *const this)
 {
     memset(this, 0, sizeof(dclist));
-    this->itemSize = maxItemSize;
-    this->ordered = 1;
 }
 
-void *dclist_alloc(dclist *const this)
+void *dclist_add(dclist *const this, void *const ptr)
 {
-    void *ptr = this->list[this->size];
+    if (!ptr) return 0;
 
-    if (this->size < this->capacity)
+    if (this->size >= this->capacity)
     {
-        ++this->size;
-    }
-    else if ((ptr = malloc(this->itemSize)) != 0)
-    {
-        ptr = dclist_add(this, ptr);
+        void *aux = malloc((this->capacity + 1) * sizeof(void *));
+        if (aux == 0) return 0;
+
+        memcpy(aux, this->list, this->capacity * sizeof(void *));
+        free(this->list);
+        this->list = aux;
+        ++this->capacity;
     }
 
-    memset(ptr, 0, this->itemSize);
+    this->list[this->size] = ptr;
+    ++this->size;
+
     return ptr;
-}
-
-void *dclist_add(dclist *const this, void *const add)
-{
-    if (add != 0)
-    {
-        if (this->size >= this->capacity)
-        {
-            void *ptr = malloc((this->capacity + 1) * sizeof(void *));
-
-            if (ptr == 0)
-            {
-                return 0;
-            }
-
-            memcpy(ptr, this->list, this->capacity * sizeof(void *));
-            free(this->list);
-            this->list = ptr;
-            ++this->capacity;
-        }
-
-        this->list[this->size] = add;
-        ++this->size;
-    }
-
-    return add;
 }
 
 int dclist_iterator(dclist *const this, void (*iterator)())
 {
-    if (iterator == 0)
-    {
-        return -1;
-    }
+    if (iterator == 0) return DCLIST_NULL_ITERATOR;
 
     for (unsigned i = 0; i < this->size; ++i)
-    {
         iterator(this->list[i]);
-    }
 
     return this->size;
 }
 
-int dclist_remove(dclist *const this, void *const data, void *(*exec)())
+int dclist_remove(dclist *const this, void *const data)
 {
     int index = dclist_findIndex(this, data);
 
     if (index != DCLIST_NOT_FOUND)
-    {
-        index = dclist_removeByIndex(this, index, exec);
-    }
+        index = dclist_removeByIndex(this, index);
 
     return index;
 }
@@ -87,13 +56,8 @@ void dclist_reset(dclist *const this)
 
 void dclist_end(dclist *const this)
 {
-    while (this->itemSize && this->capacity--)
-    {
-        free(this->list[this->capacity]);
-    }
-
     free(this->list);
-    dclist_init(this, this->itemSize);
+    dclist_init(this);
 }
 
 //
@@ -101,42 +65,25 @@ void dclist_end(dclist *const this)
 int dclist_findIndex(dclist *const this, void *const data)
 {
     for (unsigned i = 0; i < this->size; i++)
-    {
         if (this->list[i] == data)
-        {
             return i;
-        }
-    }
 
     return DCLIST_NOT_FOUND;
 }
 
-int dclist_removeByIndex(dclist *const this, unsigned index, void (*exec)())
+int dclist_removeByIndex(dclist *const this, unsigned index)
 {
-    if (this->size == 0 || index >= this->size)
-    {
-        return DCLIST_NOT_FOUND;
-    }
-    else if (exec != 0)
-    {
-        exec(this->list[index]);
-    }
+    if (this->size == 0 || index >= this->size) return DCLIST_NOT_FOUND;
 
     this->size--;
 
-    if (this->ordered)
-    {
-        for (unsigned i = index; i < this->size; ++i)
-        {
-            this->list[i] = this->list[i + 1];
-        }
-    }
-    else
-    {
-        void *const swap = this->list[index];
-        this->list[index] = this->list[this->size];
-        this->list[this->size] = swap;
-    }
+    for (unsigned i = index; i < this->size; ++i)
+        this->list[i] = this->list[i + 1];
+
+    // // Unordered delete
+    // void *const swap = this->list[index];
+    // this->list[index] = this->list[this->size];
+    // this->list[this->size] = swap;
 
     return index;
 }
@@ -156,14 +103,8 @@ FUNC(f5, list[i + 0], list[i + 1], list[i + 2], list[i + 3], list[i + 4]);
 
 int dclist_iteratorEx(dclist *const this, void (*iterator)(), unsigned nbItems)
 {
-    if (nbItems == 0)
-    {
-        return DCLIST_NO_ITEMS;
-    }
-    else if (iterator == 0)
-    {
-        return DCLIST_NULL_ITERATOR;
-    }
+    if (nbItems == 0 || nbItems > 5) return DCLIST_NO_ITEMS;
+    if (iterator == 0) return DCLIST_NULL_ITERATOR;
 
     static void (*const _exec[])() = {0, f1, f2, f3, f4, f5};
 

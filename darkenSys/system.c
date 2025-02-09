@@ -3,7 +3,7 @@
 
 void de_system_init(de_system *const this)
 {
-    dclist_init(this, 0);
+    dclist_init(this);
 }
 
 void *de_system_add(de_system *const this, void *const data)
@@ -14,7 +14,7 @@ void *de_system_add(de_system *const this, void *const data)
 
 int de_system_delete(de_system *const this, void *const data)
 {
-    int ret = dclist_remove(this, data, 0);
+    int ret = dclist_remove(this, data);
     return DARKEN_ASSERT(ret == DCLIST_NOT_FOUND, ret, "Not found");
 }
 

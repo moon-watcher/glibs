@@ -30,12 +30,12 @@ de_entity *de_entity_delete(de_entity *const this)
 
 void de_manager_init(de_manager *const this, unsigned bytes)
 {
-    dclist_init(this, DARKEN_SIZE(bytes));
+    dcalloc_init(this, DARKEN_SIZE(bytes));
 }
 
 de_entity *de_manager_new(de_manager *const this, de_state state)
 {
-    return de_entity_set(dclist_alloc(this), state);
+    return de_entity_set(dcalloc_alloc(this), state);
 }
 
 void de_manager_update(de_manager *const this)
@@ -46,7 +46,7 @@ void de_manager_update(de_manager *const this)
 
         if (entity->state == 0)
         {
-            dclist_removeByIndex(this, --i, 0);
+            dcalloc_removeByIndex(this, --i);
             de_entity_set(entity, entity->destructor ?: ({ void *f(){return 0;} f; }));
         }
 
@@ -56,14 +56,14 @@ void de_manager_update(de_manager *const this)
 
 void de_manager_reset(de_manager *const this)
 {
-    dclist_iterator(this, (void *)de_entity_delete);
+    dcalloc_iterator(this, (void *)de_entity_delete);
     de_manager_update(this);
 }
 
 void de_manager_end(de_manager *const this)
 {
     de_manager_reset(this);
-    dclist_end(this);
+    dcalloc_end(this);
 }
 
 // Darken

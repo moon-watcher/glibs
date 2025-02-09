@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../dclist/dclist.h"
+#include "../dcalloc/dcalloc.h"
 
 typedef void *(*de_state)();
 
@@ -18,7 +18,7 @@ de_entity *de_entity_delete(de_entity *const);
 
 //
 
-typedef dclist de_manager;
+typedef dcalloc de_manager;
 
 void de_manager_init(de_manager *const, unsigned);
 de_entity *de_manager_new(de_manager *const, de_state);
