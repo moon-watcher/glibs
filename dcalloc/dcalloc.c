@@ -7,7 +7,7 @@ void dcalloc_init(dcalloc *const this, unsigned maxItemSize)
 {
     memset(this, 0, sizeof(dcalloc));
     this->itemSize = maxItemSize;
-    this->ordered = 1;
+    // this->ordered = 1;
 }
 
 void *dcalloc_alloc(dcalloc *const this)
@@ -57,6 +57,20 @@ int dcalloc_remove(dcalloc *const this, void *const data)
     return index;
 }
 
+int dcalloc_restore(dcalloc *const this, void *const data)
+{
+    for (unsigned i = this->size; i < this->capacity; i++)
+        if (this->list[i] == data)
+        {
+            this->list[i] = this->list[this->size];
+            this->list[this->size] = data;
+            
+            return this->size++;
+        }
+
+    return DCALLOC_NOT_FOUND;
+}
+
 void dcalloc_reset(dcalloc *const this)
 {
     this->size = 0;
@@ -88,15 +102,15 @@ int dcalloc_removeByIndex(dcalloc *const this, unsigned index)
     
     this->size--;
 
-    if (this->ordered)
-        for (unsigned i = index; i < this->size; ++i)
-            this->list[i] = this->list[i + 1];
-    else
-    {
+    // if (this->ordered)
+    //     for (unsigned i = index; i < this->size; ++i)
+    //         this->list[i] = this->list[i + 1];
+    // else
+    // {
         void *const swap = this->list[index];
         this->list[index] = this->list[this->size];
         this->list[this->size] = swap;
-    }
+    // }
 
     return index;
 }

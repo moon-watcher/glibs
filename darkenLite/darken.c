@@ -38,6 +38,16 @@ de_entity *de_manager_new(de_manager *const this, de_state state)
     return de_entity_set(dcalloc_alloc(this), state);
 }
 
+int de_manager_pause_entity(de_manager *const this, de_entity *const entity)
+{
+    return dcalloc_remove(this, entity);
+}
+
+int de_manager_resume_entity(de_manager *const this, de_entity *const entity)
+{
+    return dcalloc_restore(this, entity);
+}
+
 void de_manager_update(de_manager *const this)
 {
     for (unsigned i = 0; i < this->size;)
