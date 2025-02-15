@@ -27,7 +27,15 @@ typedef struct
 
 //
 
-unsigned cg_size(struct CG_DEF *const);
+#define CG_SIZE(def)                                         \
+    sizeof(CollisionGrid) +                                  \
+        def.vCells * sizeof(struct CG_CELL *) +              \
+        (def.right - def.left + 1) * sizeof(unsigned char) + \
+        (def.bottom - def.top + 1) * sizeof(unsigned char) + \
+        def.vCells *def.hCells * sizeof(struct CG_CELL) +    \
+        def.vCells *def.hCells *def.capacity * sizeof(void *)
+
+//
 
 void cg_init(CollisionGrid *const, struct CG_DEF *const);
 struct CG_CELL *cg_get_CELL(CollisionGrid *const, unsigned, unsigned);

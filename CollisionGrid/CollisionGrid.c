@@ -1,24 +1,9 @@
 #include "CollisionGrid.h"
 
-unsigned cg_size(struct CG_DEF *const def)
-{
-    unsigned width = def->right - def->left + 1;
-    unsigned height = def->bottom - def->top + 1;
-
-    return sizeof(CollisionGrid) +
-           def->vCells * sizeof(struct CG_CELL *) +
-           width * sizeof(unsigned char) +
-           height * sizeof(unsigned char) +
-           def->vCells * def->hCells * sizeof(struct CG_CELL) +
-           def->vCells * def->hCells * def->capacity * sizeof(void *);
-}
-
-//
-
 void cg_init(CollisionGrid *const this, struct CG_DEF *const def)
 {
     unsigned width  = def->right  - def->left + 1;
-    unsigned height = def->bottom - def->top + 1;
+    unsigned height = def->bottom - def->top  + 1;
 
     this->capacity = def->capacity;
     this->hCells   = def->hCells;
@@ -32,7 +17,7 @@ void cg_init(CollisionGrid *const this, struct CG_DEF *const def)
     this->lookupTableCellX = (unsigned char *)((char *)this->cells + def->vCells * sizeof(struct CG_CELL *));
     this->lookupTableCellY = (unsigned char *)((char *)this->lookupTableCellX + width * sizeof(unsigned char));
 
-    unsigned wh = (width + def->hCells - 1) / def->hCells;
+    unsigned wh = (width  + def->hCells - 1) / def->hCells;
     unsigned hv = (height + def->vCells - 1) / def->vCells;
 
     for (unsigned i = 0; i < width;  i++) this->lookupTableCellX[i] = i / wh;
