@@ -19,16 +19,19 @@ de_entity *de_entity_delete(de_entity *const);
 #include "../dcalloc/dcalloc.h"
 typedef dcalloc de_manager;
 
-void de_manager_init(de_manager *const, unsigned);
-de_entity *de_manager_new(de_manager *const, de_state);
-int de_manager_pause_entity(de_manager *const, de_entity *const);
-int de_manager_resume_entity(de_manager *const, de_entity *const);
 void de_manager_update(de_manager *const);
-void de_manager_reset(de_manager *const);
-void de_manager_end(de_manager *const);
 
 //
 
 #define DARKEN_SIZE(SIZE) sizeof(de_entity) + SIZE
 
 void darken(de_entity *const, de_state);
+
+//
+
+#define de_manager_init(this, bytes) dcalloc_init(this, DARKEN_SIZE(bytes))
+#define de_manager_new(this, state) de_entity_set(dcalloc_alloc(this), state)
+#define de_manager_pause_entity(this, entity) dcalloc_remove(this, entity)
+#define de_manager_resume_entity(this, entity) dcalloc_restore(this, entity)
+#define de_manager_reset(this) dcalloc_iterator(this, (void *)de_entity_delete); de_manager_update(this)
+#define de_manager_end(this) de_manager_reset(this); dcalloc_end(this)
