@@ -7,9 +7,13 @@
 
 void frameloader_init(frameloader *const fl, void *const resource, unsigned vrampos)
 {
-    fl->resource = resource;
     fl->vrampos = vrampos;
+    frameloader_resource(fl, resource);
+}
 
+void frameloader_resource(frameloader *const fl, void *const resource)
+{
+    fl->resource = resource;
     frameloader_setAnim(fl, 0);
     frameloader_update(fl);
 }
