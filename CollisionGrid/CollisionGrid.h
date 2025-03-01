@@ -39,6 +39,8 @@ typedef struct
 
 void cg_init(CollisionGrid *const, struct CG_DEF *const);
 struct CG_CELL *cg_get_CELL(CollisionGrid *const, unsigned, unsigned);
+struct CG_CELL *cg_addItem_FAST(CollisionGrid *const, unsigned, unsigned, void *const);
+void cg_reset_CELLs(CollisionGrid *const);
 unsigned cg_get_RECT(CollisionGrid *const, struct CG_RECT *const, struct CG_CELL *[]);
 void cg_reset(CollisionGrid *const);
 
