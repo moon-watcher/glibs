@@ -1,26 +1,30 @@
 #pragma once
 
+struct CG_RECT
+{
+    int left, top;
+    int right, bottom;
+};
+
+struct CG_DEF
+{
+    struct CG_RECT;
+    unsigned capacity;
+    unsigned hCells;
+    unsigned vCells;
+};
+
+struct CG_CELL
+{
+    void **items;
+    unsigned char size;
+    unsigned char capacity;
+};
+
 typedef struct
 {
-    struct CG_DEF
-    {
-        struct CG_RECT
-        {
-            int left, top;
-            int right, bottom;
-        };
-        unsigned capacity;
-        unsigned hCells;
-        unsigned vCells;
-    };
-
-    struct CG_CELL
-    {
-        void **items;
-        unsigned char size;
-        unsigned char capacity;
-    } **cells;
-
+    struct CG_DEF *def;
+    struct CG_CELL **cells;
     unsigned char *lookupTableCellX;
     unsigned char *lookupTableCellY;
 } CollisionGrid;
