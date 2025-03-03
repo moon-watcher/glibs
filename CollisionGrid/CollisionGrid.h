@@ -50,3 +50,8 @@ unsigned cg_CELL_removeItem(struct CG_CELL *const, void *const);
 void cg_RECT_addItem(struct CG_CELL *[], unsigned, void *const);
 unsigned cg_RECT_getItems(struct CG_CELL *[], unsigned, void *[]);
 void cg_RECT_removeItem(struct CG_CELL *[], unsigned, void *const);
+
+//
+
+unsigned cg_RECT_collision_XY(struct CG_RECT *const rect, unsigned x, unsigned y);
+unsigned cg_getItems_from_RECT(CollisionGrid *const this, struct CG_RECT *const rect, void *item_list[]);
