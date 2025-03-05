@@ -13,7 +13,7 @@ void cg_init(CollisionGrid *const this, struct CG_DEF *const def)
     this->right    = def->right;
     this->bottom   = def->bottom;
 
-    this->cells            = (struct CG_CELL **)((char *)this + sizeof(CollisionGrid));
+    this->cells = (struct CG_CELL **)((char *)this + sizeof(CollisionGrid));
     this->lookupTableCellX = (unsigned char *)((char *)this->cells + def->vCells * sizeof(struct CG_CELL *));
     this->lookupTableCellY = (unsigned char *)((char *)this->lookupTableCellX + width * sizeof(unsigned char));
 
@@ -49,38 +49,42 @@ inline struct CG_CELL *cg_get_CELL(CollisionGrid *const this, unsigned x, unsign
     return (cellX < this->hCells && cellY < this->vCells) ? &this->cells[cellY][cellX] : 0;
 }
 
-unsigned cg_get_RECT(CollisionGrid *const this, struct CG_RECT *const rect, struct CG_CELL *cell_list[])
-{
-    int r_left, r_top, r_right, r_bottom;
+// unsigned cg_get_RECT(CollisionGrid *const this, struct CG_RECT *const rect, struct CG_CELL *cell_list[])
+// {
+//     int const left = rect->left;
+//     int const right = rect->right;
+//     if (left >= right) return 0;
 
-    if ((r_left = rect->left) >= (r_right = rect->right) || (r_top = rect->top) >= (r_bottom = rect->bottom)) return 0;
+//     int const top = rect->top;
+//     int const bottom = rect->bottom;
+//     if (top >= bottom) return 0;
 
-    int a_left = this->left;
-    int a_top  = this->top;
+//     unsigned count = 0;
+//     int const this_left = this->left;
+//     int const this_top = this->top;
+//     unsigned const hCells = this->hCells;
+//     unsigned const vCells = this->vCells;
+//     unsigned char const cellX_min = this->lookupTableCellX[left - this_left];
+//     unsigned char const cellY_min = this->lookupTableCellY[top - this_top];
+//     unsigned cellX_max = this->lookupTableCellX[right - this_left];
+//     unsigned cellY_max = this->lookupTableCellY[bottom - this_top];
 
-    unsigned cellX_min = this->lookupTableCellX[r_left - a_left];
-    unsigned cellY_min = this->lookupTableCellY[r_top - a_top];
-    unsigned cellX_max = this->lookupTableCellX[r_right - a_left];
-    unsigned cellY_max = this->lookupTableCellY[r_bottom - a_top];
+//     if (cellX_max >= hCells) cellX_max = hCells - 1;
+//     if (cellY_max >= vCells) cellY_max = vCells - 1;
 
-    if (cellX_max >= this->hCells) cellX_max = this->hCells - 1;
-    if (cellY_max >= this->vCells) cellY_max = this->vCells - 1;
+//     for (unsigned char y = cellY_min; y <= cellY_max; ++y)
+//         for (unsigned char x = cellX_min; x <= cellX_max; ++x)
+//             cell_list[count++] = &this->cells[y][x];
 
-    unsigned count = 0;
-
-    for (unsigned cellY = cellY_min; cellY <= cellY_max; ++cellY)
-        for (unsigned cellX = cellX_min; cellX <= cellX_max; ++cellX)
-            cell_list[count++] = &this->cells[cellY][cellX];
-
-    return count;
-}
+//     return count;
+// }
 
 inline struct CG_CELL *cg_addItem_FAST(CollisionGrid *const this, unsigned x, unsigned y, void *const ptr)
 {
     unsigned const cellX = this->lookupTableCellX[x - this->left];
-    unsigned const cellY = this->lookupTableCellY[y - this->top ];
+    unsigned const cellY = this->lookupTableCellY[y - this->top];
     struct CG_CELL *cell = &this->cells[cellY][cellX];
-    
+
     cell->items[cell->size++] = ptr;
 
     return cell;
@@ -149,40 +153,34 @@ void cg_RECT_removeItem(struct CG_CELL *cell_list[], unsigned total, void *const
         cg_CELL_removeItem(cell_list[i], ptr);
 }
 
-
-
-
-
 unsigned cg_getItems_from_RECT(CollisionGrid *const this, struct CG_RECT *const rect, void *item_list[])
 {
-    int const rect_left = rect->left;
-    int const rect_right = rect->right;
-    
-    if (rect_left >= rect_right) return 0;
-    
-    int const rect_top = rect->top;
-    int const rect_bottom = rect->bottom;
+    int const left = rect->left;
+    int const right = rect->right;
+    if (left >= right) return 0;
 
-    if (rect_top >= rect_bottom) return 0;
-
-    int const this_left = this->left;
-    int const this_top  = this->top;
-
-    unsigned const cellX_min = this->lookupTableCellX[rect_left - this_left];
-    unsigned const cellY_min = this->lookupTableCellY[rect_top - this_top ];
-    unsigned cellX_max = this->lookupTableCellX[rect_right - this_left];
-    unsigned cellY_max = this->lookupTableCellY[rect_bottom - this_top ];
-
-    if (cellX_max >= this->hCells) cellX_max = this->hCells - 1;
-    if (cellY_max >= this->vCells) cellY_max = this->vCells - 1;
+    int const top = rect->top;
+    int const bottom = rect->bottom;
+    if (top >= bottom) return 0;
 
     unsigned count = 0;
     unsigned const sofv = sizeof(void *);
+    int const this_left = this->left;
+    int const this_top = this->top;
+    unsigned const hCells = this->hCells;
+    unsigned const vCells = this->vCells;
+    unsigned char const cellX_min = this->lookupTableCellX[left - this_left];
+    unsigned char const cellY_min = this->lookupTableCellY[top - this_top];
+    unsigned cellX_max = this->lookupTableCellX[right - this_left];
+    unsigned cellY_max = this->lookupTableCellY[bottom - this_top];
 
-    for (unsigned cellY = cellY_min; cellY <= cellY_max; ++cellY)
-        for (unsigned cellX = cellX_min; cellX <= cellX_max; ++cellX)
+    if (cellX_max >= hCells) cellX_max = hCells - 1;
+    if (cellY_max >= vCells) cellY_max = vCells - 1;
+
+    for (unsigned char y = cellY_min; y <= cellY_max; ++y)
+        for (unsigned char x = cellX_min; x <= cellX_max; ++x)
         {
-            struct CG_CELL *const cell = &this->cells[cellY][cellX];
+            struct CG_CELL *const cell = &this->cells[y][x];
             unsigned size = cell->size;
             memcpy(&item_list[count], cell->items, size * sofv);
             count += size;
@@ -193,5 +191,5 @@ unsigned cg_getItems_from_RECT(CollisionGrid *const this, struct CG_RECT *const 
 
 inline unsigned cg_RECT_collision_XY(struct CG_RECT *const rect, unsigned x, unsigned y)
 {
-    return (x >= rect->left && x <= rect->right && y >= rect->top  && y <= rect->bottom);
+    return (x >= rect->left && x <= rect->right && y >= rect->top && y <= rect->bottom);
 }

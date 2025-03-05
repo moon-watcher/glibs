@@ -41,7 +41,7 @@ void cg_init(CollisionGrid *const, struct CG_DEF *const);
 struct CG_CELL *cg_get_CELL(CollisionGrid *const, unsigned, unsigned);
 struct CG_CELL *cg_addItem_FAST(CollisionGrid *const, unsigned, unsigned, void *const);
 void cg_reset_CELLs(CollisionGrid *const);
-unsigned cg_get_RECT(CollisionGrid *const, struct CG_RECT *const, struct CG_CELL *[]);
+// unsigned cg_get_RECT(CollisionGrid *const, struct CG_RECT *const, struct CG_CELL *[]);
 void cg_reset(CollisionGrid *const);
 
 void *cg_CELL_addItem(struct CG_CELL *const, void *const);
@@ -51,7 +51,5 @@ void cg_RECT_addItem(struct CG_CELL *[], unsigned, void *const);
 unsigned cg_RECT_getItems(struct CG_CELL *[], unsigned, void *[]);
 void cg_RECT_removeItem(struct CG_CELL *[], unsigned, void *const);
 
-//
-
-unsigned cg_RECT_collision_XY(struct CG_RECT *const rect, unsigned x, unsigned y);
-unsigned cg_getItems_from_RECT(CollisionGrid *const this, struct CG_RECT *const rect, void *item_list[]);
+unsigned cg_getItems_from_RECT(CollisionGrid *const, struct CG_RECT *const, void *[]);
+unsigned cg_RECT_collision_XY(struct CG_RECT *const, unsigned, unsigned);
