@@ -1,16 +1,16 @@
 #include "darken.h"
 
+// State
+
+void *de_state_empty() { return de_state_empty; }
+
+
 // Entity
 
 inline de_entity *de_entity_set       (de_entity *const this, de_state state) { return this->state      = state, this; }
 inline de_entity *de_entity_destructor(de_entity *const this, de_state state) { return this->destructor = state, this; }
 inline de_entity *de_entity_delete    (de_entity *const this)                 { return de_entity_set(this, 0);         }
 inline de_entity *de_entity_exec      (de_entity *const this)                 { return this->state(this->data, this), this; }
-
-
-// State
-
-void *de_state_empty() { return de_state_empty; }
 
 
 // Manager
@@ -32,12 +32,12 @@ void de_manager_update(de_manager *const this)
 }
 
 
-// Darken
+// // Darken
 
-void darken(de_entity *const entity, de_state state)
-{
-    de_entity_set(entity, state);
+// void darken(de_entity *const entity, de_state state)
+// {
+//     de_entity_set(entity, state);
 
-    while (state != 0)
-        state = state(entity->data, entity);
-}
+//     while (state != 0)
+//         state = state(entity->data, entity);
+// }

@@ -28,7 +28,7 @@ typedef dcalloc de_manager;
 
 void de_manager_update(de_manager *const);
 
-#define de_manager_init(this, bytes)           dcalloc_init(this, DARKEN_SIZE(bytes))
+#define de_manager_init(this, bytes)           dcalloc_init(this, sizeof(de_entity) + bytes)
 #define de_manager_new(this, state)            de_entity_set(dcalloc_alloc(this), state)
 #define de_manager_pause_entity(this, entity)  dcalloc_remove(this, entity)
 #define de_manager_resume_entity(this, entity) dcalloc_restore(this, entity)
@@ -36,8 +36,8 @@ void de_manager_update(de_manager *const);
 #define de_manager_end(this)                   de_manager_reset(this); dcalloc_end(this)
 
 
-//
+// //
 
-#define DARKEN_SIZE(SIZE) sizeof(de_entity) + SIZE
+// #define DARKEN_SIZE(SIZE) sizeof(de_entity) + SIZE
 
-void darken(de_entity *const, de_state);
+// void darken(de_entity *const, de_state);
