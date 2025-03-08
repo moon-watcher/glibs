@@ -7,10 +7,10 @@ void *de_state_empty() { return de_state_empty; }
 
 // Entity
 
-inline de_entity *de_entity_set       (de_entity *const this, de_state state) { return this->state      = state, this; }
-inline de_entity *de_entity_destructor(de_entity *const this, de_state state) { return this->destructor = state, this; }
-inline de_entity *de_entity_delete    (de_entity *const this)                 { return de_entity_set(this, 0);         }
-inline de_entity *de_entity_exec      (de_entity *const this)                 { return this->state(this->data, this), this; }
+inline void de_entity_set       (de_entity *const this, de_state state) { this->state      = state; }
+inline void de_entity_destructor(de_entity *const this, de_state state) { this->destructor = state; }
+inline void de_entity_delete    (de_entity *const this)                 { this->state      = 0; }
+inline void de_entity_exec      (de_entity *const this)                 { this->state(this->data, this); }
 
 
 // Manager
