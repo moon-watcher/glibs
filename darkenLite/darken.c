@@ -30,14 +30,3 @@ void de_manager_update(de_manager *const this)
         entity->state = entity->state(entity->data, entity);
     }
 }
-
-
-// // Darken
-
-// void darken(de_entity *const entity, de_state state)
-// {
-//     de_entity_set(entity, state);
-
-//     while (state != 0)
-//         state = state(entity->data, entity);
-// }
