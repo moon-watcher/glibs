@@ -3,7 +3,7 @@
 #include "state.h"
 #include "entity.h"
 
-#include "../libs/dcalloc/dcalloc.h"
+#include "../dcalloc/dcalloc.h"
 typedef dcalloc de_manager;
 
 void       de_manager_init   (de_manager *const, unsigned);

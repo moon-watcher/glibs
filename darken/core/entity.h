@@ -2,7 +2,7 @@
 
 #include "state.h"
 
-#include "../libs/dcalloc/dcalloc.h"
+#include "../dcalloc/dcalloc.h"
 typedef dcalloc de_manager;
 
 typedef struct de_entity
