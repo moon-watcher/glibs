@@ -2,14 +2,14 @@
 
 typedef struct
 {
-    unsigned timer;
-    int staticTimer;
+    unsigned countdown;
+    int timer;
     void *resource;
     unsigned char anim;
     unsigned char frame;
     unsigned vrampos;
     unsigned pause;
-    unsigned allFrames;
+    unsigned allTiles;
 } frameloader;
 
 void frameloader_init(frameloader *const, void *const, unsigned, unsigned);

@@ -5,11 +5,11 @@
  * TODO: Add thrid param to frameloader_init() to use SPR_loadAllFrames()
  */
 
-void frameloader_init(frameloader *const fl, void *const resource, unsigned vrampos, unsigned allFrames)
+void frameloader_init(frameloader *const fl, void *const resource, unsigned vrampos, unsigned allTiles)
 {
     fl->vrampos = vrampos;
-    // fl->allFrames = allFrames;
-    fl->staticTimer = -1;
+    // fl->allTiles = allTiles;
+    fl->timer = 0;
     frameloader_resume(fl);
     frameloader_resource(fl, resource);
 }
@@ -17,9 +17,9 @@ void frameloader_init(frameloader *const fl, void *const resource, unsigned vram
 void frameloader_resource(frameloader *const fl, void *const resource)
 {
     fl->resource = resource;
-    frameloader_setAnim(fl, 0, fl->staticTimer);
+    frameloader_setAnim(fl, 0, fl->timer);
 
-    // if (fl->allFrames)
+    // if (fl->allTiles)
     //     SPR_loadAllFrames(fl->resource, fl->vrampos, fl->allFrames);
 
     frameloader_update(fl);
@@ -30,23 +30,25 @@ void frameloader_update(frameloader *const fl)
     if (fl->pause)
         return;
 
-    if (fl->timer > 0 && --fl->timer)
+    if (fl->countdown > 0 && --fl->countdown)
         return;
 
+    fl->countdown = fl->timer;
     FRAMELOADER_UPDATE(fl);
 }
 
-void frameloader_setSprite(frameloader *const fl, void *const sp, int staticTimer)
+void frameloader_setSprite(frameloader *const fl, void *const sp, int timer)
 {
-    FRAMELOADER_SET_SPRITE(fl, sp, staticTimer);
+    fl->countdown = fl->timer;
+    FRAMELOADER_SET_SPRITE(fl, sp, timer);
 }
 
-void frameloader_setAnim(frameloader *const fl, unsigned anim, int staticTimer)
+void frameloader_setAnim(frameloader *const fl, unsigned anim, int timer)
 {
     fl->anim = anim;
     fl->frame = 0;
-    fl->timer = 0;
-    fl->staticTimer = staticTimer;
+    fl->countdown = 0;
+    fl->timer = timer;
 }
 
 void frameloader_pause(frameloader *const fl)
