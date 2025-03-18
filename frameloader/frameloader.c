@@ -25,11 +25,6 @@ void frameloader_update(frameloader *const fl)
     FRAMELOADER_UPDATE(fl);
 }
 
-void frameloader_setSprite(frameloader *const fl, void *const sp)
-{
-    FRAMELOADER_SET_SPRITE(fl, sp);
-}
-
 void frameloader_setAnim(frameloader *const fl, unsigned anim, int timer)
 {
     fl->anim = anim;

@@ -25,10 +25,3 @@
                                                                                                                 \
     if (++fl->frame == animation->numFrame)                                                                     \
         fl->frame = 0;
-
-#define FRAMELOADER_SET_SPRITE(fl, sp)         \
-    Sprite *const sprite = sp;                 \
-    SPR_setDefinition(sprite, fl->resource);   \
-    SPR_setAnimAndFrame(sprite, fl->anim, 0);  \
-    SPR_setVRAMTileIndex(sprite, fl->vrampos); \
-    SPR_setAutoTileUpload(sprite, 0);
