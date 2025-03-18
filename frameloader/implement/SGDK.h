@@ -4,7 +4,9 @@
 
 #define FRAMELOADER_UPDATE(fl)                                                                                  \
     Animation *const animation = ((SpriteDefinition *const)fl->resource)->animations[fl->anim];                 \
-    if (fl->timer < 0) fl->countdown = animation->frames[fl->frame]->timer;                                  \
+                                                                                                                \
+    if (fl->timer < 0)                                                                                          \
+        fl->countdown = animation->frames[fl->frame]->timer;                                                    \
                                                                                                                 \
     /* Copy of loadTiles() in sprite_eng.c */                                                                   \
     TileSet *const tileset = animation->frames[fl->frame]->tileset;                                             \
@@ -24,7 +26,9 @@
     if (++fl->frame == animation->numFrame)                                                                     \
         fl->frame = 0;
 
-#define FRAMELOADER_SET_SPRITE(fl, sp, timer)        \
-    SPR_setAnimAndFrame((Sprite *)sp, fl->anim, 0);  \
-    SPR_setVRAMTileIndex((Sprite *)sp, fl->vrampos); \
-    SPR_setAutoTileUpload((Sprite *)sp, 0);
+#define FRAMELOADER_SET_SPRITE(fl, sp)         \
+    Sprite *const sprite = sp;                 \
+    SPR_setDefinition(sprite, fl->resource);   \
+    SPR_setAnimAndFrame(sprite, fl->anim, 0);  \
+    SPR_setVRAMTileIndex(sprite, fl->vrampos); \
+    SPR_setAutoTileUpload(sprite, 0);
