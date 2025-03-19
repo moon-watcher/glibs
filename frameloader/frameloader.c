@@ -1,44 +1,51 @@
 #include "frameloader.h"
-#include "config.h"
 
-void frameloader_init(frameloader *const fl, void *const resource, unsigned vrampos, int timer)
+void frameloader_init(frameloader *const this, void (*update_f)(frameloader *const), unsigned vrampos)
 {
-    fl->vrampos = vrampos;
-    frameloader_resume(fl);
-    frameloader_resource(fl, resource, timer);
+    this->update_f = update_f;
+    this->vrampos = vrampos;
+    this->resource = 0;
+    this->countdown = 0;
+    this->timer = 0;
+    this->anim = 0;
+    this->frame = 0;
+    this->pause = 0;
 }
 
-void frameloader_resource(frameloader *const fl, void *const resource, int timer)
+void frameloader_set(frameloader *const this, void *const resource, int timer, int anim)
 {
-    fl->resource = resource;
-    frameloader_setAnim(fl, 0, timer);
-    frameloader_update(fl);
+    frameloader_init(this, this->update_f, this->vrampos);
+
+    this->resource = resource;
+    this->timer = timer;
+    this->anim = anim;
+
+    frameloader_update(this);
 }
 
-void frameloader_update(frameloader *const fl)
+unsigned frameloader_update(frameloader *const this)
 {
-    if (fl->pause || (fl->countdown > 0 && --fl->countdown))
-        return;
+    if (!this->resource)
+        return FRAMELOADER_ERROR;
 
-    fl->countdown = fl->timer;
-    
-    FRAMELOADER_UPDATE(fl);
+    if (this->pause)
+        return FRAMELOADER_PAUSED;
+
+    if (this->countdown > 0 && --this->countdown)
+        return FRAMELOADER_IDLE;
+
+    this->countdown = this->timer;
+    this->update_f(this);
+
+    return FRAMELOADER_OK;
 }
 
-void frameloader_setAnim(frameloader *const fl, unsigned anim, int timer)
+void frameloader_pause(frameloader *const this)
 {
-    fl->anim = anim;
-    fl->frame = 0;
-    fl->countdown = 0;
-    fl->timer = timer;
+    this->pause = 1;
 }
 
-void frameloader_pause(frameloader *const fl)
+void frameloader_resume(frameloader *const this)
 {
-    fl->pause = 1;
-}
-
-void frameloader_resume(frameloader *const fl)
-{
-    fl->pause = 0;
+    this->pause = 0;
 }

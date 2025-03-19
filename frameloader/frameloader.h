@@ -1,19 +1,27 @@
 #pragma once
 
-typedef struct
+typedef struct frameloader
 {
+    void (*update_f)(struct frameloader *const);
+    unsigned vrampos;
+    void *resource;
     unsigned countdown;
     int timer;
-    void *resource;
-    unsigned char anim;
-    unsigned char frame;
-    unsigned vrampos;
+    int anim;
+    unsigned frame;
     unsigned pause;
 } frameloader;
 
-void frameloader_init(frameloader *const, void *const, unsigned, int);
-void frameloader_resource(frameloader *const, void *const, int);
-void frameloader_update(frameloader *const);
-void frameloader_setAnim(frameloader *const, unsigned, int);
+enum
+{
+    FRAMELOADER_ERROR,
+    FRAMELOADER_PAUSED,
+    FRAMELOADER_IDLE,
+    FRAMELOADER_OK
+};
+
+void frameloader_init(frameloader *const, void (*update_f)(struct frameloader *const), unsigned);
+void frameloader_set(frameloader *const, void *const, int, int);
+unsigned frameloader_update(frameloader *const);
 void frameloader_pause(frameloader *const);
 void frameloader_resume(frameloader *const);
