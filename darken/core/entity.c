@@ -26,7 +26,7 @@ inline de_entity *de_entity_delete(de_entity *const this)
 
 inline de_entity *de_entity_pause(de_entity *const this)
 {
-    if (this && this->manager && dcalloc_remove(this->manager, this) >= 0)
+    if (this && this->manager && de_alloc_remove(this->manager, this) >= 0)
         return this;
 
     return 0;
@@ -34,7 +34,7 @@ inline de_entity *de_entity_pause(de_entity *const this)
 
 inline de_entity *de_entity_resume(de_entity *const this)
 {
-    if (this && this->manager && dcalloc_restore(this->manager, this) >= 0)
+    if (this && this->manager && de_alloc_restore(this->manager, this) >= 0)
         return this;
 
     return 0;

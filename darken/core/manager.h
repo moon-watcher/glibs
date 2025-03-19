@@ -3,8 +3,9 @@
 #include "state.h"
 #include "entity.h"
 
-#include "../dcalloc/dcalloc.h"
-typedef dcalloc de_manager;
+#include "../alloc/alloc.h"
+
+typedef de_alloc de_manager;
 
 void       de_manager_init   (de_manager *const, unsigned);
 de_entity *de_manager_new    (de_manager *const, de_state, de_state);

@@ -1,16 +1,16 @@
 // Dynamic Cacheable List
 
-#include "dcalloc.h"
+#include "alloc.h"
 #include "config.h"
 
-void dcalloc_init(dcalloc *const this, unsigned maxItemSize)
+void de_alloc_init(de_alloc *const this, unsigned maxItemSize)
 {
-    memset(this, 0, sizeof(dcalloc));
+    memset(this, 0, sizeof(de_alloc));
     this->itemSize = maxItemSize;
     // this->ordered = 1;
 }
 
-void *dcalloc_alloc(dcalloc *const this)
+void *de_alloc_alloc(de_alloc *const this)
 {
     void *ptr = this->list[this->size];
 
@@ -37,9 +37,9 @@ void *dcalloc_alloc(dcalloc *const this)
     return ptr;
 }
 
-int dcalloc_iterator(dcalloc *const this, void (*iterator)())
+int de_alloc_iterator(de_alloc *const this, void (*iterator)())
 {
-    if (iterator == 0) return DCALLOC_NULL_ITERATOR;
+    if (iterator == 0) return DE_ALLOC_NULL_ITERATOR;
 
     for (unsigned i = 0; i < this->size; ++i)
         iterator(this->list[i]);
@@ -47,17 +47,17 @@ int dcalloc_iterator(dcalloc *const this, void (*iterator)())
     return this->size;
 }
 
-int dcalloc_remove(dcalloc *const this, void *const data)
+int de_alloc_remove(de_alloc *const this, void *const data)
 {
-    int index = dcalloc_findIndex(this, data);
+    int index = de_alloc_findIndex(this, data);
 
-    if (index != DCALLOC_NOT_FOUND)
-        index = dcalloc_removeByIndex(this, index);
+    if (index != DE_ALLOC_NOT_FOUND)
+        index = de_alloc_removeByIndex(this, index);
 
     return index;
 }
 
-int dcalloc_restore(dcalloc *const this, void *const data)
+int de_alloc_restore(de_alloc *const this, void *const data)
 {
     for (unsigned i = this->size; i < this->capacity; i++)
         if (this->list[i] == data)
@@ -68,37 +68,37 @@ int dcalloc_restore(dcalloc *const this, void *const data)
             return this->size++;
         }
 
-    return DCALLOC_NOT_FOUND;
+    return DE_ALLOC_NOT_FOUND;
 }
 
-void dcalloc_reset(dcalloc *const this)
+void de_alloc_reset(de_alloc *const this)
 {
     this->size = 0;
 }
 
-void dcalloc_end(dcalloc *const this)
+void de_alloc_end(de_alloc *const this)
 {
     while (this->itemSize && this->capacity--)
         free(this->list[this->capacity]);
 
     free(this->list);
-    dcalloc_init(this, this->itemSize);
+    de_alloc_init(this, this->itemSize);
 }
 
 //
 
-int dcalloc_findIndex(dcalloc *const this, void *const data)
+int de_alloc_findIndex(de_alloc *const this, void *const data)
 {
     for (unsigned i = 0; i < this->size; i++)
         if (this->list[i] == data)
             return i;
 
-    return DCALLOC_NOT_FOUND;
+    return DE_ALLOC_NOT_FOUND;
 }
 
-int dcalloc_removeByIndex(dcalloc *const this, unsigned index)
+int de_alloc_removeByIndex(de_alloc *const this, unsigned index)
 {
-    if (this->size == 0 || index >= this->size) return DCALLOC_NOT_FOUND;
+    if (this->size == 0 || index >= this->size) return DE_ALLOC_NOT_FOUND;
     
     this->size--;
 
@@ -128,10 +128,10 @@ FUNC(f3, list[i + 0], list[i + 1], list[i + 2]);
 FUNC(f4, list[i + 0], list[i + 1], list[i + 2], list[i + 3]);
 FUNC(f5, list[i + 0], list[i + 1], list[i + 2], list[i + 3], list[i + 4]);
 
-int dcalloc_iteratorEx(dcalloc *const this, void (*iterator)(), unsigned nbItems)
+int de_alloc_iteratorEx(de_alloc *const this, void (*iterator)(), unsigned nbItems)
 {
-    if (nbItems == 0 || nbItems > 5) return DCALLOC_NO_ITEMS;
-    if (iterator == 0) return DCALLOC_NULL_ITERATOR;
+    if (nbItems == 0 || nbItems > 5) return DE_ALLOC_NO_ITEMS;
+    if (iterator == 0) return DE_ALLOC_NULL_ITERATOR;
 
     static void (*const _exec[])() = {0, f1, f2, f3, f4, f5};
 

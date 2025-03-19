@@ -2,8 +2,8 @@
 
 #include "state.h"
 
-#include "../dcalloc/dcalloc.h"
-typedef dcalloc de_manager;
+#include "../alloc/alloc.h"
+typedef de_alloc de_manager;
 
 typedef struct de_entity
 {
