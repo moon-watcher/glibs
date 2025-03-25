@@ -1,5 +1,3 @@
-#pragma once
-
 #include "SGDK.h"
 
 void frameloader_SGDK_updater(frameloader *const this)
