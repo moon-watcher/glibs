@@ -1,7 +1,7 @@
 // Dynamic Cacheable List
 
 #include "alloc.h"
-#include "config.h"
+#include "../config.h"
 
 void de_alloc_init(de_alloc *const this, unsigned maxItemSize)
 {
