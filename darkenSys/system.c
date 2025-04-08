@@ -1,24 +1,24 @@
 #include "system.h"
 #include "assert.h"
 
-void de_system_init(de_system *const this)
+void darkenSys_init(darkenSys *const this)
 {
     dclist_init(this);
 }
 
-void *de_system_add(de_system *const this, void *const data)
+void *darkenSys_add(darkenSys *const this, void *const data)
 {
     void *ret = dclist_add(this, data);
     return DARKEN_ASSERT(ret == 0, ret, "Allocation");
 }
 
-int de_system_delete(de_system *const this, void *const data)
+int darkenSys_delete(darkenSys *const this, void *const data)
 {
     int ret = dclist_remove(this, data);
     return DARKEN_ASSERT(ret == DCLIST_NOT_FOUND, ret, "Not found");
 }
 
-int de_system_update(de_system *const this, void (*update)(), unsigned params)
+int darkenSys_update(darkenSys *const this, void (*update)(), unsigned params)
 {
     DARKEN_ASSERT(update == 0, DCLIST_NULL_ITERATOR, "Null iterator");
     DARKEN_ASSERT(params == 0, DCLIST_NO_ITEMS, "No parameters");
@@ -31,12 +31,12 @@ int de_system_update(de_system *const this, void (*update)(), unsigned params)
     return this->size / params;
 }
 
-void de_system_reset(de_system *const this)
+void darkenSys_reset(darkenSys *const this)
 {
     dclist_reset(this);
 }
 
-void de_system_end(de_system *const this)
+void darkenSys_end(darkenSys *const this)
 {
     dclist_end(this);
 }

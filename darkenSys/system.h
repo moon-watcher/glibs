@@ -2,11 +2,11 @@
 
 #include "../dclist/dclist.h"
 
-typedef dclist de_system;
+typedef dclist darkenSys;
 
-void de_system_init(de_system *const);
-void *de_system_add(de_system *const, void *const);
-int de_system_delete(de_system *const, void *const);
-int de_system_update(de_system *const, void (*)(), unsigned);
-void de_system_reset(de_system *const);
-void de_system_end(de_system *const);
+void darkenSys_init(darkenSys *const);
+void *darkenSys_add(darkenSys *const, void *const);
+int darkenSys_delete(darkenSys *const, void *const);
+int darkenSys_update(darkenSys *const, void (*)(), unsigned);
+void darkenSys_reset(darkenSys *const);
+void darkenSys_end(darkenSys *const);
