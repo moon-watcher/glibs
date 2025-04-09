@@ -6,7 +6,7 @@
 
 typedef struct de_list
 {
-    void **list;
+    void **items;
     unsigned size;
     unsigned capacity;
     // unsigned ordered;

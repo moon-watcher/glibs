@@ -18,13 +18,13 @@ void *de_list_add(de_list *const this, void *const ptr)
         void *aux = malloc((this->capacity + 1) * sizeof(void *));
         if (aux == 0) return 0;
 
-        memcpy(aux, this->list, this->capacity * sizeof(void *));
-        free(this->list);
-        this->list = aux;
+        memcpy(aux, this->items, this->capacity * sizeof(void *));
+        free(this->items);
+        this->items = aux;
         ++this->capacity;
     }
 
-    this->list[this->size] = ptr;
+    this->items[this->size] = ptr;
     ++this->size;
 
     return ptr;
@@ -35,7 +35,7 @@ int de_list_iterator(de_list *const this, void (*iterator)())
     if (iterator == 0) return DE_LIST_NULL_ITERATOR;
 
     for (unsigned i = 0; i < this->size; ++i)
-        iterator(this->list[i]);
+        iterator(this->items[i]);
 
     return this->size;
 }
@@ -57,7 +57,7 @@ void de_list_reset(de_list *const this)
 
 void de_list_end(de_list *const this)
 {
-    free(this->list);
+    free(this->items);
     de_list_init(this);
 }
 
@@ -66,7 +66,7 @@ void de_list_end(de_list *const this)
 int de_list_findIndex(de_list *const this, void *const data)
 {
     for (unsigned i = 0; i < this->size; i++)
-        if (this->list[i] == data)
+        if (this->items[i] == data)
             return i;
 
     return DE_LIST_NOT_FOUND;
@@ -80,12 +80,12 @@ int de_list_removeByIndex(de_list *const this, unsigned index)
 
     // if (this->ordered)
     //     for (unsigned i = index; i < this->size; ++i)
-    //         this->list[i] = this->list[i + 1];
+    //         this->items[i] = this->items[i + 1];
     // else
     // {
-        void *const swap = this->list[index];
-        this->list[index] = this->list[this->size];
-        this->list[this->size] = swap;
+        void *const swap = this->items[index];
+        this->items[index] = this->items[this->size];
+        this->items[this->size] = swap;
     // }
 
     return index;
@@ -112,5 +112,5 @@ void de_list_iteratorEx(de_list *const this, void (*iterator)(), unsigned nbItem
 
     static void (*const _exec[])() = {0, f1, f2, f3, f4, f5, f6};
 
-    _exec[nbItems](this->list, iterator, this->size, nbItems);
+    _exec[nbItems](this->items, iterator, this->size, nbItems);
 }
