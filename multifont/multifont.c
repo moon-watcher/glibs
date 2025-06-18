@@ -14,12 +14,8 @@ void multifont_init(multifont *const mt, const unsigned long *tiles_ptr, unsigne
     mt->char_height = 1;
     mt->chars_number = chars_number ?: MULTIFONT_MAXCHARS;
     mt->pos_in_tileset = pos_in_tileset;
+    
     multifont_reset(mt);
-}
-
-void multifont_reset(multifont *const mt)
-{
-    memset(mt->chars_vrampos, 0, mt->chars_number * sizeof(mt->chars_number));
 }
 
 void multifont_write(multifont *const mt, char *text, unsigned x, unsigned y)
@@ -45,4 +41,9 @@ void multifont_write(multifont *const mt, char *text, unsigned x, unsigned y)
         _write(mt->plan, mt->pal, mt->prio, *vrampos, x, y, width, height);
         x += width;
     }
+}
+
+void multifont_reset(multifont *const mt)
+{
+    memset(mt->chars_vrampos, 0, mt->chars_number * sizeof(mt->chars_number));
 }
