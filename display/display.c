@@ -20,3 +20,8 @@ unsigned display_prepare(unsigned short *colors, unsigned pal)
 
     return pal;
 }
+
+unsigned display_prepareColor(unsigned short color, unsigned index)
+{
+    return cache[index] = color;
+}
