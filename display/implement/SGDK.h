@@ -2,7 +2,7 @@
 
 #include <genesis.h>
 
-#define DISPLAY_PALETTES  4
+#define DISPLAY_PALETTES 4
 #define DISPLAY_PALETTE_COLORS 16
 
 #define DISPLAY_FADE_FUNCTION(FRAMES, COLORS)              \
