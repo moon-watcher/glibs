@@ -1,6 +1,6 @@
 #include "CollisionGrid.h"
 
-void cg_init(CollisionGrid *const this, struct CG_DEF *const def)
+void cg_init(CollisionGrid *const this, const struct CG_DEF *def)
 {
     unsigned width  = def->right  - def->left + 1;
     unsigned height = def->bottom - def->top  + 1;

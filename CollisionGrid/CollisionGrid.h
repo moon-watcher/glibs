@@ -37,7 +37,7 @@ typedef struct
 
 //
 
-void cg_init(CollisionGrid *const, struct CG_DEF *const);
+void cg_init(CollisionGrid *const, const struct CG_DEF *);
 struct CG_CELL *cg_get_CELL(CollisionGrid *const, unsigned, unsigned);
 struct CG_CELL *cg_addItem_FAST(CollisionGrid *const, unsigned, unsigned, void *const);
 void cg_reset_CELLs(CollisionGrid *const);

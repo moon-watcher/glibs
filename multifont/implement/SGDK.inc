@@ -1,6 +1,6 @@
 #include <genesis.h>
 
-static void _load(u16 vrampos, u32 *tiles, u16 pos, u16 chr, u16 size)
+static inline void _load(u16 vrampos, u32 *tiles, u16 pos, u16 chr, u16 size)
 {
     DMA_doCPUCopyDirect(VDP_WRITE_VRAM_ADDR((u32)(vrampos << 5)), tiles + ((pos + chr) << 3), size << 4, 2);
 }

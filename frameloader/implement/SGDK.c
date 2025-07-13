@@ -25,11 +25,3 @@ void frameloader_SGDK_updater(frameloader *const this)
     if (++this->frame == animation->numFrame)
         this->frame = 0;
 }
-
-void frameloader_SGDK_setSprite(frameloader *const this, Sprite *const sprite)
-{
-    SPR_setDefinition(sprite, this->resource);
-    SPR_setAnimAndFrame(sprite, this->anim, 0);
-    SPR_setAutoTileUpload(sprite, 0);
-    SPR_setVRAMTileIndex(sprite, this->vrampos);
-}
