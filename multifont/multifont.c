@@ -2,7 +2,7 @@
 
 void multifont_init(multifont *const mt, const unsigned long *tiles_ptr, unsigned plan, unsigned pal, unsigned (*vrampos_f)(unsigned), unsigned pos_in_tileset, unsigned chars_number)
 {
-    if (chars_number > MULTIFONT_MAXCHARS)
+    if (chars_number > MULTIFONT_MAXCHARS || chars_number == 0)
         chars_number = MULTIFONT_MAXCHARS;
 
     mt->tiles_ptr = tiles_ptr;
@@ -12,19 +12,21 @@ void multifont_init(multifont *const mt, const unsigned long *tiles_ptr, unsigne
     mt->vrampos_f = vrampos_f;
     mt->char_width = 1;
     mt->char_height = 1;
-    mt->chars_number = chars_number ?: MULTIFONT_MAXCHARS;
+    mt->chars_number = chars_number;
     mt->pos_in_tileset = pos_in_tileset;
     
     multifont_reset(mt);
 }
 
-void multifont_write(multifont *const mt, char *text, unsigned x, unsigned y)
+void multifont_write(multifont *const mt, char *text, unsigned pos_x, unsigned pos_y)
 {
     char chr;
     char *string = text;
     unsigned width = mt->char_width;
     unsigned height = mt->char_height;
     unsigned nb_tiles = width * height;
+    unsigned x = pos_x;
+    unsigned y = pos_y;
 
     while ((chr = *string++))
     {
@@ -36,7 +38,10 @@ void multifont_write(multifont *const mt, char *text, unsigned x, unsigned y)
         unsigned *const vrampos = &mt->chars_vrampos[(unsigned)chr];
 
         if (*vrampos == 0)
-            _load(*vrampos = mt->vrampos_f(nb_tiles), mt->tiles_ptr, mt->pos_in_tileset, chr, nb_tiles);
+        {
+            *vrampos = mt->vrampos_f(nb_tiles);
+            _load(*vrampos, mt->tiles_ptr, mt->pos_in_tileset, chr, nb_tiles);
+        }
 
         _write(mt->plan, mt->pal, mt->prio, *vrampos, x, y, width, height);
         x += width;
