@@ -1,7 +1,14 @@
 #pragma once
 
-typedef struct
+typedef struct CollisionGrid
 {
+    struct CG_CELL
+    {
+        void **items;
+        unsigned char size;
+        struct CollisionGrid *parent;
+    } **cells;
+
     struct CG_DEF
     {
         struct CG_RECT
@@ -12,14 +19,7 @@ typedef struct
         unsigned capacity;
         unsigned hCells;
         unsigned vCells;
-    };
-
-    struct CG_CELL
-    {
-        void **items;
-        unsigned char size;
-        unsigned char capacity;
-    } **cells;
+    } const *def;
 
     unsigned char *lookupTableCellX;
     unsigned char *lookupTableCellY;
@@ -32,8 +32,8 @@ typedef struct
         def.vCells * sizeof(struct CG_CELL *) +              \
         (def.right - def.left + 1) * sizeof(unsigned char) + \
         (def.bottom - def.top + 1) * sizeof(unsigned char) + \
-        def.vCells *def.hCells * sizeof(struct CG_CELL) +    \
-        def.vCells *def.hCells *def.capacity * sizeof(void *)
+        def.vCells * def.hCells * sizeof(struct CG_CELL) +   \
+        def.vCells * def.hCells * def.capacity * sizeof(void *)
 
 //
 
@@ -51,5 +51,5 @@ void cg_RECT_addItem(struct CG_CELL *[], unsigned, void *const);
 unsigned cg_RECT_getItems(struct CG_CELL *[], unsigned, void *[]);
 void cg_RECT_removeItem(struct CG_CELL *[], unsigned, void *const);
 
-unsigned cg_getItems_from_RECT(CollisionGrid *const, struct CG_RECT *const, void *[]);
+unsigned cg_getItems_from_RECT(CollisionGrid *const, const struct CG_RECT *, void *[]);
 unsigned cg_RECT_collision_XY(struct CG_RECT *const, unsigned, unsigned);
