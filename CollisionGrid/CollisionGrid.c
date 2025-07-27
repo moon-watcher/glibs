@@ -27,7 +27,7 @@ void cg_init(CollisionGrid *const this, const struct CG_DEF *def)
         for (unsigned x = 0; x < hCells; ++x)
         {
             struct CG_CELL *cell = &this->cells[y][x];
-            cell->items = (void **)((char *)cellMemory + vCells * hCells * sizeof(CG_CELL) + (y * hCells + x) * def->capacity * sizeof(void *));
+            cell->items = (void **)((char *)cellMemory + vCells * hCells * sizeof(struct CG_CELL) + (y * hCells + x) * def->capacity * sizeof(void *));
             cell->size = 0;
             cell->parent = this;
         }
@@ -190,8 +190,8 @@ unsigned cg_getItems_from_RECT(CollisionGrid *const this, const struct CG_RECT *
     struct CG_DEF *const def      = this->def;
     int const this_left           = def->left;
     int const this_top            = def->top;
-    unsigned const vCells         = def->vCells;
     unsigned const hCells         = def->hCells;
+    unsigned const vCells         = def->vCells;
     unsigned char const cellX_min = this->lookupTableCellX[left - this_left];
     unsigned char const cellY_min = this->lookupTableCellY[top - this_top];
     unsigned cellX_max            = this->lookupTableCellX[right - this_left];
