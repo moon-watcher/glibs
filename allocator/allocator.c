@@ -1,10 +1,9 @@
 #include "allocator.h"
-#include "../_config/free.h"
-#include "../_config/malloc.h"
+#include "config.h"
 
-void allocator_init(allocator *const a, unsigned int base)
+void allocator_init(allocator *const a, unsigned base)
 {
-	a->list = NULL;
+	a->list = 0;
 	a->base = base;
 	a->count = 0;
 }
@@ -13,23 +12,23 @@ void allocator_destroy(allocator *const a)
 {
 	while (a->list)
 	{
-		struct allocatorList *aux = a->list->next;
+		struct allocatorNode *aux = a->list->next;
 
 		free(a->list);
 		a->list = aux;
 	}
 
-	a->list = NULL;
+	a->list = 0;
 	a->base = 0;
 	a->count = 0;
 }
 
-unsigned int allocator_new(allocator *const a, unsigned int chunk_size)
+unsigned allocator_new(allocator *const a, unsigned chunk_size)
 {
-	unsigned int pos = a->base;
-	struct allocatorList *node = a->list;
-	struct allocatorList *new = malloc(sizeof(struct allocatorList));
-	struct allocatorList *next = NULL;
+	unsigned pos = a->base;
+	struct allocatorNode *node = a->list;
+	struct allocatorNode *new = malloc(sizeof(struct allocatorNode));
+	struct allocatorNode *next = 0;
 
 	if (node)
 	{
@@ -38,7 +37,7 @@ unsigned int allocator_new(allocator *const a, unsigned int chunk_size)
 			pos = node->index + node->size;
 			next = node->next;
 
-			if (next == NULL || next->index >= pos + chunk_size)
+			if (next == 0 || next->index >= pos + chunk_size)
 				break;
 
 			node = next;
@@ -58,13 +57,13 @@ unsigned int allocator_new(allocator *const a, unsigned int chunk_size)
 	return pos;
 }
 
-void allocator_delete(allocator *const a, unsigned int pos)
+void allocator_delete(allocator *const a, unsigned pos)
 {
 	if (pos < a->base)
 		return;
 
-	struct allocatorList *node = a->list;
-	struct allocatorList *prev = NULL;
+	struct allocatorNode *node = a->list;
+	struct allocatorNode *prev = 0;
 
 	while (node)
 	{
@@ -74,7 +73,7 @@ void allocator_delete(allocator *const a, unsigned int pos)
 			free(node);
 
 			if (--a->count == 0)
-				a->list = NULL;
+				a->list = 0;
 
 			return;
 		}
@@ -84,14 +83,14 @@ void allocator_delete(allocator *const a, unsigned int pos)
 	}
 }
 
-// unsigned int allocator_count(allocator *const a)
+// unsigned allocator_count(allocator *const a)
 // {
 // 	return a->count;
 // }
 
 // void allocator_info ()
 //{
-//	struct allocatorList *aux = list;
+//	struct allocatorNode *aux = list;
 //
 //	char i = 3;
 //	char str[10];
@@ -124,7 +123,7 @@ void allocator_delete(allocator *const a, unsigned int pos)
 //	allocator_new(927);
 //	allocator_delete ( x );
 //	allocator_new(2);
-//	unsigned int y = allocator_new(5);
+//	unsigned y = allocator_new(5);
 //	allocator_new(1);
 //	allocator_new(8);
 //	allocator_delete ( y );

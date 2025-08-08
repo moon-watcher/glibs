@@ -1,55 +1,29 @@
 #include "menu.h"
 
-#include "../_config/free.h"
-#include "../_config/malloc.h"
-#include "../_config/memcpy.h"
-
-struct menu *menu_create(void (*handler)(), int (*selected)(), int (*draw)())
+void menu_init(struct menu *this, void (*handler)(), int (*selected)(), int (*draw)())
 {
-    struct menu *this = malloc(sizeof(struct menu));
-
     this->drawOption = draw;
     this->drawSelected = selected;
     this->round = 0;
     this->oneOption = 0;
     this->handler = handler;
-    this->head = NULL;
-    this->tail = NULL;
-    this->selectedOption = NULL;
-
-    return this;
+    this->head = 0;
+    this->tail = 0;
+    this->selectedOption = 0;
 }
 
-void menu_destroy(struct menu *this)
+void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct menu *submenu)
 {
-    if (this == NULL)
+    if (this == 0)
         return;
 
-    while (this->head != NULL)
-    {
-        struct menuOption *mo = this->head;
-        this->head = mo->next;
-
-        free(mo);
-    }
-
-    free(this);
-    this = NULL;
-}
-
-struct menuOption *menu_addOption(struct menu *const this, void *const data, struct menu *const submenu)
-{
-    if (this == NULL)
-        return NULL;
-
-    struct menuOption *mo = malloc(sizeof(struct menuOption));
     memcpy(&mo->data, data, MENU_CONFIG_DATASIZE);
 
     mo->submenu = submenu;
-    mo->next = NULL;
-    mo->prev = NULL;
+    mo->next = 0;
+    mo->prev = 0;
 
-    if (this->head == NULL)
+    if (this->head == 0)
         this->head = mo;
     else
     {
@@ -58,13 +32,11 @@ struct menuOption *menu_addOption(struct menu *const this, void *const data, str
     }
 
     this->tail = mo;
-
-    return mo;
 }
 
-void menu_drawAll(struct menu *const this)
+void menu_drawAll(struct menu *this)
 {
-    if (this == NULL)
+    if (this == 0)
         return;
 
     struct menuOption *mo = this->head;
@@ -80,18 +52,18 @@ void menu_drawAll(struct menu *const this)
             mo = mo->next;
         }
 
-    if (this->selectedOption != NULL)
+    if (this->selectedOption != 0)
         menu_drawSelected(this);
     else
         menu_drawOption(this, menu_getOptionByIndex(this, 0));
 }
 
-int menu_update(struct menu *const this)
+int menu_update(struct menu *this)
 {
-    if (this == NULL)
+    if (this == 0)
         return MENU_ERROR_UPDATE;
 
-    if (this->handler == NULL)
+    if (this->handler == 0)
         return MENU_ERROR_UPDATE_HANDLER;
 
     int ret = this->handler(this, menu_getSelected(this), menu_getIndex(this));
@@ -101,17 +73,17 @@ int menu_update(struct menu *const this)
     return ret;
 }
 
-struct menuOption *menu_incOption(struct menu *const this)
+struct menuOption *menu_incOption(struct menu *this)
 {
-    if (this == NULL)
-        return NULL;
+    if (this == 0)
+        return 0;
 
     struct menuOption *mo = this->selectedOption;
 
-    if (mo == NULL)
-        return NULL;
+    if (mo == 0)
+        return 0;
 
-    if (mo->next != NULL)
+    if (mo->next != 0)
         this->selectedOption = mo->next;
     else if (this->round != 0)
         this->selectedOption = this->head;
@@ -124,17 +96,17 @@ struct menuOption *menu_incOption(struct menu *const this)
     return this->selectedOption;
 }
 
-struct menuOption *menu_decOption(struct menu *const this)
+struct menuOption *menu_decOption(struct menu *this)
 {
-    if (this == NULL)
-        return NULL;
+    if (this == 0)
+        return 0;
 
     struct menuOption *mo = this->selectedOption;
 
-    if (mo == NULL)
-        return NULL;
+    if (mo == 0)
+        return 0;
 
-    if (mo->prev != NULL)
+    if (mo->prev != 0)
         this->selectedOption = mo->prev;
     else if (this->round != 0)
         this->selectedOption = this->tail;
@@ -148,55 +120,55 @@ struct menuOption *menu_decOption(struct menu *const this)
     return this->selectedOption;
 }
 
-int menu_drawSelected(struct menu *const this)
+int menu_drawSelected(struct menu *this)
 {
-    if (this == NULL)
+    if (this == 0)
         return MENU_ERROR_DRAWSELECTED;
 
-    if (this->drawSelected == NULL)
+    if (this->drawSelected == 0)
         return MENU_ERROR_DRAWSELECTED_DRAWSELECTED;
 
-    if (this->selectedOption == NULL)
+    if (this->selectedOption == 0)
         return MENU_ERROR_DRAWSELECTED_SELECTEDOPTION;
 
-    if (this->selectedOption->data == NULL)
+    if (this->selectedOption->data == 0)
         return MENU_ERROR_DRAWSELECTED_DATA;
 
     return this->drawSelected(this->selectedOption->data);
 }
 
-int menu_drawOption(struct menu *const this, struct menuOption *const mo)
+int menu_drawOption(struct menu *this, struct menuOption *mo)
 {
-    if (this == NULL)
+    if (this == 0)
         return MENU_ERROR_DRAWOPTION;
 
-    if (this->drawOption == NULL)
+    if (this->drawOption == 0)
         return MENU_ERROR_DRAWOPTION_DRAWOPTION;
 
     return this->drawOption(&mo->data);
 }
 
-struct menu *menu_getSubmenu(struct menu *const this)
+struct menu *menu_getSubmenu(struct menu *this)
 {
-    if (this == NULL)
-        return NULL;
+    if (this == 0)
+        return 0;
 
     struct menuOption *mo = this->selectedOption;
-    return mo ? mo->submenu : NULL;
+    return mo ? mo->submenu : 0;
 }
 
-void menu_selectOption(struct menu *const this, struct menuOption *const mo)
+void menu_selectOption(struct menu *this, struct menuOption *mo)
 {
-    if (this == NULL)
+    if (this == 0)
         return;
 
     this->selectedOption = mo;
 }
 
-struct menuOption *menu_getOptionByIndex(struct menu *const this, unsigned int index)
+struct menuOption *menu_getOptionByIndex(struct menu *this, unsigned int index)
 {
-    if (this == NULL)
-        return NULL;
+    if (this == 0)
+        return 0;
 
     struct menuOption *mo = this->head;
     unsigned int i = 0;
@@ -209,23 +181,23 @@ struct menuOption *menu_getOptionByIndex(struct menu *const this, unsigned int i
         mo = mo->next;
     }
 
-    return NULL;
+    return 0;
 }
 
-struct menuOption *menu_getSelected(struct menu *const this)
+struct menuOption *menu_getSelected(struct menu *this)
 {
-    if (this == NULL)
-        return NULL;
+    if (this == 0)
+        return 0;
 
     return this->selectedOption;
 }
 
-int menu_getIndex(struct menu *const this)
+int menu_getIndex(struct menu *this)
 {
-    if (this == NULL)
+    if (this == 0)
         return MENU_ERROR_GETINDEX;
 
-    if (this->selectedOption == NULL)
+    if (this->selectedOption == 0)
         return MENU_ERROR_GETINDEX_SELECTEDOPTION;
 
     struct menuOption *mo = this->head;
@@ -243,28 +215,28 @@ int menu_getIndex(struct menu *const this)
     return MENU_ERROR_GETINDEX_GETINDEX;
 }
 
-void menu_deactivate(struct menu *const this, unsigned int recursive)
+void menu_deactivate(struct menu *this, unsigned int recursive)
 {
-    if (this == NULL)
+    if (this == 0)
         return;
 
     struct menuOption *mo = menu_getSelected(this);
 
-    if (mo != NULL)
+    if (mo != 0)
         menu_drawOption(this, mo);
 
     if (recursive && this->selectedOption && this->selectedOption->submenu)
         menu_deactivate(this->selectedOption->submenu, recursive);
 }
 
-void menu_activate(struct menu *const this, unsigned int recursive)
+void menu_activate(struct menu *this, unsigned int recursive)
 {
-    if (this == NULL)
+    if (this == 0)
         return;
 
     struct menuOption *mo = menu_getSelected(this);
 
-    if (mo == NULL)
+    if (mo == 0)
         menu_selectOption(this, menu_getOptionByIndex(this, 0));
 
     menu_drawSelected(this);

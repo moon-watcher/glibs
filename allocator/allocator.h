@@ -2,18 +2,18 @@
 
 typedef struct
 {
-	struct allocatorList
+	struct allocatorNode
 	{
-		unsigned int index;
-		unsigned int size;
-		struct allocatorList *next;
+		unsigned index;
+		unsigned size;
+		struct allocatorNode *next;
 	} *list;
 
-	unsigned int base;
-	unsigned int count;
+	unsigned base;
+	unsigned count;
 } allocator;
 
-void allocator_init(allocator *const, unsigned int);
+void allocator_init(allocator *const, unsigned);
 void allocator_destroy(allocator *const);
-unsigned int allocator_new(allocator *const, unsigned int);
-void allocator_delete(allocator *const, unsigned int);
+unsigned allocator_new(allocator *const, unsigned);
+void allocator_delete(allocator *const, unsigned);

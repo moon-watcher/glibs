@@ -1,4 +1,4 @@
-#include "../src/include.h"
+#include <genesis.h>
 
 #include "files/back.h"
 #include "files/flechas.h"
@@ -14,7 +14,7 @@
 
 void libpsgTest()
 {
-    libpsg_play(&back_data, 0);
+    libpsg_play(back_data, 0);
 
     while (1)
     {

@@ -1,62 +1,51 @@
 #include "frameloader.h"
 
-void frameloader_init(frameloader *const fl, const SpriteDefinition *sd, unsigned int (*vrampos_f)(unsigned int))
+void frameloader_init(frameloader *const this, void (*update_f)(frameloader *const), unsigned vrampos)
 {
-    if (fl->animations != sd->animations)
-    {
-        fl->animations = sd->animations;
-        fl->vram = vrampos_f(sd->maxNumTile);
-    }
-
-    frameloader_setAnim(fl, 0);
-    frameloader_reset(fl);
+    this->update_f = update_f;
+    this->vrampos = vrampos;
+    this->resource = 0;
+    this->countdown = 0;
+    this->timer = 0;
+    this->anim = 0;
+    this->frame = 0;
+    this->pause = 0;
 }
 
-void frameloader_update(frameloader *const fl)
+void frameloader_set(frameloader *const this, void *const resource, int timer, int anim)
 {
-    if (fl->timer--)
-        return;
+    frameloader_init(this, this->update_f, this->vrampos);
 
-    Animation *const animation = fl->animations[fl->anim];
-    AnimationFrame *const frame = animation->frames[fl->frame];
+    this->resource = resource;
+    this->timer = timer;
+    this->anim = anim;
 
-    fl->timer = frame->timer;
-
-    if (++fl->frame == animation->numFrame)
-        fl->frame = 0;
-
-    // Copy of loadTiles() at sprite_eng.c
-    TileSet *const ts = frame->tileset;
-    u16 compression = ts->compression;
-    u16 lenInWord = (ts->numTile << 5) >> 1;
-    void *const from = FAR_SAFE(ts->tiles, lenInWord << 1);
-    unsigned int vrampos = fl->vram << 5;
-
-    if (compression != COMPRESSION_NONE)
-    {
-        u8 *buf = DMA_allocateAndQueueDma(DMA_VRAM, vrampos, lenInWord, 2);
-
-        if (buf)
-            unpack(compression, (u8 *)from, buf);
-    }
-    else
-        DMA_queueDma(DMA_VRAM, from, vrampos, lenInWord, 2);
+    frameloader_update(this);
 }
 
-void frameloader_setSprite(frameloader *const fl, Sprite *const sp)
+unsigned frameloader_update(frameloader *const this)
 {
-    SPR_setAnimAndFrame(sp, fl->anim, 0);
-    SPR_setVRAMTileIndex(sp, fl->vram);
-    SPR_setAutoTileUpload(sp, FALSE);
+    if (!this->resource)
+        return FRAMELOADER_ERROR;
+
+    if (this->pause)
+        return FRAMELOADER_PAUSED;
+
+    if (this->countdown > 0 && --this->countdown)
+        return FRAMELOADER_IDLE;
+
+    this->countdown = this->timer;
+    this->update_f(this);
+
+    return FRAMELOADER_OK;
 }
 
-void frameloader_setAnim(frameloader *const fl, unsigned int anim)
+void frameloader_pause(frameloader *const this)
 {
-    fl->anim = anim;
+    this->pause = 1;
 }
 
-void frameloader_reset(frameloader *const fl)
+void frameloader_resume(frameloader *const this)
 {
-    fl->frame = 0;
-    fl->timer = 0;
+    this->pause = 0;
 }

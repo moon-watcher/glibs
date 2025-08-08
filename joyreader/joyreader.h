@@ -1,115 +1,21 @@
 #pragma once
 
-typedef struct
-{
-    unsigned int port : 2;
-    unsigned int (*reader_f)(unsigned int);
-    unsigned int changed;
-    unsigned int active;
-} joyreader;
+#define JOYREADER_UPDATE(J, V) ({ J = *(unsigned int *)&(struct { unsigned short changed, active; }){V ^ J, V}; })
+#define JOYREADER_ACTIVE(J)    ((unsigned short)J)
+#define JOYREADER_CHANGED(J)   (J >> 16)
+#define JOYREADER_INACTIVE(J)  (~JOYREADER_ACTIVE(J))
+#define JOYREADER_PRESSED(J)   (JOYREADER_CHANGED(J) & JOYREADER_ACTIVE(J))
+#define JOYREADER_RELEASED(J)  (JOYREADER_CHANGED(J) & JOYREADER_INACTIVE(J))
 
-void joyreader_init(joyreader *const, unsigned int, unsigned int (*)(unsigned int));
-void joyreader_update(joyreader *const);
-void joyreader_reset(joyreader *const);
-void joyreader_press(joyreader *const, unsigned int);
+#include "config.h"
 
+// void joyreader_update(joyreader *const joy, unsigned active)
+// {
+//     joy->changed = active ^ joy->active;
+//     joy->active = active;
+// }
 
-#define joy_active(J)                 ( J->active )
-#define joy_active_up(J)            ( ( joy_active(J)   >>  0 ) & 1 )
-#define joy_active_down(J)          ( ( joy_active(J)   >>  1 ) & 1 )
-#define joy_active_left(J)          ( ( joy_active(J)   >>  2 ) & 1 )
-#define joy_active_right(J)         ( ( joy_active(J)   >>  3 ) & 1 )
-#define joy_active_a(J)             ( ( joy_active(J)   >>  6 ) & 1 )
-#define joy_active_b(J)             ( ( joy_active(J)   >>  4 ) & 1 )
-#define joy_active_c(J)             ( ( joy_active(J)   >>  5 ) & 1 )
-#define joy_active_x(J)             ( ( joy_active(J)   >> 10 ) & 1 )
-#define joy_active_y(J)             ( ( joy_active(J)   >>  9 ) & 1 )
-#define joy_active_z(J)             ( ( joy_active(J)   >>  8 ) & 1 )
-#define joy_active_start(J)         ( ( joy_active(J)   >>  7 ) & 1 )
-#define joy_active_mode(J)          ( ( joy_active(J)   >> 11 ) & 1 )
-#define joy_active_vertical(J)        ( joy_active_up(J)         | joy_active_down(J) )
-#define joy_active_horizontal(J)      ( joy_active_left(J)       | joy_active_right(J) )
-#define joy_active_dir(J)             ( joy_active_vertical(J)   | joy_active_horizontal(J) )
-#define joy_active_abc(J)             ( joy_active_a(J)          | joy_active_b(J)   | joy_active_c(J) )
-#define joy_active_xyz(J)             ( joy_active_x(J)          | joy_active_y(J)   | joy_active_z(J) )
-#define joy_active_btn(J)             ( joy_active_abc(J)        | joy_active_xyz(J) )
-
-#define joy_changed(J)                ( J->changed )
-#define joy_changed_up(J)           ( ( joy_changed(J)  >>  0 ) & 1 )
-#define joy_changed_down(J)         ( ( joy_changed(J)  >>  1 ) & 1 )
-#define joy_changed_left(J)         ( ( joy_changed(J)  >>  2 ) & 1 )
-#define joy_changed_right(J)        ( ( joy_changed(J)  >>  3 ) & 1 )
-#define joy_changed_a(J)            ( ( joy_changed(J)  >>  6 ) & 1 )
-#define joy_changed_b(J)            ( ( joy_changed(J)  >>  4 ) & 1 )
-#define joy_changed_c(J)            ( ( joy_changed(J)  >>  5 ) & 1 )
-#define joy_changed_x(J)            ( ( joy_changed(J)  >> 10 ) & 1 )
-#define joy_changed_y(J)            ( ( joy_changed(J)  >>  9 ) & 1 )
-#define joy_changed_z(J)            ( ( joy_changed(J)  >>  8 ) & 1 )
-#define joy_changed_start(J)        ( ( joy_changed(J)  >>  7 ) & 1 )
-#define joy_changed_mode(J)         ( ( joy_changed(J)  >> 11 ) & 1 )
-#define joy_changed_vertical(J)       ( joy_changed_up(J)        | joy_changed_down(J) )
-#define joy_changed_horizontal(J)     ( joy_changed_left(J)      | joy_changed_right(J) )
-#define joy_changed_dir(J)            ( joy_changed_vertical(J)  | joy_changed_horizontal(J) )
-#define joy_changed_abc(J)            ( joy_changed_a(J)         | joy_changed_b(J)  | joy_changed_c(J) )
-#define joy_changed_xyz(J)            ( joy_changed_x(J)         | joy_changed_y(J)  | joy_changed_z(J) )
-#define joy_changed_btn(J)            ( joy_changed_abc(J)       | joy_changed_xyz(J) )
-
-#define joy_inactive(J)               ( ~joy_active(J) )
-#define joy_inactive_up(J)          ( ( joy_inactive(J) >>  0 ) & 1 )
-#define joy_inactive_down(J)        ( ( joy_inactive(J) >>  1 ) & 1 )
-#define joy_inactive_left(J)        ( ( joy_inactive(J) >>  2 ) & 1 )
-#define joy_inactive_right(J)       ( ( joy_inactive(J) >>  3 ) & 1 )
-#define joy_inactive_a(J)           ( ( joy_inactive(J) >>  6 ) & 1 )
-#define joy_inactive_b(J)           ( ( joy_inactive(J) >>  4 ) & 1 )
-#define joy_inactive_c(J)           ( ( joy_inactive(J) >>  5 ) & 1 )
-#define joy_inactive_x(J)           ( ( joy_inactive(J) >> 10 ) & 1 )
-#define joy_inactive_y(J)           ( ( joy_inactive(J) >>  9 ) & 1 )
-#define joy_inactive_z(J)           ( ( joy_inactive(J) >>  8 ) & 1 )
-#define joy_inactive_start(J)       ( ( joy_inactive(J) >>  7 ) & 1 )
-#define joy_inactive_mode(J)        ( ( joy_inactive(J) >> 11 ) & 1 )
-#define joy_inactive_vertical(J)      ( joy_inactive_up(J)       | joy_inactive_down(J) )
-#define joy_inactive_horizontal(J)    ( joy_inactive_left(J)     | joy_inactive_right(J) )
-#define joy_inactive_dir(J)           ( joy_inactive_vertical(J) | joy_inactive_horizontal(J) )
-#define joy_inactive_abc(J)           ( joy_inactive_a(J)        | joy_inactive_b(J) | joy_inactive_c(J) )
-#define joy_inactive_xyz(J)           ( joy_inactive_x(J)        | joy_inactive_y(J) | joy_inactive_z(J) )
-#define joy_inactive_btn(J)           ( joy_inactive_abc(J)      | joy_inactive_xyz(J) )
-
-#define joy_pressed(J)                ( joy_active(J)  & joy_changed(J) )
-#define joy_pressed_up(J)           ( ( joy_pressed(J)  >>  0 ) & 1 )
-#define joy_pressed_down(J)         ( ( joy_pressed(J)  >>  1 ) & 1 )
-#define joy_pressed_left(J)         ( ( joy_pressed(J)  >>  2 ) & 1 )
-#define joy_pressed_right(J)        ( ( joy_pressed(J)  >>  3 ) & 1 )
-#define joy_pressed_a(J)            ( ( joy_pressed(J)  >>  6 ) & 1 )
-#define joy_pressed_b(J)            ( ( joy_pressed(J)  >>  4 ) & 1 )
-#define joy_pressed_c(J)            ( ( joy_pressed(J)  >>  5 ) & 1 )
-#define joy_pressed_x(J)            ( ( joy_pressed(J)  >> 10 ) & 1 )
-#define joy_pressed_y(J)            ( ( joy_pressed(J)  >>  9 ) & 1 )
-#define joy_pressed_z(J)            ( ( joy_pressed(J)  >>  8 ) & 1 )
-#define joy_pressed_start(J)        ( ( joy_pressed(J)  >>  7 ) & 1 )
-#define joy_pressed_mode(J)         ( ( joy_pressed(J)  >> 11 ) & 1 )
-#define joy_pressed_vertical(J)       ( joy_pressed_up(J)        | joy_pressed_down(J) )
-#define joy_pressed_horizontal(J)     ( joy_pressed_left(J)      | joy_pressed_right(J) )
-#define joy_pressed_dir(J)            ( joy_pressed_vertical(J)  | joy_pressed_horizontal(J) )
-#define joy_pressed_abc(J)            ( joy_pressed_a(J)         | joy_pressed_b(J)  | joy_pressed_c(J) )
-#define joy_pressed_xyz(J)            ( joy_pressed_x(J)         | joy_pressed_y(J)  | joy_pressed_z(J) )
-#define joy_pressed_btn(J)            ( joy_pressed_abc(J)       | joy_pressed_xyz(J) )
-
-#define joy_released(J)               ( ~joy_active(J) & joy_changed(J) )
-#define joy_released_up(J)          ( ( joy_released(J) >>  0 ) & 1 )
-#define joy_released_down(J)        ( ( joy_released(J) >>  1 ) & 1 )
-#define joy_released_left(J)        ( ( joy_released(J) >>  2 ) & 1 )
-#define joy_released_right(J)       ( ( joy_released(J) >>  3 ) & 1 )
-#define joy_released_a(J)           ( ( joy_released(J) >>  6 ) & 1 )
-#define joy_released_b(J)           ( ( joy_released(J) >>  4 ) & 1 )
-#define joy_released_c(J)           ( ( joy_released(J) >>  5 ) & 1 )
-#define joy_released_x(J)           ( ( joy_released(J) >> 10 ) & 1 )
-#define joy_released_y(J)           ( ( joy_released(J) >>  9 ) & 1 )
-#define joy_released_z(J)           ( ( joy_released(J) >>  8 ) & 1 )
-#define joy_released_start(J)       ( ( joy_released(J) >>  7 ) & 1 )
-#define joy_released_mode(J)        ( ( joy_released(J) >> 11 ) & 1 )
-#define joy_released_vertical(J)      ( joy_released_up(J)       | joy_released_down(J) )
-#define joy_released_horizontal(J)    ( joy_released_left(J)     | joy_released_right(J) )
-#define joy_released_dir(J)           ( joy_released_vertical(J) | joy_released_horizontal(J) )
-#define joy_released_abc(J)           ( joy_released_a(J)        | joy_released_b(J) | joy_released_c(J) )
-#define joy_released_xyz(J)           ( joy_released_x(J)        | joy_released_y(J) | joy_released_z(J) )
-#define joy_released_btn(J)           ( joy_released_abc(J)      | joy_released_xyz(J) )
+// void joyreader_press(joyreader *const joy, unsigned value)
+// {
+//     joy->active = value;
+// }
