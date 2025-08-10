@@ -12,7 +12,7 @@ void frameloader_init(frameloader *const this, void (*update_f)(frameloader *con
     this->pause = 0;
 }
 
-void frameloader_set(frameloader *const this, void *const resource, int timer, int anim)
+void frameloader_set(frameloader *const this, const void *resource, int timer, int anim)
 {
     frameloader_init(this, this->update_f, this->vrampos);
 
