@@ -9,7 +9,6 @@ void frameloader_init(frameloader *const this, void (*update_f)(frameloader *con
     this->timer = 0;
     this->anim = 0;
     this->frame = 0;
-    this->pause = 0;
 }
 
 void frameloader_set(frameloader *const this, const void *resource, int timer, int anim)
@@ -25,27 +24,11 @@ void frameloader_set(frameloader *const this, const void *resource, int timer, i
 
 unsigned frameloader_update(frameloader *const this)
 {
-    if (!this->resource)
-        return FRAMELOADER_ERROR;
+    if (this->countdown == 0)
+    {
+        this->countdown = this->timer;
+        this->update_f(this);
+    }
 
-    if (this->pause)
-        return FRAMELOADER_PAUSED;
-
-    if (this->countdown > 0 && --this->countdown)
-        return FRAMELOADER_IDLE;
-
-    this->countdown = this->timer;
-    this->update_f(this);
-
-    return FRAMELOADER_OK;
-}
-
-void frameloader_pause(frameloader *const this)
-{
-    this->pause = 1;
-}
-
-void frameloader_resume(frameloader *const this)
-{
-    this->pause = 0;
+    return this->countdown--;
 }
