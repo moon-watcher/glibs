@@ -185,28 +185,29 @@ unsigned cg_getItems_from_RECT(CollisionGrid *const this, const struct CG_RECT *
     if (top >= bottom)
         return 0;
 
-    unsigned count                = 0;
-    unsigned const sofv           = sizeof(void *);
-    struct CG_DEF *const def      = this->def;
-    int const this_left           = def->left;
-    int const this_top            = def->top;
-    unsigned const hCells         = def->hCells;
-    unsigned const vCells         = def->vCells;
-    unsigned char const cellX_min = this->lookupTableCellX[left - this_left];
-    unsigned char const cellY_min = this->lookupTableCellY[top - this_top];
-    unsigned cellX_max            = this->lookupTableCellX[right - this_left];
-    unsigned cellY_max            = this->lookupTableCellY[bottom - this_top];
+    unsigned count           = 0;
+    struct CG_DEF *const def = this->def;
+    int const this_left      = def->left;
+    int const this_top       = def->top;
+    unsigned const hCells    = def->hCells;
+    unsigned const vCells    = def->vCells;
+    unsigned const cellX_min = this->lookupTableCellX[left   - this_left];
+    unsigned const cellY_min = this->lookupTableCellY[top    - this_top];
+    unsigned cellX_max       = this->lookupTableCellX[right  - this_left];
+    unsigned cellY_max       = this->lookupTableCellY[bottom - this_top];
 
     if (cellX_max >= hCells) cellX_max = hCells - 1;
     if (cellY_max >= vCells) cellY_max = vCells - 1;
 
-    for (unsigned char y = cellY_min; y <= cellY_max; ++y)
-        for (unsigned char x = cellX_min; x <= cellX_max; ++x)
+    for (unsigned y = cellY_min; y <= cellY_max; ++y)
+        for (unsigned x = cellX_min; x <= cellX_max; ++x)
         {
             struct CG_CELL *const cell = &this->cells[y][x];
-            unsigned char const size = cell->size;
-            memcpy(&item_list[count], cell->items, size * sofv);
-            count += size;
+            unsigned const size = cell->size;
+            void **src = cell->items;
+
+            for (unsigned i = 0; i < size; ++i)
+                item_list[count++] = src[i];
         }
 
     return count;
