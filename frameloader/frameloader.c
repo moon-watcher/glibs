@@ -1,6 +1,6 @@
 #include "frameloader.h"
 
-void frameloader_init(frameloader *const this, void (*update_f)(frameloader *const), unsigned vrampos)
+void frameloader_init(frameloader *const this, int (*update_f)(frameloader *const), unsigned vrampos)
 {
     this->update_f = update_f;
     this->vrampos = vrampos;
@@ -27,7 +27,10 @@ unsigned frameloader_update(frameloader *const this)
     if (this->countdown == 0)
     {
         this->countdown = this->timer;
-        this->update_f(this);
+        unsigned total_frames = this->update_f(this);
+
+        if (++this->frame == total_frames)
+            this->frame = 0;
     }
 
     return this->countdown--;

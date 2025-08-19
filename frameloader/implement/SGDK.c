@@ -1,27 +1,22 @@
 #include "SGDK.h"
 
-void frameloader_SGDK_updater(frameloader *const this)
+int frameloader_SGDK_updater(frameloader *const this)
 {
-    Animation *const animation = ((SpriteDefinition *const)this->resource)->animations[this->anim];
+    SpriteDefinition *const sd = this->resource;
+    Animation *const animation = sd->animations[this->anim];
+    AnimationFrame *const frame = animation->frames[this->frame];
+    TileSet *const tileset = frame->tileset; // Copy of loadTiles() in sprite_eng.c
+    u16 const lenInWord = tileset->numTile << 4;
+    void *const from = FAR_SAFE(tileset->tiles, lenInWord << 1);
+    u16 const vrampos = this->vrampos << 5;
 
-    if (this->timer < 0)
-        this->countdown = animation->frames[this->frame]->timer;
+    if (tileset->compression)
+        unpack(tileset->compression, (u8 *)from, DMA_allocateAndQueueDma(DMA_VRAM, vrampos, lenInWord, 2));
+    else
+        DMA_queueDma(DMA_VRAM, from, vrampos, lenInWord, 2);
 
-    /* Copy of loadTiles() in sprite_eng.c */
-    TileSet *const tileset = animation->frames[this->frame]->tileset;
-    u16 const lenInWord = (tileset->numTile << 5) >> 1;
+    if (this->timer == 0)
+        this->countdown = frame->timer;
 
-    if (lenInWord)
-    {
-        void *const from = FAR_SAFE(tileset->tiles, lenInWord << 1);
-        u16 const vrampos = this->vrampos << 5;
-
-        if (tileset->compression)
-            unpack(tileset->compression, (u8 *)from, DMA_allocateAndQueueDma(DMA_VRAM, vrampos, lenInWord, 2));
-        else
-            DMA_queueDma(DMA_VRAM, from, vrampos, lenInWord, 2);
-    }
-
-    if (++this->frame == animation->numFrame)
-        this->frame = 0;
+    return animation->numFrame;
 }
