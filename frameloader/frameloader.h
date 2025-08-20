@@ -9,6 +9,7 @@ typedef struct frameloader
     int timer;
     int anim;
     unsigned frame;
+    unsigned total_frames;
 } frameloader;
 
 void frameloader_init(frameloader *const, int (*)(struct frameloader *const), unsigned);

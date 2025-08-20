@@ -9,6 +9,7 @@ void frameloader_init(frameloader *const this, int (*update_f)(frameloader *cons
     this->timer = 0;
     this->anim = 0;
     this->frame = 0;
+    this->total_frames = 0;
 }
 
 void frameloader_set(frameloader *const this, const void *resource, int timer, int anim)
@@ -18,19 +19,19 @@ void frameloader_set(frameloader *const this, const void *resource, int timer, i
     this->resource = resource;
     this->timer = timer;
     this->anim = anim;
-
-    frameloader_update(this);
+    this->countdown = this->timer;
+    this->total_frames = this->update_f(this);
 }
 
 unsigned frameloader_update(frameloader *const this)
 {
     if (this->countdown == 0)
     {
-        this->countdown = this->timer;
-        unsigned total_frames = this->update_f(this);
-
-        if (++this->frame == total_frames)
+        if (++this->frame >= this->total_frames)
             this->frame = 0;
+        
+        this->countdown = this->timer;
+        this->total_frames = this->update_f(this);
     }
 
     return this->countdown--;
