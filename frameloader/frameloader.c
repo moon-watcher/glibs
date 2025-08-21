@@ -29,7 +29,7 @@ unsigned frameloader_update(frameloader *const this)
     {
         if (++this->frame >= this->total_frames)
             this->frame = 0;
-        
+
         this->countdown = this->timer;
         this->total_frames = this->update_f(this);
     }
