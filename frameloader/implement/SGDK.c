@@ -36,11 +36,8 @@ int frameloader_SGDK_updater_0(frameloader *const this)
  */
 int frameloader_SGDK_updater(frameloader *const this)
 {
-    SpriteDefinition *const sd = this->resource;
-    Animation *const animation = sd->animations[this->anim];
-    AnimationFrame *const frame = animation->frames[this->frame];
-    TileSet *const tileset = frame->tileset;
-
+    Animation *const animation = ((SpriteDefinition *const)this->resource)->animations[this->anim];
+    TileSet *const tileset = animation->frames[this->frame]->tileset;
     u16 len = tileset->numTile << 4;
     void *const from = FAR_SAFE(tileset->tiles, len << 1);
     u16 const to = this->vrampos << 5;
