@@ -17,7 +17,9 @@ void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct
     if (this == 0)
         return;
 
-    memcpy(&mo->data, data, MENU_CONFIG_DATASIZE);
+    // memcpy(&mo->data, data, MENU_CONFIG_DATASIZE);
+    for (unsigned i = 0; i < MENU_CONFIG_DATASIZE; i++)
+        ((unsigned char*)&mo->data)[i] = ((const unsigned char*)data)[i];
 
     mo->submenu = submenu;
     mo->next = 0;
