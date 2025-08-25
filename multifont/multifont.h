@@ -17,5 +17,6 @@ typedef struct
 } multifont;
 
 void multifont_init(multifont *const, const unsigned long *, unsigned, unsigned, unsigned (*)(unsigned), unsigned, unsigned);
-void multifont_write(multifont *const, char *, unsigned, unsigned);
+void multifont_write(multifont *const, const char *, unsigned, unsigned);
+unsigned multifont_sprite(multifont *const, const char *, unsigned, unsigned, void *const, void *[]);
 void multifont_reset(multifont *const);
