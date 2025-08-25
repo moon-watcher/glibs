@@ -2,4 +2,4 @@
 
 #define MULTIFONT_MAXCHARS 96
 
-#include "implement/SGDK.inc"
+#include "implement/SGDK.h"
