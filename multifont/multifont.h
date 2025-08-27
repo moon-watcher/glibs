@@ -34,6 +34,6 @@ void multifont_reset(multifont *const);
 
 //
 
-multifont_sprite *multifont_sprite_init(multifont *const, void *const, void(*));
+void multifont_sprite_init(multifont_sprite *, multifont *const, void *const, void(*));
 void multifont_sprite_write(multifont_sprite *, const char *, unsigned, unsigned);
 void multifont_sprite_end(multifont_sprite *);
