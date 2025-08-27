@@ -1,8 +1,5 @@
 #pragma once
 
-#define MULTIFONT_SPRITE_TILEWIDTH 8 // pixels
-#define MULTIFONT_SPRITE_MAXSPRITES 80
-
 #include "config.h"
 
 typedef struct
@@ -26,6 +23,7 @@ typedef struct
     int total;
     void (*freeFn)();
     multifont *mf;
+    unsigned flags;
 } multifont_sprite;
 
 void multifont_text_init(multifont *const, const unsigned long *, unsigned, unsigned, unsigned (*)(unsigned), unsigned, unsigned);

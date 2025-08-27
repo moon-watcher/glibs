@@ -70,13 +70,14 @@ void multifont_sprite_init(multifont_sprite *const mfs, multifont *const mf, voi
     mfs->mf = mf;
     mfs->definition = def;
     mfs->freeFn = freeFn;
+    mfs->flags = 0;
 }
 
 void multifont_sprite_write(multifont_sprite *const mfs, const char *text, unsigned x_pos, unsigned y_pos)
 {
     multifont *const mf = mfs->mf;
     PROCCESS(
-        mfs->array[mfs->total++] = _sprite(mf, *vrampos, x, y, mfs->definition),
+        mfs->array[mfs->total++] = _sprite(mfs, *vrampos, x, y),
         MULTIFONT_SPRITE_TILEWIDTH);
 }
 
