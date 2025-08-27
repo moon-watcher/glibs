@@ -28,7 +28,7 @@
 
 //
 
-void multifont_init(multifont *const mf, const unsigned long *tiles_ptr, unsigned plan, unsigned pal, unsigned (*vrampos_f)(unsigned), unsigned pos_in_tileset, unsigned chars_number)
+void multifont_text_init(multifont *const mf, const unsigned long *tiles_ptr, unsigned plan, unsigned pal, unsigned (*vrampos_f)(unsigned), unsigned pos_in_tileset, unsigned chars_number)
 {
     if (chars_number > MULTIFONT_MAXCHARS || chars_number == 0)
         chars_number = MULTIFONT_MAXCHARS;
@@ -43,7 +43,7 @@ void multifont_init(multifont *const mf, const unsigned long *tiles_ptr, unsigne
     mf->chars_number = chars_number;
     mf->pos_in_tileset = pos_in_tileset;
 
-    multifont_reset(mf);
+    multifont_text_reset(mf);
 }
 
 void multifont_text_write(multifont *const mf, const char *text, unsigned x_pos, unsigned y_pos)
@@ -53,7 +53,7 @@ void multifont_text_write(multifont *const mf, const char *text, unsigned x_pos,
         1);
 }
 
-void multifont_reset(multifont *const mf)
+void multifont_text_reset(multifont *const mf)
 {
     for (unsigned short i = 0; i < mf->chars_number; i++)
         mf->chars_vrampos[i] = 0;
@@ -66,8 +66,8 @@ void multifont_sprite_init(multifont_sprite *const mfs, multifont *const mf, voi
     for (unsigned i = 0; i < MULTIFONT_SPRITE_MAXSPRITES; i++)
         mfs->array[i] = 0;
 
-    mfs->mf = mf;
     mfs->total = 0;
+    mfs->mf = mf;
     mfs->definition = def;
     mfs->freeFn = freeFn;
 }
@@ -82,13 +82,13 @@ void multifont_sprite_write(multifont_sprite *const mfs, const char *text, unsig
 
 void multifont_sprite_reset(multifont_sprite *const mfs)
 {
+    if (mfs->freeFn)
+        for (unsigned i = 0; i < MULTIFONT_SPRITE_MAXSPRITES; i++)
+            if (mfs->array[i])
+                mfs->freeFn(mfs->array[i]);
+        
     for (unsigned i = 0; i < MULTIFONT_SPRITE_MAXSPRITES; i++)
-    {
-        if (mfs->freeFn && mfs->array[i])
-            mfs->freeFn(mfs->array[i]);
-
         mfs->array[i] = 0;
-    }
 
     mfs->total = 0;
 }
