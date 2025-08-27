@@ -1,6 +1,32 @@
 #include "multifont.h"
 
-#define MULTIFONT_SPRITE_TILE_WIDTH 8 // pixels
+#define PROCCESS(CODE, MULTIPLY)                                           \
+    unsigned short const width = mf->char_width;                           \
+    unsigned short const height = mf->char_height;                         \
+    unsigned short const nb_tiles = width * height;                        \
+    unsigned short x = x_pos;                                              \
+    unsigned short y = y_pos;                                              \
+                                                                           \
+    for (char chr, *string = text; (chr = *string++);)                     \
+    {                                                                      \
+        chr -= 32;                                                         \
+                                                                           \
+        if (chr >= mf->chars_number)                                       \
+            continue;                                                      \
+                                                                           \
+        unsigned short *const vrampos = &mf->chars_vrampos[(unsigned)chr]; \
+                                                                           \
+        if (*vrampos == 0)                                                 \
+        {                                                                  \
+            *vrampos = mf->vrampos_f(nb_tiles);                            \
+            _load(mf, *vrampos, chr, nb_tiles);                            \
+        }                                                                  \
+                                                                           \
+        CODE;                                                              \
+        x += width * MULTIPLY;                                             \
+    }
+
+//
 
 void multifont_init(multifont *const mf, const unsigned long *tiles_ptr, unsigned plan, unsigned pal, unsigned (*vrampos_f)(unsigned), unsigned pos_in_tileset, unsigned chars_number)
 {
@@ -22,30 +48,9 @@ void multifont_init(multifont *const mf, const unsigned long *tiles_ptr, unsigne
 
 void multifont_text_write(multifont *const mf, const char *text, unsigned x_pos, unsigned y_pos)
 {
-    unsigned short const width = mf->char_width;
-    unsigned short const height = mf->char_height;
-    unsigned short const nb_tiles = width * height;
-    unsigned short x = x_pos;
-    unsigned short y = y_pos;
-
-    for (char chr, *string = text; (chr = *string++);)
-    {
-        chr -= 32;
-
-        if (chr >= mf->chars_number)
-            continue;
-
-        unsigned short *const vrampos = &mf->chars_vrampos[(unsigned)chr];
-
-        if (*vrampos == 0)
-        {
-            *vrampos = mf->vrampos_f(nb_tiles);
-            _load(mf, *vrampos, chr, nb_tiles);
-        }
-
-        _write(mf, *vrampos, x, y, width, height);
-        x += width;
-    }
+    PROCCESS(
+        _write(mf, *vrampos, x, y, width, height),
+        1);
 }
 
 void multifont_reset(multifont *const mf)
@@ -60,7 +65,7 @@ multifont_sprite *multifont_sprite_init(multifont *const mf, void *const def, vo
 {
     multifont_sprite *mfs = malloc(sizeof(multifont_sprite));
 
-    for (unsigned i = 0; i < 80; i++)
+    for (unsigned i = 0; i < MULTIFONT_SPRITE_MAXSPRITES; i++)
         mfs->array[i] = 0;
 
     mfs->mf = mf;
@@ -74,35 +79,14 @@ multifont_sprite *multifont_sprite_init(multifont *const mf, void *const def, vo
 void multifont_sprite_write(multifont_sprite *const mfs, const char *text, unsigned x_pos, unsigned y_pos)
 {
     multifont *const mf = mfs->mf;
-    unsigned short const width = mf->char_width;
-    unsigned short const height = mf->char_height;
-    unsigned short const nb_tiles = width * height;
-    unsigned short x = x_pos;
-    unsigned short y = y_pos;
-
-    for (char chr, *string = text; (chr = *string++);)
-    {
-        chr -= 32;
-
-        if (chr >= mf->chars_number)
-            continue;
-
-        unsigned short *const vrampos = &mf->chars_vrampos[(unsigned)chr];
-
-        if (*vrampos == 0)
-        {
-            *vrampos = mf->vrampos_f(nb_tiles);
-            _load(mf, *vrampos, chr, nb_tiles);
-        }
-
-        mfs->array[mfs->total++] = _sprite(mf, *vrampos, x, y, mfs->definition);
-        x += width * MULTIFONT_SPRITE_TILE_WIDTH;
-    }
+    PROCCESS(
+        mfs->array[mfs->total++] = _sprite(mf, *vrampos, x, y, mfs->definition),
+        MULTIFONT_SPRITE_TILEWIDTH);
 }
 
 void multifont_sprite_end(multifont_sprite *mfs)
 {
-    for (unsigned i = 0; i < 80; i++)
+    for (unsigned i = 0; i < MULTIFONT_SPRITE_MAXSPRITES; i++)
     {
         if (mfs->freeFn && mfs->array[i])
             mfs->freeFn(mfs->array[i]);
@@ -112,5 +96,5 @@ void multifont_sprite_end(multifont_sprite *mfs)
 
     mfs->total = 0;
 
-    free(mfs); 
+    free(mfs);
 }
