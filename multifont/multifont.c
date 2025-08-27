@@ -61,7 +61,7 @@ void multifont_reset(multifont *const mf)
 
 //
 
-void multifont_sprite_init(multifont_sprite *mfs, multifont *const mf, void *const def, void(*freeFn))
+void multifont_sprite_init(multifont_sprite *const mfs, multifont *const mf, void *const def, void(*freeFn))
 {
     for (unsigned i = 0; i < MULTIFONT_SPRITE_MAXSPRITES; i++)
         mfs->array[i] = 0;
@@ -80,7 +80,7 @@ void multifont_sprite_write(multifont_sprite *const mfs, const char *text, unsig
         MULTIFONT_SPRITE_TILEWIDTH);
 }
 
-void multifont_sprite_end(multifont_sprite *mfs)
+void multifont_sprite_reset(multifont_sprite *const mfs)
 {
     for (unsigned i = 0; i < MULTIFONT_SPRITE_MAXSPRITES; i++)
     {
@@ -90,8 +90,5 @@ void multifont_sprite_end(multifont_sprite *mfs)
         mfs->array[i] = 0;
     }
 
-    mfs->mf = 0;
     mfs->total = 0;
-    mfs->definition = 0;
-    mfs->freeFn = 0;
 }
