@@ -16,7 +16,21 @@ typedef struct
     unsigned chars_vrampos[MULTIFONT_MAXCHARS];
 } multifont;
 
+typedef struct
+{
+    void *array[80];
+    void *definition;
+    int total;
+    void (*freeFn)();
+    multifont *mf;
+} multifont_sprite;
+
 void multifont_init(multifont *const, const unsigned long *, unsigned, unsigned, unsigned (*)(unsigned), unsigned, unsigned);
-unsigned multifont_text(multifont *const, const char *, unsigned, unsigned);
-unsigned multifont_sprite(multifont *const, const char *, unsigned, unsigned, void *const, void *[]);
+void multifont_text_write(multifont *const, const char *, unsigned, unsigned);
 void multifont_reset(multifont *const);
+
+//
+
+multifont_sprite *multifont_sprite_init(multifont *const, void *const, void(*));
+void multifont_sprite_write(multifont_sprite *, const char *, unsigned, unsigned);
+void multifont_sprite_end(multifont_sprite *); 
