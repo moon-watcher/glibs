@@ -4,8 +4,8 @@
 #include "list/list.h"
 #include "maths/sqrt.h"
 
-
 #include "allocator.h"
+#include "bitflag.h"
 #include "CollisionGrid.h"
 #include "display.h"
 #include "frameloader.h"
