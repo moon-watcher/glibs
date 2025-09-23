@@ -3,15 +3,18 @@
 #define PROCCESS(CODE, MULTIPLY)                                           \
     unsigned short const width = mf->char_width;                           \
     unsigned short const height = mf->char_height;                         \
+    unsigned short const chars = mf->chars_number;                         \
     unsigned short const nb_tiles = width * height;                        \
+    unsigned short const inc_x = width * MULTIPLY;                         \
     unsigned short x = x_pos;                                              \
     unsigned short y = y_pos;                                              \
+    char chr, *string = text;                                              \
                                                                            \
-    for (char chr, *string = text; (chr = *string++);)                     \
+    while (chr = *string++)                                                \
     {                                                                      \
         chr -= 32;                                                         \
                                                                            \
-        if (chr >= mf->chars_number)                                       \
+        if (chr >= chars)                                                  \
             continue;                                                      \
                                                                            \
         unsigned short *const vrampos = &mf->chars_vrampos[(unsigned)chr]; \
@@ -23,7 +26,7 @@
         }                                                                  \
                                                                            \
         CODE;                                                              \
-        x += width * MULTIPLY;                                             \
+        x += inc_x;                                                        \
     }
 
 //
@@ -48,9 +51,7 @@ void multifont_text_init(multifont *const mf, const unsigned long *tiles_ptr, un
 
 void multifont_text_write(multifont *const mf, const char *text, unsigned x_pos, unsigned y_pos)
 {
-    PROCCESS(
-        _write(mf, *vrampos, x, y, width, height),
-        1);
+    PROCCESS(_write(mf, *vrampos, x, y, width, height), 1);
 }
 
 void multifont_text_reset(multifont *const mf)
@@ -76,9 +77,7 @@ void multifont_sprite_init(multifont_sprite *const mfs, multifont *const mf, voi
 void multifont_sprite_write(multifont_sprite *const mfs, const char *text, unsigned x_pos, unsigned y_pos)
 {
     multifont *const mf = mfs->mf;
-    PROCCESS(
-        mfs->array[mfs->total++] = _sprite(mfs, *vrampos, x, y),
-        MULTIFONT_SPRITE_TILEWIDTH);
+    PROCCESS(mfs->array[mfs->total++] = _sprite(mfs, *vrampos, x, y), MULTIFONT_SPRITE_TILEWIDTH);
 }
 
 void multifont_sprite_reset(multifont_sprite *const mfs)
@@ -87,7 +86,7 @@ void multifont_sprite_reset(multifont_sprite *const mfs)
         for (unsigned i = 0; i < MULTIFONT_SPRITE_MAXSPRITES; i++)
             if (mfs->array[i])
                 mfs->freeFn(mfs->array[i]);
-        
+
     for (unsigned i = 0; i < MULTIFONT_SPRITE_MAXSPRITES; i++)
         mfs->array[i] = 0;
 
