@@ -10,7 +10,7 @@
     unsigned short y = y_pos;                                              \
     char chr, *string = text;                                              \
                                                                            \
-    while (chr = *string++)                                                \
+    while ((chr = *string++))                                              \
     {                                                                      \
         chr -= 32;                                                         \
                                                                            \
