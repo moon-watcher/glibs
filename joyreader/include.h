@@ -7,8 +7,6 @@
 #define JOYREADER_PRESSED(J)   (JOYREADER_CHANGED(J) & JOYREADER_ACTIVE(J))
 #define JOYREADER_RELEASED(J)  (JOYREADER_CHANGED(J) & JOYREADER_INACTIVE(J))
 
-#include "config.h"
-
 // void joyreader_update(joyreader *const joy, unsigned active)
 // {
 //     joy->changed = active ^ joy->active;
