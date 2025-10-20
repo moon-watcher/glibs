@@ -42,3 +42,24 @@ unsigned long sqrt(unsigned long x)
         i += 1;
     return i;
 }
+
+// ChatGPT alternative // not tested
+unsigned long sqrt_fast(unsigned long x)
+{
+    unsigned long i = 0;
+    unsigned long sq = 0;
+    unsigned long step = (x >= 65536) ? 32768 : 128;
+
+    do
+    {
+        unsigned long const newsq = sq + ((i << 1) + step) * step;
+        if (newsq <= x)
+        {
+            i += step;
+            sq = newsq;
+        }
+        step >>= 1;
+    } while (step);
+
+    return i;
+}
