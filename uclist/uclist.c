@@ -3,7 +3,7 @@
 #include "uclist.h"
 #include "config.h"
 
-void uclist_init_alloc(uclist *const this, unsigned itemSize)
+void uclist_init_alloc(uclist *const this, unsigned short itemSize)
 {
     this->items = 0;
     this->size = 0;
@@ -19,7 +19,7 @@ void uclist_init_add(uclist *const this)
 void *uclist_alloc(uclist *const this)
 {
     void *ptr = this->items[this->size];
-    unsigned const itemSize = this->itemSize;
+    unsigned short const itemSize = this->itemSize;
 
     if (this->size < this->capacity)
         ++this->size;
@@ -34,7 +34,7 @@ void *uclist_alloc(uclist *const this)
 
 void *uclist_add(uclist *const this, void *const add)
 {
-    unsigned const capacity = this->capacity;
+    unsigned short const capacity = this->capacity;
 
     if (this->size >= capacity)
     {
@@ -56,7 +56,7 @@ void *uclist_add(uclist *const this, void *const add)
 void uclist_iterator(uclist *const this, void (*iterator)())
 {
     void **const items = this->items;
-    unsigned i = this->size;
+    unsigned short i = this->size;
 
     while (i--)
         iterator(items[i]);
@@ -75,12 +75,12 @@ int uclist_remove(uclist *const this, void *const data)
 void uclist_restore(uclist *const this, void *const data)
 {
     void **const items = this->items;
-    unsigned i = this->capacity;
+    unsigned short i = this->capacity;
 
     while (i--)
         if (items[i] == data)
         {
-            unsigned const size = this->size;
+            unsigned short const size = this->size;
 
             items[i] = items[size];
             items[size] = data;
@@ -94,7 +94,7 @@ void uclist_restore(uclist *const this, void *const data)
 int uclist_find(uclist *const this, void *const data)
 {
     void **const items = this->items;
-    unsigned i = this->size;
+    unsigned short i = this->size;
 
     while (i--)
         if (items[i] == data)
@@ -103,9 +103,9 @@ int uclist_find(uclist *const this, void *const data)
     return -1;
 }
 
-unsigned uclist_removeByIndex(uclist *const this, unsigned index)
+unsigned short uclist_removeByIndex(uclist *const this, unsigned short index)
 {
-    unsigned size = this->size;
+    unsigned short size = this->size;
 
     if (size == 0 || index >= size)
         return 0;
@@ -121,12 +121,12 @@ unsigned uclist_removeByIndex(uclist *const this, unsigned index)
     return 1;
 }
 
-unsigned uclist_reset(uclist *const this)
+unsigned short uclist_reset(uclist *const this)
 {
     this->size = 0;
 
-    unsigned capacity = this->capacity;
-    unsigned const itemSize = this->itemSize;
+    unsigned short capacity = this->capacity;
+    unsigned short const itemSize = this->itemSize;
 
     if (capacity == 0 || itemSize == 0)
         return 2;
@@ -149,11 +149,11 @@ unsigned uclist_reset(uclist *const this)
 void uclist_end(uclist *const this)
 {
     void **const items = this->items;
-    unsigned const itemSize = this->itemSize;
+    unsigned short const itemSize = this->itemSize;
 
     if (itemSize)
     {
-        unsigned i = this->capacity;
+        unsigned short i = this->capacity;
 
         while (i--)
             free(items[i]);
@@ -166,9 +166,9 @@ void uclist_end(uclist *const this)
 //
 
 #define FUNC(NAME, ...)                                                           \
-    static void NAME(void *list[], void (*it)(), unsigned size, unsigned nbItems) \
+    static void NAME(void *list[], void (*it)(), unsigned short size, unsigned short nbItems) \
     {                                                                             \
-        for (unsigned i = 0; i < size; i += nbItems)                              \
+        for (unsigned short i = 0; i < size; i += nbItems)                              \
             it(__VA_ARGS__);                                                      \
     }
 
@@ -177,7 +177,7 @@ FUNC(f3, list[i + 0], list[i + 1], list[i + 2]);
 FUNC(f4, list[i + 0], list[i + 1], list[i + 2], list[i + 3]);
 FUNC(f5, list[i + 0], list[i + 1], list[i + 2], list[i + 3], list[i + 4]);
 
-int uclist_iteratorEx(uclist *const this, void (*iterator)(), unsigned nbItems)
+int uclist_iteratorEx(uclist *const this, void (*iterator)(), unsigned short nbItems)
 {
     static void (*const _exec[])() = {f2, f3, f4, f5};
 
