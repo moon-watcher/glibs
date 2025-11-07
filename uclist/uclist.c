@@ -165,11 +165,11 @@ void uclist_end(uclist *const this)
 
 //
 
-#define FUNC(NAME, ...)                                                           \
+#define FUNC(NAME, ...)                                                                       \
     static void NAME(void *list[], void (*it)(), unsigned short size, unsigned short nbItems) \
-    {                                                                             \
-        for (unsigned short i = 0; i < size; i += nbItems)                              \
-            it(__VA_ARGS__);                                                      \
+    {                                                                                         \
+        for (unsigned short i = 0; i < size; i += nbItems)                                    \
+            it(__VA_ARGS__);                                                                  \
     }
 
 FUNC(f2, list[i + 0], list[i + 1]);
