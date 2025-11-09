@@ -24,8 +24,8 @@ void *uclist_alloc(uclist *const this)
     if (this->size < this->capacity)
         ++this->size;
 
-    else if ((ptr = malloc(itemSize)) != 0)
-        ptr = uclist_add(this, ptr);
+    else if (!((ptr = malloc(itemSize)) && uclist_add(this, ptr)))
+        free(ptr);
 
     memset(ptr, 0, itemSize);
 
@@ -107,7 +107,7 @@ unsigned short uclist_removeByIndex(uclist *const this, unsigned short index)
 {
     unsigned short size = this->size;
 
-    if (size == 0 || index >= size)
+    if (index >= size)
         return 0;
 
     size = --this->size;
@@ -131,8 +131,9 @@ unsigned short uclist_reset(uclist *const this)
     if (capacity == 0 || itemSize == 0)
         return 2;
 
-    void *block = malloc(capacity * itemSize);
-    if (!block)
+    void *ptr = malloc(capacity * itemSize);
+
+    if (!ptr)
         return 0;
 
     void **const items = this->items;
@@ -140,7 +141,7 @@ unsigned short uclist_reset(uclist *const this)
     while (capacity--)
     {
         free(items[capacity]);
-        items[capacity] = (unsigned char *)block + capacity * itemSize;
+        items[capacity] = (unsigned char *)ptr + capacity * itemSize;
     }
 
     return 1;
@@ -179,9 +180,9 @@ FUNC(f5, list[i + 0], list[i + 1], list[i + 2], list[i + 3], list[i + 4]);
 
 int uclist_iteratorEx(uclist *const this, void (*iterator)(), unsigned short nbItems)
 {
-    static void (*const _exec[])() = {f2, f3, f4, f5};
+    static void (*const _exec[])() = {0, 0, f2, f3, f4, f5};
 
-    _exec[nbItems - 2](this->items, iterator, this->size, nbItems);
+    _exec[nbItems](this->items, iterator, this->size, nbItems);
 
     return this->size / nbItems;
 }
