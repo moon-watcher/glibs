@@ -21,6 +21,7 @@ void uclist_end(uclist *);
 
 //
 
+void *uclist_addUnique(uclist *, void *);
 int16_t uclist_getIndex(uclist *, void *);
 uint16_t uclist_removeByIndex(uclist *, uint16_t);
 

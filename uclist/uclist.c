@@ -103,6 +103,11 @@ void uclist_end(uclist *$)
 
 //
 
+void *uclist_addSafe(uclist *$, void *add)
+{
+    return (uclist_getIndex($, add) < 0) ? uclist_add($, add) : 0;
+}
+
 int16_t uclist_getIndex(uclist *$, void *data)
 {
     uint16_t i = $->size;
