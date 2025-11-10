@@ -134,8 +134,6 @@ uint16_t uclist_removeByIndex(uclist *$, uint16_t index)
     return 1;
 }
 
-//
-
 #define FUNC(NAME, ...)                                                           \
     static void NAME(void *list[], void (*it)(), uint16_t size, uint16_t nbItems) \
     {                                                                             \
@@ -150,7 +148,7 @@ FUNC(f5, list[i + 0], list[i + 1], list[i + 2], list[i + 3], list[i + 4]);
 
 static void (*_iteratorEx[])() = {0, 0, f2, f3, f4, f5};
 
-int16_t uclist_iteratorEx(uclist *$, void (*iterator)(), uint16_t nbItems)
+uint16_t uclist_iteratorEx(uclist *$, void (*iterator)(), uint16_t nbItems)
 {
     _iteratorEx[nbItems]($->items, iterator, $->size, nbItems);
 
