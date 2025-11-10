@@ -63,8 +63,7 @@ uint16_t uclist_restore(uclist *$, void *data)
         if ($->items[--i] == data)
         {
             $->items[i] = $->items[$->size];
-            $->items[$->size] = data;
-            ++$->size;
+            $->items[$->size++] = data;
 
             return 1;
         }
@@ -109,7 +108,8 @@ int16_t uclist_getIndex(uclist *$, void *data)
     uint16_t i = $->size;
 
     while (i--)
-        if ($->items[i] == data) return i;
+        if ($->items[i] == data)
+            return i;
 
     return -1;
 }
