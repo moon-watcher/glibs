@@ -1,176 +1,141 @@
 // Unordered Cacheable List
 
 #include "uclist.h"
-#include "config.h"
 
-void uclist_init_alloc(uclist *const this, unsigned short itemSize)
+void uclist_init(uclist *$, uint16_t itemSize)
 {
-    this->items = 0;
-    this->size = 0;
-    this->capacity = 0;
-    this->itemSize = itemSize;
+    $->items = 0;
+    $->size = 0;
+    $->capacity = 0;
+    $->itemSize = itemSize;
 }
 
-void uclist_init_add(uclist *const this)
+void *uclist_alloc(uclist *$)
 {
-    uclist_init_alloc(this, 0);
-}
+    void *ptr = $->items[$->size];
 
-void *uclist_alloc(uclist *const this)
-{
-    void *ptr = this->items[this->size];
-    unsigned short const itemSize = this->itemSize;
+    if ($->size < $->capacity)
+        $->size++;
 
-    if (this->size < this->capacity)
-        ++this->size;
-
-    else if (!((ptr = malloc(itemSize)) && uclist_add(this, ptr)))
+    else if (!((ptr = malloc($->itemSize)) && uclist_add($, ptr)))
         free(ptr);
 
-    memset(ptr, 0, itemSize);
+    memset(ptr, 0, $->itemSize);
 
     return ptr;
 }
 
-void *uclist_add(uclist *const this, void *const add)
+void *uclist_add(uclist *$, void *add)
 {
-    unsigned short const capacity = this->capacity;
-
-    if (this->size >= capacity)
+    if ($->size >= $->capacity)
     {
-        void **ptr = malloc((capacity + 1) * sizeof(void *));
+        void **ptr = malloc(($->capacity + 1) * sizeof(void *));
+        if (!ptr) return 0;
 
-        if (!ptr)
-            return 0;
+        memcpy(ptr, $->items, $->capacity * sizeof(void *));
+        free($->items);
 
-        memcpy(ptr, this->items, capacity * sizeof(void *));
-        free(this->items);
-
-        this->items = ptr;
-        ++this->capacity;
+        $->items = ptr;
+        ++$->capacity;
     }
 
-    return this->items[this->size++] = add;
+    return $->items[$->size++] = add;
 }
 
-void uclist_iterator(uclist *const this, void (*iterator)())
+void uclist_iterator(uclist *$, void (*iterator)())
 {
-    void **const items = this->items;
-    unsigned short i = this->size;
+    uint16_t i = $->size;
 
     while (i--)
-        iterator(items[i]);
+        iterator($->items[i]);
 }
 
-int uclist_remove(uclist *const this, void *const data)
+uint16_t uclist_remove(uclist *$, void *data)
 {
-    int index = uclist_find(this, data);
-
-    if (index >= 0)
-        uclist_removeByIndex(this, index);
-
-    return index;
+    return uclist_removeByIndex($, (uint16_t)uclist_getIndex($, data));
 }
 
-void uclist_restore(uclist *const this, void *const data)
+uint16_t uclist_restore(uclist *$, void *data)
 {
-    void **const items = this->items;
-    unsigned short i = this->capacity;
-
-    while (i--)
-        if (items[i] == data)
+    uint16_t i = $->capacity;
+    
+    while (i > $->size)
+        if ($->items[--i] == data)
         {
-            unsigned short const size = this->size;
+            $->items[i] = $->items[$->size];
+            $->items[$->size] = data;
+            ++$->size;
 
-            items[i] = items[size];
-            items[size] = data;
-
-            ++this->size;
-
-            return;
+            return 1;
         }
+
+    return 0;
 }
 
-int uclist_find(uclist *const this, void *const data)
+uint16_t uclist_reset(uclist *$)
 {
-    void **const items = this->items;
-    unsigned short i = this->size;
+    $->size = 0;
+
+    if ($->capacity == 0) return 3;
+    if ($->itemSize == 0) return 2;
+
+    void *ptr = malloc($->capacity * $->itemSize);
+    if (!ptr) return 0;
+
+    uint16_t i = $->capacity;
 
     while (i--)
-        if (items[i] == data)
-            return i;
-
-    return -1;
-}
-
-unsigned short uclist_removeByIndex(uclist *const this, unsigned short index)
-{
-    unsigned short size = this->size;
-
-    if (index >= size)
-        return 0;
-
-    size = --this->size;
-
-    void **const items = this->items;
-    void *const swap = items[index];
-
-    items[index] = items[size];
-    items[size] = swap;
-
-    return 1;
-}
-
-unsigned short uclist_reset(uclist *const this)
-{
-    this->size = 0;
-
-    unsigned short capacity = this->capacity;
-    unsigned short const itemSize = this->itemSize;
-
-    if (capacity == 0 || itemSize == 0)
-        return 2;
-
-    void *ptr = malloc(capacity * itemSize);
-
-    if (!ptr)
-        return 0;
-
-    void **const items = this->items;
-
-    while (capacity--)
     {
-        free(items[capacity]);
-        items[capacity] = (unsigned char *)ptr + capacity * itemSize;
+        free($->items[i]);
+        $->items[i] = (uint8_t *)ptr + i * $->itemSize;
     }
 
     return 1;
 }
 
-void uclist_end(uclist *const this)
+void uclist_end(uclist *$)
 {
-    void **const items = this->items;
-    unsigned short const itemSize = this->itemSize;
+    while ($->itemSize && $->capacity--)
+        free($->items[$->capacity]);
 
-    if (itemSize)
-    {
-        unsigned short i = this->capacity;
-
-        while (i--)
-            free(items[i]);
-    }
-
-    free(items);
-    uclist_init_alloc(this, itemSize);
+    free($->items);
+    uclist_init($, $->itemSize);
 }
 
 //
 
-#define FUNC(NAME, ...)                                                                       \
-    static void NAME(void *list[], void (*it)(), unsigned short size, unsigned short nbItems) \
-    {                                                                                         \
-        for (unsigned short i = 0; i < size; i += nbItems)                                    \
-            it(__VA_ARGS__);                                                                  \
+int16_t uclist_getIndex(uclist *$, void *data)
+{
+    uint16_t i = $->size;
+
+    while (i--)
+        if ($->items[i] == data) return i;
+
+    return -1;
+}
+
+uint16_t uclist_removeByIndex(uclist *$, uint16_t index)
+{
+    if (index >= $->size) return 0;
+
+    --$->size;
+
+    void **items = $->items;
+    void *swap = items[index];
+
+    items[index] = items[$->size];
+    items[$->size] = swap;
+
+    return 1;
+}
+
+//
+
+#define FUNC(NAME, ...)                                                           \
+    static void NAME(void *list[], void (*it)(), uint16_t size, uint16_t nbItems) \
+    {                                                                             \
+        for (uint16_t i = 0; i < size; i += nbItems)                              \
+            it(__VA_ARGS__);                                                      \
     }
 
 FUNC(f2, list[i + 0], list[i + 1]);
@@ -178,11 +143,11 @@ FUNC(f3, list[i + 0], list[i + 1], list[i + 2]);
 FUNC(f4, list[i + 0], list[i + 1], list[i + 2], list[i + 3]);
 FUNC(f5, list[i + 0], list[i + 1], list[i + 2], list[i + 3], list[i + 4]);
 
-int uclist_iteratorEx(uclist *const this, void (*iterator)(), unsigned short nbItems)
+static void (*_iteratorEx[])() = {0, 0, f2, f3, f4, f5};
+
+int16_t uclist_iteratorEx(uclist *$, void (*iterator)(), uint16_t nbItems)
 {
-    static void (*const _exec[])() = {0, 0, f2, f3, f4, f5};
+    _iteratorEx[nbItems]($->items, iterator, $->size, nbItems);
 
-    _exec[nbItems](this->items, iterator, this->size, nbItems);
-
-    return this->size / nbItems;
+    return $->size / nbItems;
 }

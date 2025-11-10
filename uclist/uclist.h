@@ -1,25 +1,29 @@
 #pragma once
 
-typedef struct uclist
+#include "config.h"
+
+typedef struct
 {
     void **items;
-    unsigned short size;
-    unsigned short capacity;
-    unsigned short itemSize;
+    uint16_t size;
+    uint16_t capacity;
+    uint16_t itemSize;
 } uclist;
 
-void uclist_init_alloc(uclist *const, unsigned short);
-void uclist_init_add(uclist *const);
-void *uclist_alloc(uclist *const);
-void *uclist_add(uclist *const, void *const);
-void uclist_iterator(uclist *const, void (*)());
-int uclist_remove(uclist *const, void *const);
-void uclist_restore(uclist *const, void *const);
-int uclist_find(uclist *const, void *const);
-unsigned short uclist_removeByIndex(uclist *const, unsigned short);
-unsigned short uclist_reset(uclist *const);
-void uclist_end(uclist *const);
+void uclist_init(uclist *, uint16_t);
+void *uclist_alloc(uclist *);
+void *uclist_add(uclist *, void *);
+void uclist_iterator(uclist *, void (*)());
+uint16_t uclist_remove(uclist *, void *);
+uint16_t uclist_restore(uclist *, void *);
+uint16_t uclist_reset(uclist *);
+void uclist_end(uclist *);
 
 //
 
-int uclist_iteratorEx(uclist *const, void (*)(), unsigned short);
+int16_t uclist_getIndex(uclist *, void *);
+uint16_t uclist_removeByIndex(uclist *, uint16_t);
+
+//
+
+int16_t uclist_iteratorEx(uclist *, void (*)(), uint16_t);
