@@ -19,7 +19,7 @@ uint16_t uclist_restore(uclist *, void *);
 uint16_t uclist_reset(uclist *);
 void uclist_end(uclist *);
 
-void *uclist_addUnique(uclist *, void *);
+void *uclist_addSafe(uclist *, void *);
 int16_t uclist_getIndex(uclist *, void *);
 uint16_t uclist_removeByIndex(uclist *, uint16_t);
 uint16_t uclist_iteratorEx(uclist *, void (*)(), uint16_t);
