@@ -7,21 +7,22 @@ struct CG_CELL
     unsigned char capacity : 4;
 };
 
+struct CG_DEF
+{
+    struct CG_RECT
+    {
+        int x, y;
+        int right, bottom;
+    };
+    unsigned capacity;
+    unsigned hCells;
+    unsigned vCells;
+};
+
 typedef struct
 {
     struct CG_CELL **cells;
-
-    struct CG_DEF
-    {
-        struct CG_RECT
-        {
-            int x, y;
-            int right, bottom;
-        };
-        unsigned capacity;
-        unsigned hCells;
-        unsigned vCells;
-    } const *def;
+    struct CG_DEF const *def;
 
     unsigned char *lookupTableCellX;
     unsigned char *lookupTableCellY;
