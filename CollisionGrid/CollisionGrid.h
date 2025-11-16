@@ -1,39 +1,43 @@
 #pragma once
 
-typedef struct CollisionGrid
+// #include <stdint.h>
+
+struct CG_CELL
 {
-    struct CG_CELL
-    {
-        void **items;
-        unsigned char size;
-        struct CollisionGrid *parent;
-    } **cells;
+    void **items;
+    unsigned char size : 4;
+    unsigned char capacity : 4;
+} **cells;
+
+typedef struct
+{
+    struct CG_CELL **cells;
 
     struct CG_DEF
     {
         struct CG_RECT
         {
-            int left, top;
+            int x, y;
             int right, bottom;
         };
-        unsigned capacity;
         unsigned hCells;
         unsigned vCells;
+        unsigned capacity;
     } const *def;
 
     unsigned char *lookupTableCellX;
     unsigned char *lookupTableCellY;
-} CollisionGrid;
+} CollisionGrid, *pCollisionGrid;
 
 //
 
-#define CG_SIZE(def)                                         \
-    sizeof(CollisionGrid) +                                  \
-        def.vCells * sizeof(struct CG_CELL *) +              \
-        (def.right - def.left + 1) * sizeof(unsigned char) + \
-        (def.bottom - def.top + 1) * sizeof(unsigned char) + \
-        def.vCells * def.hCells * sizeof(struct CG_CELL) +   \
-        def.vCells * def.hCells * def.capacity * sizeof(void *)
+#define CG_SIZE(def)                                       \
+    sizeof(CollisionGrid) +                                \
+        def.vCells * sizeof(struct CG_CELL *) +            \
+        (def.right - def.x + 1) * sizeof(unsigned char) +  \
+        (def.bottom - def.y + 1) * sizeof(unsigned char) + \
+        def.vCells *def.hCells * sizeof(struct CG_CELL) +  \
+        def.vCells *def.hCells *def.capacity * sizeof(void *)
 
 //
 
