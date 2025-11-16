@@ -5,10 +5,10 @@
 void cg_init(CollisionGrid *const this, const struct CG_DEF *def)
 {
     unsigned const width  = def->right  - def->x + 1;
-    unsigned const height = def->bottom - def->y  + 1;
+    unsigned const height = def->bottom - def->y + 1;
+    unsigned const cap    = def->capacity;
     unsigned const hCells = def->hCells;
     unsigned const vCells = def->vCells;
-    unsigned const cap    = def->capacity ?: 16;
     unsigned const wh     = (width  + hCells - 1) / hCells;
     unsigned const hv     = (height + vCells - 1) / vCells;
 

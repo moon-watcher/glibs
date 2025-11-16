@@ -1,7 +1,5 @@
 #pragma once
 
-// #include <stdint.h>
-
 struct CG_CELL
 {
     void **items;
@@ -20,9 +18,9 @@ typedef struct
             int x, y;
             int right, bottom;
         };
+        unsigned capacity;
         unsigned hCells;
         unsigned vCells;
-        unsigned capacity;
     } const *def;
 
     unsigned char *lookupTableCellX;
