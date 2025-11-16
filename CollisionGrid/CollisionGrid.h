@@ -7,7 +7,7 @@ struct CG_CELL
     void **items;
     unsigned char size : 4;
     unsigned char capacity : 4;
-} **cells;
+};
 
 typedef struct
 {
