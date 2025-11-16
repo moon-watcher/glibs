@@ -22,8 +22,7 @@ struct CG_DEF
 typedef struct
 {
     struct CG_CELL **cells;
-    struct CG_DEF const *def;
-
+    struct CG_DEF *def;
     unsigned char *lookupTableCellX;
     unsigned char *lookupTableCellY;
 } CollisionGrid, *pCollisionGrid;
@@ -40,19 +39,19 @@ typedef struct
 
 //
 
-void cg_init(CollisionGrid *const, const struct CG_DEF *);
-struct CG_CELL *cg_get_CELL(CollisionGrid *const, unsigned, unsigned);
-struct CG_CELL *cg_addItem_FAST(CollisionGrid *const, unsigned, unsigned, void *const);
-void cg_reset_CELLs(CollisionGrid *const);
-// unsigned cg_get_RECT(CollisionGrid *const, struct CG_RECT *const, struct CG_CELL *[]);
-void cg_reset(CollisionGrid *const);
+void cg_init(pCollisionGrid, struct CG_DEF *);
+struct CG_CELL *cg_get_CELL(pCollisionGrid, unsigned, unsigned);
+struct CG_CELL *cg_addItem_FAST(pCollisionGrid, unsigned, unsigned, void *);
+void cg_reset_CELLs(pCollisionGrid);
+// unsigned cg_get_RECT(pCollisionGrid, struct CG_RECT *, struct CG_CELL *[]);
+void cg_reset(pCollisionGrid);
 
-void *cg_CELL_addItem(struct CG_CELL *const, void *const);
-unsigned cg_CELL_removeItem(struct CG_CELL *const, void *const);
+void *cg_CELL_addItem(struct CG_CELL *, void *);
+unsigned cg_CELL_removeItem(struct CG_CELL *, void *);
 
-void cg_RECT_addItem(struct CG_CELL *[], unsigned, void *const);
+void cg_RECT_addItem(struct CG_CELL *[], unsigned, void *);
 unsigned cg_RECT_getItems(struct CG_CELL *[], unsigned, void *[]);
-void cg_RECT_removeItem(struct CG_CELL *[], unsigned, void *const);
+void cg_RECT_removeItem(struct CG_CELL *[], unsigned, void *);
 
-unsigned cg_getItems_from_RECT(CollisionGrid *const, const struct CG_RECT *, void *[]);
-unsigned cg_RECT_collision_XY(struct CG_RECT *const, unsigned, unsigned);
+unsigned cg_getItems_from_RECT(pCollisionGrid, struct CG_RECT *, void *[]);
+unsigned cg_RECT_collision_XY(struct CG_RECT *, unsigned, unsigned);
