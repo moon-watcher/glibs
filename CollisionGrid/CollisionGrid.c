@@ -46,11 +46,11 @@ inline struct CG_CELL *cg_get_CELL(pCollisionGrid $, uint16_t x, uint16_t y)
     if (y < a_top)
         return 0;
     
-    uint8_t cellX = $->lookupTableCellX[x - a_left];    
+    uint16_t cellX = $->lookupTableCellX[x - a_left];    
     if (cellX >= def->hCells)
         return 0;
 
-    uint8_t cellY = $->lookupTableCellY[y - a_top];
+    uint16_t cellY = $->lookupTableCellY[y - a_top];
     if (cellY >= def->vCells)
         return 0;
         
@@ -60,8 +60,8 @@ inline struct CG_CELL *cg_get_CELL(pCollisionGrid $, uint16_t x, uint16_t y)
 inline struct CG_CELL *cg_addItem_FAST(pCollisionGrid $, uint16_t x, uint16_t y, void *item)
 {
     struct CG_DEF *def = $->def;
-    uint8_t cellX = $->lookupTableCellX[x - def->x];
-    uint8_t cellY = $->lookupTableCellY[y - def->y];
+    uint16_t cellX = $->lookupTableCellX[x - def->x];
+    uint16_t cellY = $->lookupTableCellY[y - def->y];
     struct CG_CELL *cell = &$->cells[cellY][cellX];
 
     cell->items[cell->size++] = item;
@@ -101,7 +101,7 @@ inline void *cg_CELL_addItem(struct CG_CELL *$, void *item)
 
 uint16_t cg_CELL_removeItem(struct CG_CELL *$, void *item)
 {
-    uint8_t size = $->size;
+    uint16_t size = $->size;
 
     for (uint16_t i = 0; i < size; i++)
         if ($->items[i] == item)
@@ -128,7 +128,7 @@ uint16_t cg_RECT_getItems(struct CG_CELL *cell_list[], uint16_t total, void *ite
     for (uint16_t i = 0; i < total; i++)
     {
         struct CG_CELL *cell = cell_list[i];
-        uint8_t size = cell->size;
+        uint16_t size = cell->size;
 
         for (uint16_t j = 0; j < size; j++)
             item_list[count++] = cell->items[j];
@@ -155,16 +155,16 @@ uint16_t cg_getItems_from_RECT(pCollisionGrid $, struct CG_RECT *rect, void *ite
     if (top >= bottom)
         return 0;
 
-    uint16_t count           = 0;
+    uint16_t count     = 0;
     struct CG_DEF *def = $->def;
-    int16_t $_left      = def->x;
-    int16_t $_top       = def->y;
+    int16_t $_left     = def->x;
+    int16_t $_top      = def->y;
     uint16_t hCells    = def->hCells;
     uint16_t vCells    = def->vCells;
     uint16_t cellX_min = $->lookupTableCellX[left   - $_left];
     uint16_t cellY_min = $->lookupTableCellY[top    - $_top];
-    uint16_t cellX_max       = $->lookupTableCellX[right  - $_left];
-    uint16_t cellY_max       = $->lookupTableCellY[bottom - $_top];
+    uint16_t cellX_max = $->lookupTableCellX[right  - $_left];
+    uint16_t cellY_max = $->lookupTableCellY[bottom - $_top];
 
     if (cellX_max >= hCells) cellX_max = hCells - 1;
     if (cellY_max >= vCells) cellY_max = vCells - 1;

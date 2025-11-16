@@ -1,24 +1,24 @@
 #pragma once
 
-#include <stdint.h>
+#include "config.h"
 
 struct CG_CELL
 {
     void **items;
-    uint8_t size : 4;     // 16
-    uint8_t capacity : 4; // 16
+    uint16_t size : CG_CELL_CAPACITY_BITS;
+    uint16_t capacity : CG_CELL_CAPACITY_BITS;
 };
 
 struct CG_DEF
 {
     struct CG_RECT
     {
-        int x, y;
-        int right, bottom;
+        int16_t x, y;
+        int16_t right, bottom;
     };
-    uint16_t capacity : 4; // 16
-    uint16_t hCells : 6;   // 64
-    uint16_t vCells : 6;   // 64
+    uint16_t capacity : CG_CELL_CAPACITY_BITS;
+    uint16_t hCells : CG_DEF_HCELLS_BITS;
+    uint16_t vCells : CG_DEF_VCELLS_BITS;
 };
 
 typedef struct
@@ -31,13 +31,13 @@ typedef struct
 
 //
 
-#define CG_SIZE(def)                                      \
-    sizeof(CollisionGrid) +                               \
-        def.vCells * sizeof(struct CG_CELL *) +           \
-        (def.right - def.x + 1) * sizeof(uint8_t) +       \
-        (def.bottom - def.y + 1) * sizeof(uint8_t) +      \
-        def.vCells *def.hCells * sizeof(struct CG_CELL) + \
-        def.vCells *def.hCells *def.capacity * sizeof(void *)
+#define CG_SIZE(def)                                       \
+    sizeof(CollisionGrid) +                                \
+        def.vCells * sizeof(struct CG_CELL *) +            \
+        (def.right - def.x + 1) * sizeof(uint8_t) +        \
+        (def.bottom - def.y + 1) * sizeof(uint8_t) +       \
+        def.vCells * def.hCells * sizeof(struct CG_CELL) + \
+        def.vCells * def.hCells *def.capacity * sizeof(void *)
 
 //
 
