@@ -185,7 +185,7 @@ uint16_t cg_getItems_from_RECT(pCollisionGrid $, struct CG_RECT *rect, void *ite
 
 inline uint16_t cg_RECT_collision_XY(struct CG_RECT *rect, uint16_t x, uint16_t y)
 {
-    return (x >= rect->x && x <= rect->w && y >= rect->y && y <= rect->h);
+    return ((uint16_t)(x - rect->x) < rect->w && (uint16_t)(y - rect->y) < rect->h);
 }
 
 //

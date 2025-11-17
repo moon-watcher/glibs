@@ -1,6 +1,6 @@
 #pragma once
 
-#include "config.h"
+#include <stdint.h>
 
 struct CG_RECT
 {
@@ -10,16 +10,16 @@ struct CG_RECT
 struct CG_DEF
 {
     struct CG_RECT rect;
-    uint16_t capacity : CG_CELL_CAPACITY_BITS;
-    uint16_t hCells : CG_DEF_HCELLS_BITS;
-    uint16_t vCells : CG_DEF_VCELLS_BITS;
+    uint8_t capacity;
+    uint8_t hCells;
+    uint8_t vCells;
 };
 
 struct CG_CELL
 {
     void **items;
-    uint16_t size : CG_CELL_CAPACITY_BITS;
-    uint16_t capacity : CG_CELL_CAPACITY_BITS;
+    uint8_t size;
+    uint8_t capacity;
 };
 
 typedef struct
@@ -35,10 +35,10 @@ typedef struct
 #define CG_SIZE(def)                                       \
     sizeof(CollisionGrid) +                                \
         def.vCells * sizeof(struct CG_CELL *) +            \
-        (def.rect.w - def.rect.x + 1) * sizeof(uint8_t) +  \
-        (def.rect.h - def.rect.y + 1) * sizeof(uint8_t) +  \
+        def.rect.w * sizeof(uint8_t) +                     \
+        def.rect.h * sizeof(uint8_t) +                     \
         def.vCells * def.hCells * sizeof(struct CG_CELL) + \
-        def.vCells * def.hCells *def.capacity * sizeof(void *)
+        def.vCells * def.hCells * def.capacity * sizeof(void *)
 
 //
 
