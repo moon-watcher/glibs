@@ -2,18 +2,15 @@
 
 void cg_init(pCollisionGrid $, struct CG_DEF *def)
 {
-    uint16_t width  = def->rect.x2 - def->rect.x1 + 1;
-    uint16_t height = def->rect.y2 - def->rect.y1 + 1;
+    uint16_t width  = def->rect.w;
+    uint16_t height = def->rect.h;
     uint16_t cap    = def->capacity;
     uint16_t hCells = def->hCells;
     uint16_t vCells = def->vCells;
     uint16_t wh     = (width  + hCells - 1) / hCells;
     uint16_t hv     = (height + vCells - 1) / vCells;
 
-    $->x1               = def->rect.x1;
-    $->y1               = def->rect.y1;
-    $->x2               = def->rect.x2;
-    $->y2               = def->rect.y2;
+    $->rect             = def->rect;
     $->capacity         = def->capacity;
     $->hCells           = def->hCells;
     $->vCells           = def->vCells;
@@ -42,19 +39,22 @@ void cg_init(pCollisionGrid $, struct CG_DEF *def)
 
 inline struct CG_CELL *cg_get_CELL(pCollisionGrid $, uint16_t x, uint16_t y)
 {
-    int16_t left = $->x1;
-    if (x < left)
-        return 0;
-
-    int16_t top = $->y1;
-    if (y < top)
+    if (x < $->rect.x || y < $->rect.y)
         return 0;
     
-    uint16_t cellX = $->lookupTableCellX[x - left];    
+    uint16_t offsetX = x - $->rect.x;
+    if (offsetX >= $->rect.w)
+        return 0;
+
+    uint16_t offsetY = y - $->rect.y;
+    if (offsetY >= $->rect.h)
+        return 0;
+    
+    uint8_t cellX = $->lookupTableCellX[offsetX];
     if (cellX >= $->hCells)
         return 0;
 
-    uint16_t cellY = $->lookupTableCellY[y - top];
+    uint8_t cellY = $->lookupTableCellY[offsetY];
     if (cellY >= $->vCells)
         return 0;
         
@@ -63,15 +63,12 @@ inline struct CG_CELL *cg_get_CELL(pCollisionGrid $, uint16_t x, uint16_t y)
 
 inline struct CG_CELL *cg_addItem_FAST(pCollisionGrid $, uint16_t x, uint16_t y, void *item)
 {
-    uint16_t left  = $->x1;
-    uint16_t top   = $->y1;
-    uint16_t cellX = $->lookupTableCellX[x - left];
-    uint16_t cellY = $->lookupTableCellY[y - top];
+    uint8_t cellX = $->lookupTableCellX[$->rect.x];
+    uint8_t cellY = $->lookupTableCellY[$->rect.y];
     struct CG_CELL *cell = &$->cells[cellY][cellX];
 
     cell->items[cell->size++] = item;
 
-    return cell;
 }
 
 void cg_reset_CELLs(pCollisionGrid $)
@@ -145,29 +142,44 @@ void cg_RECT_removeItem(struct CG_CELL *cell_list[], uint16_t total, void *item)
 
 uint16_t cg_getItems_from_RECT(pCollisionGrid $, struct CG_RECT *rect, void *item_list[])
 {
-    int16_t x1 = rect->x1;
-    int16_t x2 = rect->x2;
-    if (x1 >= x2)
+    if (rect->w == 0 || rect->h == 0)
         return 0;
 
-    int16_t y1 = rect->y1;
-    int16_t y2 = rect->y2;
-    if (y1 >= y2)
+    uint16_t x1 = rect->x;
+    uint16_t y1 = rect->y;
+    uint16_t x2 = rect->x + rect->w;
+    uint16_t y2 = rect->y + rect->h;
+
+    // Verificar si el rectángulo está completamente fuera del grid
+    uint16_t gridX2 = $->rect.x + $->rect.w;
+    uint16_t gridY2 = $->rect.y + $->rect.h;
+    
+    if (x2 <= $->rect.x || x1 >= gridX2 || y2 <= $->rect.y || y1 >= gridY2)
         return 0;
+    
+    // Clampear a los límites del grid
+    if (x1 < $->rect.x) x1 = $->rect.x;
+    if (y1 < $->rect.y) y1 = $->rect.y;
+    if (x2 > gridX2) x2 = gridX2;
+    if (y2 > gridY2) y2 = gridY2;
+    
+    // Calcular offsets
+    uint16_t offsetX1 = x1 - $->rect.x;
+    uint16_t offsetY1 = y1 - $->rect.y;
+    uint16_t offsetX2 = x2 - 1 - $->rect.x;
+    uint16_t offsetY2 = y2 - 1 - $->rect.y;
+    
+    // Obtener celdas
+    uint16_t cellX_min = $->lookupTableCellX[offsetX1];
+    uint16_t cellY_min = $->lookupTableCellY[offsetY1];
+    uint16_t cellX_max = $->lookupTableCellX[offsetX2];
+    uint16_t cellY_max = $->lookupTableCellY[offsetY2];
 
-    uint16_t count     = 0;
-    int16_t  left      = $->x1;
-    int16_t  top       = $->y1;
-    uint16_t hCells    = $->hCells;
-    uint16_t vCells    = $->vCells;
-    uint16_t cellX_min = $->lookupTableCellX[x1 - left];
-    uint16_t cellY_min = $->lookupTableCellY[y1 - top ];
-    uint16_t cellX_max = $->lookupTableCellX[x2 - left];
-    uint16_t cellY_max = $->lookupTableCellY[y2 - top ];
+    if (cellX_max >= $->hCells) cellX_max = $->hCells - 1;
+    if (cellY_max >= $->vCells) cellY_max = $->vCells - 1;
 
-    if (cellX_max >= hCells) cellX_max = hCells - 1;
-    if (cellY_max >= vCells) cellY_max = vCells - 1;
-
+    uint16_t count = 0;
+    
     for (uint16_t y = cellY_min; y <= cellY_max; ++y)
         for (uint16_t x = cellX_min; x <= cellX_max; ++x)
         {
@@ -184,7 +196,10 @@ uint16_t cg_getItems_from_RECT(pCollisionGrid $, struct CG_RECT *rect, void *ite
 
 inline uint16_t cg_RECT_collision_XY(struct CG_RECT *rect, uint16_t x, uint16_t y)
 {
-    return (x >= rect->x1 && x <= rect->x2 && y >= rect->y1 && y <= rect->y2);
+    int16_t x2 = rect->x + rect->w;
+    int16_t y2 = rect->y + rect->h;
+    
+    return (x >= rect->x && x < x2 && y >= rect->y && y < y2);
 }
 
 //

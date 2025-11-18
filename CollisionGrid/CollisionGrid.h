@@ -4,7 +4,7 @@
 
 struct CG_RECT
 {
-    int16_t x1, y1, x2, y2;
+    uint16_t x, y, w, h;
 };
 
 struct CG_DEF
@@ -25,8 +25,10 @@ struct CG_CELL
 typedef struct
 {
     struct CG_CELL **cells;
-    struct CG_RECT;
-    struct CG_DEF;
+    struct CG_RECT rect;
+    uint8_t capacity;
+    uint8_t hCells;
+    uint8_t vCells;
 
     uint8_t *lookupTableCellX;
     uint8_t *lookupTableCellY;
@@ -34,12 +36,12 @@ typedef struct
 
 //
 
-#define CG_SIZE(def)                                        \
-    sizeof(CollisionGrid) +                                 \
-        def.vCells * sizeof(struct CG_CELL *) +             \
-        (def.rect.x2 - def.rect.x1 + 1) * sizeof(uint8_t) + \
-        (def.rect.y2 - def.rect.y1 + 1) * sizeof(uint8_t) + \
-        def.vCells * def.hCells * sizeof(struct CG_CELL) +  \
+#define CG_SIZE(def)                                       \
+    sizeof(CollisionGrid) +                                \
+        def.vCells * sizeof(struct CG_CELL *) +            \
+        def.rect.w * sizeof(uint8_t) +                     \
+        def.rect.h * sizeof(uint8_t) +                     \
+        def.vCells * def.hCells * sizeof(struct CG_CELL) + \
         def.vCells * def.hCells * def.capacity * sizeof(void *)
 
 //
