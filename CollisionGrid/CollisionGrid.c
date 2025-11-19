@@ -5,13 +5,11 @@ void cg_init(pCollisionGrid $, struct CG_DEF *def)
 {
     $->left   = def->left;
     $->top    = def->top;
-    $->right  = def->right;
-    $->bottom = def->bottom;
     $->hCells = def->hCells;
     $->vCells = def->vCells;
 
-    uint16_t w   = $->right - $->left + 1;
-    uint16_t h  = $->bottom - $->top  + 1;
+    uint16_t w  = def->right  - $->left + 1;
+    uint16_t h  = def->bottom - $->top  + 1;
     uint16_t wh = (w + $->hCells - 1) / $->hCells;
     uint16_t hv = (h + $->vCells - 1) / $->vCells;
 
@@ -40,10 +38,7 @@ void cg_init(pCollisionGrid $, struct CG_DEF *def)
 
 inline struct CG_CELL *cg_cellGet_XY(pCollisionGrid $, uint16_t x, uint16_t y)
 {
-    uint16_t cellX = $->lookupTableCellX[x - $->left];
-    uint16_t cellY = $->lookupTableCellY[y - $->top ];
-
-    return &$->cells[cellY][cellX];
+    return &$->cells[$->lookupTableCellY[y - $->top]][$->lookupTableCellX[x - $->left]];
 }
 
 /**
@@ -60,15 +55,15 @@ uint16_t cg_itemsGet_RECT(pCollisionGrid $, struct CG_RECT *rect, void *item_lis
     if (cellX_max >= $->hCells) cellX_max = $->hCells - 1;
     if (cellY_max >= $->vCells) cellY_max = $->vCells - 1;
 
-    for (uint16_t cellY = cellY_min; cellY <= cellY_max; ++cellY)
-        for (uint16_t cellX = cellX_min; cellX <= cellX_max; ++cellX)
+    for (uint16_t y = cellY_min; y <= cellY_max; ++y)
+        for (uint16_t x = cellX_min; x <= cellX_max; ++x)
         {
-            struct CG_CELL *cell = &$->cells[cellY][cellX];
+            struct CG_CELL *cell = &$->cells[y][x];
             uint16_t size = cell->size;
             void **src = cell->items;
 
-            for (uint16_t i = 0; i < size; ++i)
-                item_list[count++] = src[i];
+            while (size--)
+                item_list[count++] = src[size];
         }
 
     return count;
@@ -76,9 +71,12 @@ uint16_t cg_itemsGet_RECT(pCollisionGrid $, struct CG_RECT *rect, void *item_lis
 
 void cg_resetCells(pCollisionGrid $)
 {
-    for (uint16_t cellY = 0; cellY < $->vCells; ++cellY)
-        for (uint16_t cellX = 0; cellX < $->hCells; ++cellX)
-            $->cells[cellY][cellX].size = 0;
+    uint16_t hCells = $->hCells;
+    uint16_t vCells = $->vCells;
+
+    for (uint16_t y = 0; y < vCells; ++y)
+        for (uint16_t x = 0; x < hCells; ++x)
+            $->cells[y][x].size = 0;
 }
 
 void cg_reset(pCollisionGrid $)
@@ -90,9 +88,7 @@ void cg_reset(pCollisionGrid $)
 
 inline void *cg_CELL_itemAdd(struct CG_CELL *$, void *item)
 {
-    if ($->size >= $->capacity) return 0;
-
-    return $->items[$->size++] = item;
+    return ($->size < $->capacity) ? $->items[$->size++] = item : 0;
 }
 
 void *cg_CELL_itemRemove(struct CG_CELL *$, void *item)
@@ -111,7 +107,6 @@ inline uint16_t cg_RECT_collision_XY(struct CG_RECT *rect, uint16_t x, uint16_t 
     return (x >= rect->left && x <= rect->right && y >= rect->top && y <= rect->bottom);
 }
 
-//
 
 // /**
 //  * @brief Add item to multiple cells
