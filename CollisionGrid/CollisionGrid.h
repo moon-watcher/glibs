@@ -26,10 +26,9 @@ struct CG_DEF
 typedef struct CollisionGrid
 {
     struct CG_CELL **cells;
-    struct CG_RECT;
 
-    uint16_t hCells;
-    uint16_t vCells;
+    int16_t left, top;
+    uint16_t hCells, vCells;
 
     uint8_t *lookupTableCellX;
     uint8_t *lookupTableCellY;
