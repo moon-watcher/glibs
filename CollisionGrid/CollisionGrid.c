@@ -10,19 +10,19 @@ void cg_init(pCollisionGrid $, struct CG_DEF *def)
     $->hCells = def->hCells;
     $->vCells = def->vCells;
 
-    uint16_t width  = $->right  - $->left + 1;
-    uint16_t height = $->bottom - $->top  + 1;
-    uint16_t wh     = (width  + $->hCells - 1) / $->hCells;
-    uint16_t hv     = (height + $->vCells - 1) / $->vCells;
+    uint16_t w   = $->right - $->left + 1;
+    uint16_t h  = $->bottom - $->top  + 1;
+    uint16_t wh = (w + $->hCells - 1) / $->hCells;
+    uint16_t hv = (h + $->vCells - 1) / $->vCells;
 
     $->cells            = (struct CG_CELL **)((int8_t *)$ + sizeof(CollisionGrid));
     $->lookupTableCellX = (uint8_t *)((int8_t *)$->cells + $->vCells * sizeof(struct CG_CELL *));
-    $->lookupTableCellY = (uint8_t *)((int8_t *)$->lookupTableCellX + width);
+    $->lookupTableCellY = (uint8_t *)((int8_t *)$->lookupTableCellX + w);
     
-    struct CG_CELL *cellMemory = (struct CG_CELL *)((int8_t *)$->lookupTableCellY + height);
+    struct CG_CELL *cellMemory = (struct CG_CELL *)((int8_t *)$->lookupTableCellY + h);
 
-    while (width--)  $->lookupTableCellX[width]  = width  / wh;
-    while (height--) $->lookupTableCellY[height] = height / hv;
+    while (w--) $->lookupTableCellX[w] = w / wh;
+    while (h--) $->lookupTableCellY[h] = h / hv;
 
     for (uint16_t y = 0; y < $->vCells; ++y)
     {
@@ -38,95 +38,18 @@ void cg_init(pCollisionGrid $, struct CG_DEF *def)
     }
 }
 
-inline struct CG_CELL *cg_get_CELL(pCollisionGrid $, uint16_t x, uint16_t y)
+inline struct CG_CELL *cg_cellGet_XY(pCollisionGrid $, uint16_t x, uint16_t y)
 {
-    if (x < $->left || y < $->top) return 0;
-
     uint16_t cellX = $->lookupTableCellX[x - $->left];
-    if (cellX >= $->hCells) return 0;
-
-    uint16_t cellY = $->lookupTableCellY[y - $->top];
-    if (cellY >= $->vCells) return 0;
+    uint16_t cellY = $->lookupTableCellY[y - $->top ];
 
     return &$->cells[cellY][cellX];
 }
 
-inline struct CG_CELL *cg_addItem_FAST(pCollisionGrid $, uint16_t x, uint16_t y, void *item)
-{
-    uint16_t cellX = $->lookupTableCellX[x - $->left];
-    uint16_t cellY = $->lookupTableCellY[y - $->top];
-    struct CG_CELL *cell = &$->cells[cellY][cellX];
-
-    cell->items[cell->size++] = item;
-
-    return cell;
-}
-
-void cg_reset_CELLs(pCollisionGrid $)
-{
-    for (uint16_t cellY = 0; cellY < $->vCells; ++cellY)
-        for (uint16_t cellX = 0; cellX < $->hCells; ++cellX)
-            $->cells[cellY][cellX].size = 0;
-}
-
-void cg_reset(pCollisionGrid $)
-{
-    memset($->cells, 0, $->vCells * $->hCells * sizeof(struct CG_CELL));
-}
-
-//
-
-inline void *cg_CELL_addItem(struct CG_CELL *$, void *item)
-{
-    if ($->size >= $->capacity) return 0;
-
-    return $->items[$->size++] = item;
-}
-
-void *cg_CELL_removeItem(struct CG_CELL *$, void *item)
-{
-    for (uint16_t i = 0; i < $->size; i++)
-        if ($->items[i] == item)
-            return $->items[i] = $->items[--$->size];
-
-    return 0;
-}
-
-//
-
-void cg_RECT_addItem(struct CG_CELL *cell_list[], uint16_t total, void *item)
-{
-    for (uint16_t i = 0; i < total; i++)
-        cg_CELL_addItem(cell_list[i], item);
-}
-
-uint16_t cg_RECT_getItems(struct CG_CELL *cell_list[], uint16_t total, void *item_list[])
-{
-    uint16_t count = 0;
-
-    for (uint16_t i = 0; i < total; i++)
-    {
-        struct CG_CELL *cell = cell_list[i];
-        uint16_t size = cell->size;
-
-        for (uint16_t j = 0; j < size; j++)
-            item_list[count++] = cell->items[j];
-    }
-
-    return count;
-}
-
-void cg_RECT_removeItem(struct CG_CELL *cell_list[], uint16_t total, void *item)
-{
-    for (uint16_t i = 0; i < total; i++)
-        cg_CELL_removeItem(cell_list[i], item);
-}
-
 /**
- * @cond:
- *  rect->left < rect->right && rect->top < rect->bottom
+ * @cond rect->left < rect->right && rect->top < rect->bottom
  */
-uint16_t cg_getItems_from_RECT(pCollisionGrid $, struct CG_RECT *rect, void *item_list[])
+uint16_t cg_itemsGet_RECT(pCollisionGrid $, struct CG_RECT *rect, void *item_list[])
 {
     uint16_t count     = 0;
     uint16_t cellX_min = $->lookupTableCellX[rect->left   - $->left];
@@ -151,12 +74,86 @@ uint16_t cg_getItems_from_RECT(pCollisionGrid $, struct CG_RECT *rect, void *ite
     return count;
 }
 
+void cg_resetCells(pCollisionGrid $)
+{
+    for (uint16_t cellY = 0; cellY < $->vCells; ++cellY)
+        for (uint16_t cellX = 0; cellX < $->hCells; ++cellX)
+            $->cells[cellY][cellX].size = 0;
+}
+
+void cg_reset(pCollisionGrid $)
+{
+    memset($->cells, 0, $->vCells * $->hCells * sizeof(struct CG_CELL));
+}
+
+//
+
+inline void *cg_CELL_itemAdd(struct CG_CELL *$, void *item)
+{
+    if ($->size >= $->capacity) return 0;
+
+    return $->items[$->size++] = item;
+}
+
+void *cg_CELL_itemRemove(struct CG_CELL *$, void *item)
+{
+    for (uint16_t i = 0; i < $->size; i++)
+        if ($->items[i] == item)
+            return $->items[i] = $->items[--$->size];
+
+    return 0;
+}
+
+//
+
 inline uint16_t cg_RECT_collision_XY(struct CG_RECT *rect, uint16_t x, uint16_t y)
 {
     return (x >= rect->left && x <= rect->right && y >= rect->top && y <= rect->bottom);
 }
 
-// uint16_t cg_get_RECT(pCollisionGrid $, struct CG_RECT *rect, struct CG_CELL *cell_list[])
+//
+
+// /**
+//  * @brief Add item to multiple cells
+//  * @extends Unused. Is it usefull?
+//  */
+// void cg_CELLS_itemAdd(struct CG_CELL *list[], uint16_t total, void *item)
+// {
+//     for (uint16_t i = 0; i < total; i++)
+//         cg_CELL_itemAdd(list[i], item);
+// }
+
+// /**
+//  * @brief Get all items form multiples cells
+//  * @extends Unused. Is it usefull?
+//  */
+// uint16_t cg_CELLS_itemsGet(struct CG_CELL *list[], uint16_t total, void *item_list[])
+// {
+//     uint16_t count = 0;
+
+//     for (uint16_t i = 0; i < total; i++)
+//     {
+//         struct CG_CELL *cell = list[i];
+//         uint16_t size = cell->size;
+
+//         for (uint16_t j = 0; j < size; j++)
+//             item_list[count++] = cell->items[j];
+//     }
+
+//     return count;
+// }
+
+// /**
+//  * @brief Remove item form all cells
+//  * @extends Unused. Is it usefull?
+//  */
+// void cg_CELLS_itemRemove(struct CG_CELL *list[], uint16_t total, void *item)
+// {
+//     for (uint16_t i = 0; i < total; i++)
+//         cg_CELL_itemRemove(list[i], item);
+// }
+
+// uint16_t cg_get_RECT(pCollisionGrid $, struct CG_RECT *rect, struct CG_CELL *list[])
 // {
 //     int16_t left = rect->left;
 //     int16_t right = rect->right;
@@ -181,7 +178,7 @@ inline uint16_t cg_RECT_collision_XY(struct CG_RECT *rect, uint16_t x, uint16_t 
 
 //     for (uint8_t y = cellY_min; y <= cellY_max; ++y)
 //         for (uint8_t x = cellX_min; x <= cellX_max; ++x)
-//             cell_list[count++] = &$->cells[y][x];
+//             list[count++] = &$->cells[y][x];
 
 //     return count;
 // }
