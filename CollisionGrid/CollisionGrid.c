@@ -19,8 +19,8 @@ void cg_init(pCollisionGrid $, struct CG_DEF *def)
     
     struct CG_CELL *cellMemory = (struct CG_CELL *)((int8_t *)$->lookupTableCellY + h);
 
-    while (w--) $->lookupTableCellX[w] = w / wh;
-    while (h--) $->lookupTableCellY[h] = h / hv;
+    for (uint16_t i = 0; i < w; i++) $->lookupTableCellX[i] = i / wh;
+    for (uint16_t i = 0; i < h; i++) $->lookupTableCellY[i] = i / hv;
 
     for (uint16_t y = 0; y < $->vCells; ++y)
     {
