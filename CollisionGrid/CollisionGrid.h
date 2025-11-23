@@ -51,13 +51,8 @@ uint16_t cg_itemsGet_RECT(pCollisionGrid, struct CG_RECT *, void *[]);
 void cg_resetCells(pCollisionGrid);
 void cg_reset(pCollisionGrid);
 
-void *cg_CELL_itemAdd(struct CG_CELL *, void *);
-void *cg_CELL_itemRemove(struct CG_CELL *, void *);
+uint16_t cg_cell_itemAdd(struct CG_CELL *, void *);
+uint16_t cg_cell_itemRemove(struct CG_CELL *, void *);
 
-uint16_t cg_RECT_collision_XY(struct CG_RECT *, uint16_t, uint16_t);
-
-// void cg_CELLS_itemAdd(struct CG_CELL *[], uint16_t, void *);
-// uint16_t cg_CELLS_itemsGet(struct CG_CELL *[], uint16_t, void *[]);
-// void cg_CELLS_itemRemove(struct CG_CELL *[], uint16_t, void *);
-
-// uint16_t cg_get_RECT(pCollisionGrid, struct CG_RECT *, struct CG_CELL *[]);
+#define CG_RECT_COLLISION_XY(rect, x, y) \
+    (((x) - (rect)->left) < (rect)->width && ((y) - (rect)->top) < (rect)->height)
