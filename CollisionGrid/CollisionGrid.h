@@ -40,7 +40,7 @@ typedef struct CollisionGrid
 #define CG_SIZE(def)                                       \
     sizeof(CollisionGrid) +                                \
         def.vCells * sizeof(struct CG_CELL *) +            \
-        def.width * sizeof(uint8_t) +                      \
+        def.width  * sizeof(uint8_t) +                     \
         def.height * sizeof(uint8_t) +                     \
         def.vCells * def.hCells * sizeof(struct CG_CELL) + \
         def.vCells * def.hCells * def.capacity * sizeof(void *)
