@@ -74,7 +74,7 @@ uint16_t cg_itemsGet_RECT(pCollisionGrid $, struct CG_RECT *rect, void *item_lis
 
     for (; row < rowEnd; ++row)
     {
-        struct CG_CELL *cell = *row + cx0;
+        struct CG_CELL *cell    = *row + cx0;
         struct CG_CELL *cellEnd = *row + cx1;
 
         for (; cell < cellEnd; ++cell)
