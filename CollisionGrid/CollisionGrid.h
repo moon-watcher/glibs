@@ -54,5 +54,11 @@ void cg_reset(pCollisionGrid);
 uint16_t cg_cell_itemAdd(struct CG_CELL *, void *);
 uint16_t cg_cell_itemRemove(struct CG_CELL *, void *);
 
-#define CG_RECT_COLLISION_XY(rect, x, y) \
-    (((x) - (rect)->left) < (rect)->width && ((y) - (rect)->top) < (rect)->height)
+#define CG_COLLISION_RECT_XY(r1, x, y) \
+    (((x) - (r1)->left) < (r1)->width && ((y) - (r1)->top) < (r1)->height)
+
+#define CG_COLLISION_RECT_RECT(r1, r2)         \
+    ((r2)->left < (r1)->left + (r1)->width  && \
+     (r1)->left < (r2)->left + (r2)->width  && \
+     (r2)->top  < (r1)->top  + (r1)->height && \
+     (r1)->top  < (r2)->top  + (r2)->height)
