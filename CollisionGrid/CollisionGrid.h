@@ -46,8 +46,9 @@ typedef struct CollisionGrid
         def.vCells * def.hCells * def.capacity * sizeof(void *)
 
 void cg_init(pCollisionGrid, struct CG_DEF *);
-struct CG_CELL *cg_cellGet_XY(pCollisionGrid, uint16_t, uint16_t);
-uint16_t cg_itemsGet_RECT(pCollisionGrid, struct CG_RECT *, void *[]);
+struct CG_CELL *cg_getCell_XY(pCollisionGrid, uint16_t, uint16_t);
+uint16_t cg_addItem_XY(pCollisionGrid, uint16_t, uint16_t, void *);
+uint16_t cg_getItems_RECT(pCollisionGrid, struct CG_RECT *, void *[]);
 void cg_resetCells(pCollisionGrid);
 void cg_reset(pCollisionGrid);
 
