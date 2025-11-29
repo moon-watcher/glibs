@@ -1,219 +1,216 @@
 #include <genesis.h>
 #include "CollisionGrid.h"
 
-void cg_init(CollisionGrid *const this, const struct CG_DEF *def)
+void cg_init(pCollisionGrid $, struct CG_DEF *def)
 {
-    unsigned const width  = def->right  - def->left + 1;
-    unsigned const height = def->bottom - def->top  + 1;
-    unsigned const hCells = def->hCells;
-    unsigned const vCells = def->vCells;
-    unsigned const wh     = (width  + hCells - 1) / hCells;
-    unsigned const hv     = (height + vCells - 1) / vCells;
+    $->left     = def->left;
+    $->top      = def->top;
+    $->width    = def->width;
+    $->height   = def->height;
+    $->capacity = def->capacity;
+    $->hCells   = def->hCells;
+    $->vCells   = def->vCells;
 
-    this->def              = def;
-    this->cells            = (struct CG_CELL **)((char *)this + sizeof(CollisionGrid));
-    this->lookupTableCellX = (unsigned char *)((char *)this->cells + vCells * sizeof(struct CG_CELL *));
-    this->lookupTableCellY = (unsigned char *)((char *)this->lookupTableCellX + width);
+    uint16_t wh = ($->width  + $->hCells - 1) / $->hCells;
+    uint16_t hv = ($->height + $->vCells - 1) / $->vCells;
 
-    for (unsigned i = 0; i < width;  i++) this->lookupTableCellX[i] = i / wh;
-    for (unsigned i = 0; i < height; i++) this->lookupTableCellY[i] = i / hv;
+    $->cells = (struct CG_CELL **)((uint8_t *)$ + sizeof(CollisionGrid));
+    $->lookupTableCellX = (uint8_t *)($->cells + $->vCells);
+    $->lookupTableCellY = $->lookupTableCellX + $->width;
 
-    struct CG_CELL *cellMemory = (struct CG_CELL *)((char *)this->lookupTableCellY + height);
+    struct CG_CELL *cellMemory = (struct CG_CELL *)($->lookupTableCellY + $->height);
 
-    for (unsigned y = 0; y < vCells; ++y)
+    for (uint16_t i = 0; i < $->width;  i++) $->lookupTableCellX[i] = i / wh;
+    for (uint16_t i = 0; i < $->height; i++) $->lookupTableCellY[i] = i / hv;
+
+    for (uint16_t y = 0; y < $->vCells; ++y)
     {
-        this->cells[y] = &cellMemory[y * hCells];
+        $->cells[y] = &cellMemory[y * $->hCells];
 
-        for (unsigned x = 0; x < hCells; ++x)
+        for (uint16_t x = 0; x < $->hCells; ++x)
         {
-            struct CG_CELL *cell = &this->cells[y][x];
-            cell->items = (void **)((char *)cellMemory + vCells * hCells * sizeof(struct CG_CELL) + (y * hCells + x) * def->capacity * sizeof(void *));
+            struct CG_CELL *cell = &$->cells[y][x];
+            cell->items = (void **)(cellMemory + $->vCells * $->hCells) + (y * $->hCells + x) * $->capacity;
             cell->size = 0;
-            cell->parent = this;
+            cell->capacity = $->capacity;
         }
     }
 }
 
-inline struct CG_CELL *cg_get_CELL(CollisionGrid *const this, unsigned x, unsigned y)
+inline struct CG_CELL *cg_get_CELL(pCollisionGrid $, uint16_t x, uint16_t y)
 {
-    struct CG_DEF *const def = this->def;
-    
-    int const a_left = def->left;
-    if (x < a_left)
-        return 0;
+    uint16_t offsetX = x - $->left;
+    uint16_t offsetY = y - $->top;
 
-    int const a_top = def->top;
-    if (y < a_top)
-        return 0;
-    
-    unsigned char const cellX = this->lookupTableCellX[x - a_left];    
-    if (cellX >= def->hCells)
-        return 0;
-
-    unsigned char const cellY = this->lookupTableCellY[y - a_top];
-    if (cellY >= def->vCells)
-        return 0;
-        
-    return &this->cells[cellY][cellX];
+    return (offsetX < $->width && offsetY < $->height)
+               ? &$->cells[$->lookupTableCellY[offsetY]][$->lookupTableCellX[offsetX]]
+               : NULL;
 }
 
-// unsigned cg_get_RECT(CollisionGrid *const this, struct CG_RECT *const rect, struct CG_CELL *cell_list[])
-// {
-//     int const left = rect->left;
-//     int const right = rect->right;
-//     if (left >= right) return 0;
-
-//     int const top = rect->top;
-//     int const bottom = rect->bottom;
-//     if (top >= bottom) return 0;
-
-//     unsigned count = 0;
-//     int const this_left = this->left;
-//     int const this_top = this->top;
-//     unsigned const hCells = this->hCells;
-//     unsigned const vCells = this->vCells;
-//     unsigned char const cellX_min = this->lookupTableCellX[left - this_left];
-//     unsigned char const cellY_min = this->lookupTableCellY[top - this_top];
-//     unsigned cellX_max = this->lookupTableCellX[right - this_left];
-//     unsigned cellY_max = this->lookupTableCellY[bottom - this_top];
-
-//     if (cellX_max >= hCells) cellX_max = hCells - 1;
-//     if (cellY_max >= vCells) cellY_max = vCells - 1;
-
-//     for (unsigned char y = cellY_min; y <= cellY_max; ++y)
-//         for (unsigned char x = cellX_min; x <= cellX_max; ++x)
-//             cell_list[count++] = &this->cells[y][x];
-
-//     return count;
-// }
-
-inline struct CG_CELL *cg_addItem_FAST(CollisionGrid *const this, unsigned x, unsigned y, void *const item)
+inline struct CG_CELL *cg_addItem_FAST(pCollisionGrid $, uint16_t x, uint16_t y, void *item)
 {
-    struct CG_DEF *const def = this->def;
-    unsigned char const cellX = this->lookupTableCellX[x - def->left];
-    unsigned char const cellY = this->lookupTableCellY[y - def->top];
-    struct CG_CELL *const cell = &this->cells[cellY][cellX];
+    uint16_t offX = x - $->left;
+    if (offX >= $->width) return 0;
 
-    cell->items[cell->size++] = item;
+    uint16_t offY = y - $->top;
+    if (offY >= $->height) return 0;
 
-    return cell;
+    uint16_t cx = $->lookupTableCellX[offX];
+    uint16_t cy = $->lookupTableCellY[offY];
+
+    return cg_CELL_addItem(&$->cells[cy][cx], item);
 }
 
-void cg_reset_CELLs(CollisionGrid *const this)
+void cg_reset_CELLs(pCollisionGrid $)
 {
-    struct CG_DEF *const def = this->def;
-    unsigned const vCells = def->vCells;
-    unsigned const hCells = def->hCells;
+    uint16_t vCells = $->vCells;
+    uint16_t hCells = $->hCells;
 
-    for (unsigned cellY = 0; cellY < vCells; ++cellY)
-        for (unsigned cellX = 0; cellX < hCells; ++cellX)
-            this->cells[cellY][cellX].size = 0;
+    for (uint16_t cellY = 0; cellY < vCells; ++cellY)
+        for (uint16_t cellX = 0; cellX < hCells; ++cellX)
+            $->cells[cellY][cellX].size = 0;
 }
 
-void cg_reset(CollisionGrid *const this)
+void cg_reset(pCollisionGrid $)
 {
-    struct CG_DEF *const def = this->def;
-    unsigned const vCells = def->vCells;
-    unsigned const hCells = def->hCells;
-
-    memset(this->cells, 0, vCells * hCells * sizeof(struct CG_CELL));
+    memset($->cells, 0, $->vCells * $->hCells * sizeof(struct CG_CELL));
 }
 
 //
 
-inline void *cg_CELL_addItem(struct CG_CELL *const this, void *const item)
+inline uint16_t cg_CELL_addItem(struct CG_CELL *$, void *item)
 {
-    if (this->size >= this->parent->def->capacity)
+    if ($->size >= $->capacity)
         return 0;
         
-    return this->items[this->size++] = item;
+    return $->items[$->size++] = item, 1;
 }
 
-unsigned cg_CELL_removeItem(struct CG_CELL *const this, void *const item)
+uint16_t cg_CELL_removeItem(struct CG_CELL *$, void *item)
 {
-    unsigned char const size = this->size;
+    uint16_t size = $->size;
 
-    for (unsigned i = 0; i < size; i++)
-        if (this->items[i] == item)
+    for (uint16_t i = 0; i < size; i++)
+        if ($->items[i] == item)
         {
-            this->items[i] = this->items[--this->size];
+            $->items[i] = $->items[--$->size];
             return 1;
         }
 
     return 0;
 }
 
-//
-
-void cg_RECT_addItem(struct CG_CELL *cell_list[], unsigned total, void *const item)
+uint16_t cg_getItems_from_RECT(pCollisionGrid $, struct CG_RECT *rect, void *item_list[])
 {
-    for (unsigned i = 0; i < total; i++)
-        cg_CELL_addItem(cell_list[i], item);
-}
+    uint16_t width = $->width;
+    uint16_t offL = rect->left - $->left;
+    if (offL >= width) return 0;
 
-unsigned cg_RECT_getItems(struct CG_CELL *cell_list[], unsigned total, void *item_list[])
-{
-    unsigned count = 0;
+    uint16_t height = $->height;
+    uint16_t offT = rect->top - $->top;
+    if (offT >= height) return 0;
 
-    for (unsigned i = 0; i < total; i++)
+    uint16_t offR = offL + rect->width - 1;
+    if (offR >= width) return 0;
+
+    uint16_t offB = offT + rect->height - 1;
+    if (offB >= height) return 0;
+
+    uint16_t cx0 = $->lookupTableCellX[offL] + 0;
+    uint16_t cy0 = $->lookupTableCellY[offT] + 0;
+    uint16_t cx1 = $->lookupTableCellX[offR] + 1;
+    uint16_t cy1 = $->lookupTableCellY[offB] + 1;
+
+    struct CG_CELL **row    = $->cells + cy0;
+    struct CG_CELL **rowEnd = $->cells + cy1;
+    uint16_t count = 0;
+
+    for (; row < rowEnd; ++row)
     {
-        struct CG_CELL *const cell = cell_list[i];
-        unsigned char const size = cell->size;
+        struct CG_CELL *cell    = *row + cx0;
+        struct CG_CELL *cellEnd = *row + cx1;
 
-        for (unsigned j = 0; j < size; j++)
-            item_list[count++] = cell->items[j];
+        for (; cell < cellEnd; ++cell)
+        {
+            void **items = cell->items;
+            uint16_t size = cell->size;
+
+            while (size--)
+                item_list[count++] = items[size];
+        }
     }
 
     return count;
 }
 
-void cg_RECT_removeItem(struct CG_CELL *cell_list[], unsigned total, void *const item)
-{
-    for (unsigned i = 0; i < total; i++)
-        cg_CELL_removeItem(cell_list[i], item);
-}
+// inline uint16_t cg_RECT_collision_XY(struct CG_RECT *rect, uint16_t x, uint16_t y)
+// {
+//     return (
+//            x >= rect->left
+//         && x <= rect->left + rect->width
+//         && y >= rect->top
+//         && y <= rect->top + rect->height
+//     );
+// }
 
-unsigned cg_getItems_from_RECT(CollisionGrid *const this, const struct CG_RECT *rect, void *item_list[])
-{
-    int const left  = rect->left;
-    int const right = rect->right;
-    if (left >= right)
-        return 0;
+// //
 
-    int const top    = rect->top;
-    int const bottom = rect->bottom;
-    if (top >= bottom)
-        return 0;
+// void cg_RECT_addItem(struct CG_CELL *cell_list[], uint16_t total, void *item)
+// {
+//     for (uint16_t i = 0; i < total; i++)
+//         cg_CELL_addItem(cell_list[i], item);
+// }
 
-    unsigned count           = 0;
-    struct CG_DEF *const def = this->def;
-    int const this_left      = def->left;
-    int const this_top       = def->top;
-    unsigned const hCells    = def->hCells;
-    unsigned const vCells    = def->vCells;
-    unsigned const cellX_min = this->lookupTableCellX[left   - this_left];
-    unsigned const cellY_min = this->lookupTableCellY[top    - this_top];
-    unsigned cellX_max       = this->lookupTableCellX[right  - this_left];
-    unsigned cellY_max       = this->lookupTableCellY[bottom - this_top];
+// uint16_t cg_RECT_getItems(struct CG_CELL *cell_list[], uint16_t total, void *item_list[])
+// {
+//     uint16_t count = 0;
 
-    if (cellX_max >= hCells) cellX_max = hCells - 1;
-    if (cellY_max >= vCells) cellY_max = vCells - 1;
+//     for (uint16_t i = 0; i < total; i++)
+//     {
+//         struct CG_CELL *cell = cell_list[i];
+//         uint16_t size = cell->size;
 
-    for (unsigned y = cellY_min; y <= cellY_max; ++y)
-        for (unsigned x = cellX_min; x <= cellX_max; ++x)
-        {
-            struct CG_CELL *const cell = &this->cells[y][x];
-            unsigned const size = cell->size;
-            void **src = cell->items;
+//         for (uint16_t j = 0; j < size; j++)
+//             item_list[count++] = cell->items[j];
+//     }
 
-            for (unsigned i = 0; i < size; ++i)
-                item_list[count++] = src[i];
-        }
+//     return count;
+// }
 
-    return count;
-}
+// void cg_RECT_removeItem(struct CG_CELL *cell_list[], uint16_t total, void *item)
+// {
+//     for (uint16_t i = 0; i < total; i++)
+//         cg_CELL_removeItem(cell_list[i], item);
+// }
 
-inline unsigned cg_RECT_collision_XY(struct CG_RECT *const rect, unsigned x, unsigned y)
-{
-    return (x >= rect->left && x <= rect->right && y >= rect->top && y <= rect->bottom);
-}
+
+
+// uint16_t cg_get_RECT(pCollisionGrid $, struct CG_RECT *rect, struct CG_CELL *cell_list[])
+// {
+//     int left = rect->left;
+//     int right = rect->right;
+//     if (left >= right) return 0;
+
+//     int top = rect->top;
+//     int bottom = rect->bottom;
+//     if (top >= bottom) return 0;
+
+//     uint16_t count = 0;
+//     int $_left = $->left;
+//     int $_top = $->top;
+//     uint16_t hCells = $->hCells;
+//     uint16_t vCells = $->vCells;
+//     uint8_t cellX_min = $->lookupTableCellX[left - $_left];
+//     uint8_t cellY_min = $->lookupTableCellY[top - $_top];
+//     uint16_t cellX_max = $->lookupTableCellX[right - $_left];
+//     uint16_t cellY_max = $->lookupTableCellY[bottom - $_top];
+
+//     if (cellX_max >= hCells) cellX_max = hCells - 1;
+//     if (cellY_max >= vCells) cellY_max = vCells - 1;
+
+//     for (uint8_t y = cellY_min; y <= cellY_max; ++y)
+//         for (uint8_t x = cellX_min; x <= cellX_max; ++x)
+//             cell_list[count++] = &$->cells[y][x];
+
+//     return count;
+// }
