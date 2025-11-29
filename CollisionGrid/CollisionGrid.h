@@ -29,7 +29,6 @@ typedef struct
     
     int16_t left, top;
     int16_t width, height;
-    uint16_t capacity;
     uint16_t hCells, vCells;
 
     uint8_t *lookupTableCellX;
@@ -49,16 +48,16 @@ typedef struct
 //
 
 void cg_init(pCollisionGrid, struct CG_DEF *);
-struct CG_CELL *cg_get_CELL(pCollisionGrid, uint16_t, uint16_t);
-struct CG_CELL *cg_addItem_FAST(pCollisionGrid, uint16_t, uint16_t, void *);
+struct CG_CELL *cg_getCell_XY(pCollisionGrid, uint16_t, uint16_t);
+struct CG_CELL *cg_addItem_XY(pCollisionGrid, uint16_t, uint16_t, void *);
 void cg_reset_CELLs(pCollisionGrid);
 // uint16_t cg_get_RECT(pCollisionGrid, struct CG_RECT *, struct CG_CELL *[]);
 void cg_reset(pCollisionGrid);
 
-uint16_t cg_CELL_addItem(struct CG_CELL *, void *);
-uint16_t cg_CELL_removeItem(struct CG_CELL *, void *);
+uint16_t cg_cell_itemAdd(struct CG_CELL *, void *);
+uint16_t cg_cell_itemRemove(struct CG_CELL *, void *);
 
-uint16_t cg_getItems_from_RECT(pCollisionGrid,  struct CG_RECT *, void *[]);
+uint16_t cg_getItems_RECT(pCollisionGrid,  struct CG_RECT *, void *[]);
 uint16_t cg_RECT_collision_XY(struct CG_RECT *, uint16_t, uint16_t);
 
 // void cg_RECT_addItem(struct CG_CELL *[], uint16_t, void *);
