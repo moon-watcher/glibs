@@ -1,8 +1,8 @@
 #include "frameloader.h"
 
-void frameloader_init(frameloader *$, void (*update_f)(), uint16_t vrampos)
+void frameloader_init(frameloader *$, void (*update)(), uint16_t vrampos)
 {
-    $->update_f = update_f;
+    $->update = update;
     $->vrampos = vrampos;
 }
 
@@ -42,5 +42,5 @@ inline uint16_t frameloader_isLastTick(frameloader *$)
 
 inline void frameloader_exec(frameloader *$)
 {
-    $->update_f($);
+    $->update($);
 }

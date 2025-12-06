@@ -4,7 +4,7 @@
 
 typedef struct
 {
-    void (*update_f)();
+    void (*update)();
     uint16_t vrampos;
 
     void *resource;
