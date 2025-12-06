@@ -6,17 +6,17 @@ void frameloader_init(frameloader *$, void (*update_f)(), uint16_t vrampos)
     $->vrampos = vrampos;
 }
 
-void frameloader_set(frameloader *$, void *resource, int16_t frames, int16_t timer)
+void frameloader_set(frameloader *$, void *resource, uint16_t frames, uint16_t timer)
 {
     $->resource = resource;
     $->countdown = $->timer = timer;
     $->frame = 0;
     $->num_frames = frames;
-    
+
     $->update_f($);
 }
 
-uint16_t frameloader_update(frameloader *$)
+void frameloader_update(frameloader *$)
 {
     if ($->countdown == 0)
     {
@@ -29,10 +29,15 @@ uint16_t frameloader_update(frameloader *$)
         $->update_f($);
     }
 
-    return $->countdown--;
+    $->countdown--;
 }
 
 inline uint16_t frameloader_isLastFrame(frameloader *$)
 {
-    return ($->countdown == 1 && $->frame == $->num_frames - 1);
+    return ($->countdown == 1);
+}
+
+inline uint16_t frameloader_isLastTick(frameloader *$)
+{
+    return ($->frame == $->num_frames - 1);
 }

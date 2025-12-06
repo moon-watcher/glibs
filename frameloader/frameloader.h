@@ -5,16 +5,14 @@
 typedef struct
 {
     void (*update_f)();
-    uint16_t vrampos;
     void *resource;
-    uint16_t countdown;
-    int16_t timer;
-    // int16_t anim;
-    uint16_t frame;
-    uint16_t num_frames;
+    uint16_t vrampos;
+    uint16_t countdown, timer;
+    uint16_t frame, num_frames;
 } frameloader;
 
 void frameloader_init(frameloader *, void (*)(), uint16_t);
-void frameloader_set(frameloader *,  void *, int16_t, int16_t);
-uint16_t frameloader_update(frameloader *);
+void frameloader_set(frameloader *,  void *, uint16_t, uint16_t);
+void frameloader_update(frameloader *);
 uint16_t frameloader_isLastFrame(frameloader *);
+uint16_t frameloader_isLastTick(frameloader *);
