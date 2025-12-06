@@ -1,38 +1,38 @@
 #include "frameloader.h"
 
-void frameloader_init(frameloader *const this, int (*update_f)(frameloader *const), unsigned vrampos)
+void frameloader_init(frameloader *$, void (*update_f)(), uint16_t vrampos)
 {
-    this->update_f = update_f;
-    this->vrampos = vrampos;
-    this->resource = 0;
-    this->countdown = 0;
-    this->timer = 0;
-    this->anim = 0;
-    this->frame = 0;
-    this->total_frames = 0;
+    $->update_f = update_f;
+    $->vrampos = vrampos;
 }
 
-void frameloader_set(frameloader *const this, const void *resource, int timer, int anim)
+void frameloader_set(frameloader *$, void *resource, int16_t frames, int16_t timer)
 {
-    frameloader_init(this, this->update_f, this->vrampos);
-
-    this->resource = resource;
-    this->timer = timer;
-    this->anim = anim;
-    this->countdown = this->timer;
-    this->total_frames = this->update_f(this);
+    $->resource = resource;
+    $->countdown = $->timer = timer;
+    $->frame = 0;
+    $->num_frames = frames;
+    
+    $->update_f($);
 }
 
-unsigned frameloader_update(frameloader *const this)
+uint16_t frameloader_update(frameloader *$)
 {
-    if (this->countdown == 0)
+    if ($->countdown == 0)
     {
-        if (++this->frame >= this->total_frames)
-            this->frame = 0;
+        ++$->frame;
 
-        this->countdown = this->timer;
-        this->total_frames = this->update_f(this);
+        if ($->frame >= $->num_frames)
+            $->frame = 0;
+
+        $->countdown = $->timer;
+        $->update_f($);
     }
 
-    return this->countdown--;
+    return $->countdown--;
+}
+
+inline uint16_t frameloader_isLastFrame(frameloader *$)
+{
+    return ($->countdown == 1 && $->frame == $->num_frames - 1);
 }

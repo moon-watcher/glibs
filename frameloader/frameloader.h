@@ -1,17 +1,20 @@
 #pragma once
 
-typedef struct frameloader
+#include <stdint.h>
+
+typedef struct
 {
-    int (*update_f)(struct frameloader *const);
-    unsigned vrampos;
+    void (*update_f)();
+    uint16_t vrampos;
     void *resource;
-    unsigned countdown;
-    int timer;
-    int anim;
-    unsigned frame;
-    unsigned total_frames;
+    uint16_t countdown;
+    int16_t timer;
+    // int16_t anim;
+    uint16_t frame;
+    uint16_t num_frames;
 } frameloader;
 
-void frameloader_init(frameloader *const, int (*)(struct frameloader *const), unsigned);
-void frameloader_set(frameloader *const, const void *, int, int);
-unsigned frameloader_update(frameloader *const);
+void frameloader_init(frameloader *, void (*)(), uint16_t);
+void frameloader_set(frameloader *,  void *, int16_t, int16_t);
+uint16_t frameloader_update(frameloader *);
+uint16_t frameloader_isLastFrame(frameloader *);
