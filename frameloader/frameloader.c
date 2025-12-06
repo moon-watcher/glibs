@@ -12,8 +12,6 @@ void frameloader_set(frameloader *$, void *resource, uint16_t frames, uint16_t t
     $->countdown = $->timer = timer;
     $->frame = 0;
     $->num_frames = frames;
-
-    $->update_f($);
 }
 
 void frameloader_update(frameloader *$)
@@ -26,7 +24,7 @@ void frameloader_update(frameloader *$)
             $->frame = 0;
 
         $->countdown = $->timer;
-        $->update_f($);
+        frameloader_exec($);
     }
 
     $->countdown--;
@@ -40,4 +38,9 @@ inline uint16_t frameloader_isLastFrame(frameloader *$)
 inline uint16_t frameloader_isLastTick(frameloader *$)
 {
     return ($->frame == $->num_frames - 1);
+}
+
+inline void frameloader_exec(frameloader *$)
+{
+    $->update_f($);
 }
