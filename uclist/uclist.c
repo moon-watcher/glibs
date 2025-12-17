@@ -58,7 +58,7 @@ uint16_t uclist_remove(uclist *$, void *data)
 uint16_t uclist_restore(uclist *$, void *data)
 {
     uint16_t i = $->capacity;
-    
+
     while (i > $->size)
         if ($->items[--i] == data)
         {
