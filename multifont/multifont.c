@@ -1,6 +1,6 @@
 #include "multifont.h"
 
-#define PROCCESS(CODE, MULTIPLY)                                           \
+#define PROCCESS_WRITE(CODE_LOAD, CODE_WRITE, MULTIPLY)                    \
     unsigned short const width = mf->char_width;                           \
     unsigned short const height = mf->char_height;                         \
     unsigned short const chars = mf->chars_number;                         \
@@ -22,10 +22,10 @@
         if (*vrampos == 0)                                                 \
         {                                                                  \
             *vrampos = mf->vrampos_f(nb_tiles);                            \
-            _load(mf, *vrampos, chr, nb_tiles);                            \
+            CODE_LOAD;                                                     \
         }                                                                  \
                                                                            \
-        CODE;                                                              \
+        CODE_WRITE;                                                        \
         x += inc_x;                                                        \
     }
 
@@ -51,7 +51,10 @@ void multifont_text_init(multifont *const mf, const unsigned long *tiles_ptr, un
 
 void multifont_text_write(multifont *const mf, const char *text, unsigned x_pos, unsigned y_pos)
 {
-    PROCCESS(_write(mf, *vrampos, x, y, width, height), 1);
+    PROCCESS_WRITE(
+        MULTIFONT_TILE_LOAD(mf, *vrampos, chr, nb_tiles),
+        MULTIFONT_TILE_WRITE(mf, *vrampos, x, y, width, height),
+        1);
 }
 
 void multifont_text_reset(multifont *const mf)
@@ -77,7 +80,10 @@ void multifont_sprite_init(multifont_sprite *const mfs, multifont *const mf, voi
 void multifont_sprite_write(multifont_sprite *const mfs, const char *text, unsigned x_pos, unsigned y_pos)
 {
     multifont *const mf = mfs->mf;
-    PROCCESS(mfs->array[mfs->total++] = _sprite(mfs, *vrampos, x, y), MULTIFONT_SPRITE_TILEWIDTH);
+    PROCCESS_WRITE(
+        MULTIFONT_SPRITE_LOAD(mf, *vrampos, chr, nb_tiles),
+        mfs->array[mfs->total++] = MULTIFONT_SPRITE_WRITE(mf, *vrampos, x, y, mfs),
+        MULTIFONT_SPRITE_TILEWIDTH);
 }
 
 void multifont_sprite_reset(multifont_sprite *const mfs)
