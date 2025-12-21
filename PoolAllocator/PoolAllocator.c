@@ -181,7 +181,7 @@ void test_PoolAllocator_complete_lifecycle()
 
 void main()
 {
-    #include "PoolAllocator.h"
+    #include "PoolffpAlloc.h"
 
     test_PoolAllocator_init();
     test_PoolAllocator_alloc();
