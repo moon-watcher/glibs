@@ -1,23 +1,25 @@
 #pragma once
 
+#include <stdint.h>
+
 typedef struct
 {
-    unsigned index;
-    unsigned size;
+    uint16_t index;
+    uint16_t size;
 } incremental;
 
-void incremental_init(incremental *const i, unsigned index)
+void incremental_init(incremental *$)
 {
-    i->index = index;
-    i->size = 0;
+    $->index = 0;
+    $->size = 0;
 }
 
-unsigned incremental_get(incremental *const i, unsigned chunk_size)
+uint16_t incremental_get(incremental *$, uint16_t chunk_size)
 {
-    unsigned index = i->index;
+    uint16_t index = $->index;
 
-    i->index += chunk_size;
-    ++i->size;
+    $->index += chunk_size;
+    ++$->size;
 
     return index;
 }
