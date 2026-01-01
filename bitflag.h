@@ -1,8 +1,6 @@
 #pragma once
 
-#define BITFLAG_ADD(obs, flag)     ((obs) |= (flag))
-#define BITFLAG_HAS(obs, flag)    (((obs) & (flag)) != 0u)
-#define BITFLAG_CLEAR(obs, flag)   ((obs) &= ~(flag))
-#define BITFLAG_TOGGLE(obs, flag)  ((obs) ^= (flag))
-
-#define BITFLAG(bit) (1 << (bit))
+#define BITFLAG_SET(obs, flag) ((obs) |= (1U << (flag)))
+#define BITFLAG_TEST(obs, flag) (((obs) & (1U << (flag))) != 0U)
+#define BITFLAG_CLEAR(obs, flag) ((obs) &= ~(1U << (flag)))
+#define BITFLAG_FLIP(obs, flag) ((obs) ^= (1U << (flag)))
