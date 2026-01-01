@@ -10,6 +10,9 @@ typedef struct
     void *resource;
     uint16_t countdown, timer;
     uint16_t frame, num_frames;
+
+    //
+    uint32_t external;
 } frameloader;
 
 void frameloader_init(frameloader *, void (*)(), uint16_t);
