@@ -39,17 +39,17 @@ void cg_init(pCollisionGrid $, struct CG_DEF *def)
 inline struct CG_CELL *cg_getCell_XY(pCollisionGrid $, uint16_t x, uint16_t y)
 {
     uint16_t offsetX = x - $->left;
-    uint16_t offsetY = y - $->top;
+    if (offsetX >= $->width) return 0;
 
-    return (offsetX < $->width && offsetY < $->height)
-               ? &$->cells[$->lookupTableCellY[offsetY]][$->lookupTableCellX[offsetX]]
-               : NULL;
+    uint16_t offsetY = y - $->top;
+    if (offsetY >= $->height) return 0;
+
+    return &$->cells[$->lookupTableCellY[offsetY]][$->lookupTableCellX[offsetX]];
 }
 
 inline struct CG_CELL *cg_addItem_XY(pCollisionGrid $, uint16_t x, uint16_t y, void *item)
 {
-    struct CG_CELL *cell = cg_getCell_XY($, x, y);
-    return cell && cg_cell_itemAdd(cell, item) ? cell : 0;
+    return cg_cell_itemAdd(cg_getCell_XY($, x, y), item);
 }
 
 uint16_t cg_getItems_RECT(pCollisionGrid $, struct CG_RECT *rect, void *item_list[])
@@ -110,12 +110,14 @@ void cg_reset(pCollisionGrid $)
 
 //
 
-inline uint16_t cg_cell_itemAdd(struct CG_CELL *$, void *item)
+inline struct CG_CELL *cg_cell_itemAdd(struct CG_CELL *$, void *item)
 {
-    if (!item || $->size >= $->capacity)
+    if (!$ || !item || $->size >= $->capacity)
         return 0;
 
-    return $->items[$->size++] = item, 1;
+    $->items[$->size++] = item;
+
+    return $;
 }
 
 uint16_t cg_cell_itemRemove(struct CG_CELL *$, void *item)
