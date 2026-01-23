@@ -93,7 +93,7 @@ uint16_t cg_getItems_RECT(pCollisionGrid $, struct CG_RECT *rect, void *item_lis
     return out - item_list;
 }
 
-void cg_reset_CELLs(pCollisionGrid $)
+void cg_resetCells(pCollisionGrid $)
 {
     uint16_t vCells = $->vCells;
     uint16_t hCells = $->hCells;
@@ -115,19 +115,17 @@ inline struct CG_CELL *cg_cell_itemAdd(struct CG_CELL *$, void *item)
     if (!$ || !item || $->size >= $->capacity)
         return 0;
 
-    $->items[$->size++] = item;
-
-    return $;
+    return $->items[$->size++] = item, $;
 }
 
-uint16_t cg_cell_itemRemove(struct CG_CELL *$, void *item)
+struct CG_CELL *cg_cell_itemRemove(struct CG_CELL *$, void *item)
 {
     void **items = $->items;
     void **end = items + $->size;
 
     while (end > items)
         if (*--end == item)
-            return *end = items[--$->size], 1;
+            return *end = items[--$->size], $;
 
     return 0;
 }
