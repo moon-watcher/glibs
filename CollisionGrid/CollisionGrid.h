@@ -51,7 +51,6 @@ void cg_init(pCollisionGrid, struct CG_DEF *);
 struct CG_CELL *cg_getCell_XY(pCollisionGrid, uint16_t, uint16_t);
 struct CG_CELL *cg_addItem_XY(pCollisionGrid, uint16_t, uint16_t, void *);
 uint16_t cg_getItems_RECT(pCollisionGrid, struct CG_RECT *, void *[]);
-void cg_resetCells(pCollisionGrid);
 void cg_reset(pCollisionGrid);
 
 struct CG_CELL *cg_cell_itemAdd(struct CG_CELL *, void *);

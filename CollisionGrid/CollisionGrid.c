@@ -93,7 +93,7 @@ uint16_t cg_getItems_RECT(pCollisionGrid $, struct CG_RECT *rect, void *item_lis
     return out - item_list;
 }
 
-void cg_resetCells(pCollisionGrid $)
+void cg_reset(pCollisionGrid $)
 {
     uint16_t vCells = $->vCells;
     uint16_t hCells = $->hCells;
@@ -101,11 +101,6 @@ void cg_resetCells(pCollisionGrid $)
     for (uint16_t y = 0; y < vCells; ++y)
         for (uint16_t x = 0; x < hCells; ++x)
             $->cells[y][x].size = 0;
-}
-
-void cg_reset(pCollisionGrid $)
-{
-    memset($->cells, 0, $->vCells * $->hCells * sizeof(struct CG_CELL));
 }
 
 //
