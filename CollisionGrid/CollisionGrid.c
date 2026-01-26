@@ -125,6 +125,13 @@ struct CG_CELL *cg_cell_itemRemove(struct CG_CELL *$, void *item)
     return 0;
 }
 
+//
+
+inline uint16_t cg_rect_collision_xy(struct CG_RECT *rect, int16_t x, int16_t y)
+{
+    return ((uint16_t)(x - rect->left) < rect->width && (uint16_t)(y - rect->top) < rect->height);
+}
+
 // //
 
 // void cg_RECT_addItem(struct CG_CELL *cell_list[], uint16_t total, void *item)

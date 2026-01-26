@@ -37,12 +37,12 @@ typedef struct
 
 //
 
-#define CG_SIZE(def)                                         \
-    sizeof(CollisionGrid) +                                  \
-        def.vCells * sizeof(struct CG_CELL *) +              \
-        def.width  * sizeof(uint8_t) +                       \
-        def.height * sizeof(uint8_t) +                       \
-        def.vCells * def.hCells * sizeof(struct CG_CELL) +   \
+#define CG_SIZE(def)                                       \
+    sizeof(CollisionGrid) +                                \
+        def.vCells * sizeof(struct CG_CELL *) +            \
+        def.width  * sizeof(uint8_t) +                     \
+        def.height * sizeof(uint8_t) +                     \
+        def.vCells * def.hCells * sizeof(struct CG_CELL) + \
         def.vCells * def.hCells * def.capacity * sizeof(void *)
 
 //
@@ -56,8 +56,4 @@ void cg_reset(pCollisionGrid);
 struct CG_CELL *cg_cell_itemAdd(struct CG_CELL *, void *);
 struct CG_CELL *cg_cell_itemRemove(struct CG_CELL *, void *);
 
-//
-
-#define CG_RECT_COLLISION_XY(rect, x, y) \
-    ((uint16_t)((x) - (rect)->left) < (rect)->width && \
-     (uint16_t)((y) - (rect)->top)  < (rect)->height)
+uint16_t cg_rect_collision_xy(struct CG_RECT *, int16_t, int16_t);
