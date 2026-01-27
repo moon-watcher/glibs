@@ -49,6 +49,8 @@ inline struct CG_CELL *cg_getCell_XY(pCollisionGrid $, uint16_t x, uint16_t y)
 
 inline struct CG_CELL *cg_addItem_XY(pCollisionGrid $, uint16_t x, uint16_t y, void *item)
 {
+    if (!item) return 0;
+
     uint16_t offsetX = x - $->left;
     if (offsetX >= $->width) return 0;
 
@@ -119,7 +121,7 @@ void cg_reset(pCollisionGrid $)
 
 inline struct CG_CELL *cg_cell_itemAdd(struct CG_CELL *$, void *item)
 {
-    if ($->size >= $->capacity)
+    if (!item || $->size >= $->capacity)
         return 0;
 
     return $->items[$->size++] = item, $;
@@ -127,6 +129,8 @@ inline struct CG_CELL *cg_cell_itemAdd(struct CG_CELL *$, void *item)
 
 struct CG_CELL *cg_cell_itemRemove(struct CG_CELL *$, void *item)
 {
+    if (!item) return 0;
+
     void **items = $->items;
     void **end = items + $->size;
 
