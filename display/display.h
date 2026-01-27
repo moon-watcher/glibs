@@ -1,6 +1,8 @@
 #pragma once
 
-void display_on(unsigned);
-void display_off(unsigned);
-unsigned display_prepare(unsigned short *, unsigned);
-unsigned display_prepareColor(unsigned short, unsigned);
+#include <stdint.h>
+
+void display_on(uint16_t);
+void display_off(uint16_t);
+uint16_t display_prepare(uint16_t *, uint16_t);
+uint16_t display_prepareColor(uint16_t, uint16_t);
