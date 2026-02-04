@@ -17,6 +17,20 @@ void frameloader_set(frameloader *$, void *resource, uint16_t frames, uint16_t t
     $->num_frames = frames;
 }
 
+void frameloader_setResource(frameloader *$, void *resource, uint16_t frames)
+{
+    $->resource = resource;
+    $->countdown = $->timer;
+    $->frame = 0;
+    $->num_frames = frames;
+}
+
+void frameloader_setTimer(frameloader *$, void *resource, uint16_t timer)
+{
+    $->countdown = $->timer = timer;
+    $->frame = 0;
+}
+
 void frameloader_update(frameloader *$)
 {
     if ($->countdown == 0)

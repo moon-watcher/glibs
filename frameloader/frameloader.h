@@ -17,6 +17,8 @@ typedef struct
 
 void frameloader_init(frameloader *, void (*)(), uint16_t);
 void frameloader_set(frameloader *,  void *, uint16_t, uint16_t);
+void frameloader_setResource(frameloader *, void *, uint16_t);
+void frameloader_setTimer(frameloader *, void *, uint16_t);
 void frameloader_update(frameloader *);
 uint16_t frameloader_isLastFrame(frameloader *);
 uint16_t frameloader_isLastTick(frameloader *);
