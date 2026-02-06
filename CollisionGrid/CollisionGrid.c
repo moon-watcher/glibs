@@ -57,7 +57,7 @@ inline struct CG_CELL *cg_addItem_XY(pCollisionGrid $, uint16_t x, uint16_t y, v
     uint16_t offsetY = y - $->top;
     if (offsetY >= $->height) return 0;
 
-    struct CG_CELL *const cell = &$->cells[$->lookupTableCellY[offsetY]][$->lookupTableCellX[offsetX]];
+    struct CG_CELL *cell = &$->cells[$->lookupTableCellY[offsetY]][$->lookupTableCellX[offsetX]];
 
     if (cell->size >= cell->capacity) return 0;
 
@@ -109,12 +109,11 @@ uint16_t cg_getItems_RECT(pCollisionGrid $, struct CG_RECT *rect, void *item_lis
 
 void cg_reset(pCollisionGrid $)
 {
-    uint16_t vCells = $->vCells;
-    uint16_t hCells = $->hCells;
+    struct CG_CELL *cell = $->cells[0];
+    struct CG_CELL *end = cell + $->vCells * $->hCells;
 
-    for (uint16_t y = 0; y < vCells; ++y)
-        for (uint16_t x = 0; x < hCells; ++x)
-            $->cells[y][x].size = 0;
+    while (cell < end)
+        (cell++)->size = 0;
 }
 
 //
