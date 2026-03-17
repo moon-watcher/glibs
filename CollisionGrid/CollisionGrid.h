@@ -7,6 +7,7 @@ struct CG_CELL
     void **items;
     uint8_t size;
     uint8_t capacity;
+    uint8_t error;
 };
 
 struct CG_RECT
@@ -33,6 +34,8 @@ typedef struct
 
     uint8_t *lookupTableCellX;
     uint8_t *lookupTableCellY;
+
+    uint8_t error;
 } CollisionGrid, *pCollisionGrid;
 
 //
