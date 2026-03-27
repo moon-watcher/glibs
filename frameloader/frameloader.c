@@ -28,7 +28,7 @@ void frameloader_setResource(frameloader *$, void *resource, uint16_t frames)
     $->loop = -1;
 }
 
-void frameloader_setTimer(frameloader *$, void *resource, uint16_t timer)
+void frameloader_setTimer(frameloader *$, uint16_t timer)
 {
     $->countdown = $->timer = timer;
     $->frame = 0;
