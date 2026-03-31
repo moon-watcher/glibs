@@ -1,0 +1,38 @@
+struct mytal {
+    int x, y;
+    de_state state;
+}
+mytal1 = { 11, 22, enemy_walk1},
+mytal2 = { 33, 44, enemy_walk2};
+mytal3 = { 55, 55, enemy_charge};
+
+const STATEM_TABLE(mytal_states,
+    { &mytal1, 150},
+    { &mytal2, 130},
+    { &(struct mytal) { 55, 66, enemy_charge}, 110},
+    0
+);
+
+const STATEM_TABLE(enemy_states,
+    {enemy_walk1,  100},
+    {enemy_walk2,  150},
+    0
+);
+
+Statem_t sm;
+statem_init(&sm, &onPanicStates);
+
+if (statem_tick(&sm))
+{
+    struct mytal *mt = statem_next(&sm);
+
+    PRINT("%d, %d", mt->x, mt->y);
+    mt->state(data);
+
+    // ...
+
+    ((de_state)statem_next(&sm))(data);
+
+    // ...
+    return statem_next(&sm);
+}

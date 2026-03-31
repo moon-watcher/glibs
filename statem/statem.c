@@ -1,67 +1,67 @@
 #include "statem.h"
 
-void statem_init(statem_t *sm, statem_entry_t *entries)
+void statem_init(statem_t *$, statem_entry_t *entries)
 {
-    sm->entries = sm->current = entries;
-    sm->timer = 0;
+    $->entries = $->current = entries;
+    $->timer = 0;
 }
 
-uint16_t statem_tick(statem_t *sm)
+uint16_t statem_tick(statem_t *$)
 {
-    return ++sm->timer >= sm->current->duration;
+    return ++$->timer >= $->current->duration;
 }
 
-void *statem_next(statem_t *sm)
+void *statem_next(statem_t *$)
 {
-    statem_entry_t *next = sm->current + 1;
+    statem_entry_t *next = $->current + 1;
 
-    sm->current = next->state ? next : sm->entries;
-    sm->timer = 0;
+    $->current = next->ptr ? next : $->entries;
+    $->timer = 0;
 
-    return sm->current->state;
+    return $->current->ptr;
 }
 
-// void *statem_reset(statem_t *sm)
+// void *statem_reset(statem_t *$)
 // {
-//     sm->current = sm->entries;
-//     sm->timer = 0;
+//     $->current = $->entries;
+//     $->timer = 0;
 
-//     return sm->current->state;
+//     return $->current->ptr;
 // }
 
-// uint16_t statem_getIndex(statem_t *sm)
+// uint16_t statem_getIndex(statem_t *$)
 // {
-//     return sm->current - sm->entries;
+//     return $->current - $->entries;
 // }
 
-// uint16_t statem_getProgress(statem_t *sm)
+// uint16_t statem_getProgress(statem_t *$)
 // {
-//     return sm->current->duration ? sm->timer * 100 / sm->current->duration : 100;
+//     return $->current->duration ? ($->timer * 100) / $->current->duration: 0;
 // }
 
-// void *statem_goto(statem_t *sm, uint16_t index)
+// void *statem_goto(statem_t *$, uint16_t index)
 // {
-//     sm->current = sm->entries + index;
-//     sm->timer = 0;
+//     $->current = $->entries + index;
+//     $->timer = 0;
 
-//     return sm->current->state;
+//     return $->current->state;
 // }
 
-// void *statem_prev(statem_t *sm)
+// void *statem_prev(statem_t *$)
 // {
-//     uint16_t index = sm->current == sm->entries
-//                          ? sm->count - 1
-//                          : sm->current - sm->entries - 1;
+//     uint16_t index = $->current == $->entries
+//                          ? $->count - 1
+//                          : $->current - $->entries - 1;
 
-//     return statem_goto(sm, index);
+//     return statem_goto($, index);
 // }
 
-// void statem_setDuration(statem_t *sm, uint16_t duration)
+// void statem_setDuration(statem_t *$, uint16_t duration)
 // {
-//     sm->current->duration = duration;
+//     $->current->duration = duration;
 // }
 
-// void *statem_getCurrent(statem_t *sm)
+// void *statem_getCurrent(statem_t *$)
 // {
-//     return sm->current->state;
+//     return $->current->state;
 // }
