@@ -1,14 +1,9 @@
 #include "statem.h"
 
-void statem_init(statem_t *sm, statem_table_t *table)
+void statem_init(statem_t *sm, statem_entry_t *entries)
 {
-    sm->current = table->entries;
-    sm->entries = table->entries;
-    sm->count = 0;
+    sm->entries = sm->current = entries;
     sm->timer = 0;
-
-    while (sm->entries[sm->count].state)
-        ++sm->count;
 }
 
 uint16_t statem_tick(statem_t *sm)
@@ -18,21 +13,21 @@ uint16_t statem_tick(statem_t *sm)
 
 void *statem_next(statem_t *sm)
 {
-    if (++sm->current >= sm->entries + sm->count)
-        sm->current = sm->entries;
+    statem_entry_t *next = sm->current + 1;
 
+    sm->current = next->state ? next : sm->entries;
     sm->timer = 0;
 
     return sm->current->state;
 }
 
-void *statem_reset(statem_t *sm)
-{
-    sm->current = sm->entries;
-    sm->timer = 0;
+// void *statem_reset(statem_t *sm)
+// {
+//     sm->current = sm->entries;
+//     sm->timer = 0;
 
-    return sm->current->state;
-}
+//     return sm->current->state;
+// }
 
 // uint16_t statem_getIndex(statem_t *sm)
 // {
