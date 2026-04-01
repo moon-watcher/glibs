@@ -3,20 +3,22 @@
 
 typedef struct
 {
-    void *ptr;
-    uint32_t duration;
-} statem_entry_t;
+    struct statem_entry_t
+    {
+        void *ptr;
+        uint32_t duration;
+    } *entries, current;
 
-typedef struct
-{
-    statem_entry_t *entries;
-    statem_entry_t *current;
+    uint16_t index;
     uint32_t timer;
 } statem_t;
 
 #define STATEM_TABLE(name, ...) \
-    statem_entry_t name[] = {__VA_ARGS__}
+    struct statem_entry_t name[] = {__VA_ARGS__}
 
-void statem_init(statem_t *, statem_entry_t *);
+void statem_init(statem_t *, struct statem_entry_t *);
 uint16_t statem_tick(statem_t *);
 void *statem_next(statem_t *);
+void statem_setDuration(statem_t *, uint32_t);
+uint32_t statem_getDuration(statem_t *);
+uint16_t statem_getProgress(statem_t *);

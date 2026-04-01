@@ -1,24 +1,43 @@
 #include "statem.h"
 
-void statem_init(statem_t *$, statem_entry_t *entries)
+void statem_init(statem_t *$, struct statem_entry_t *entries)
 {
-    $->entries = $->current = entries;
+    $->entries = entries;
+    $->current = entries[0];
+    $->index = 0;
     $->timer = 0;
 }
 
 uint16_t statem_tick(statem_t *$)
 {
-    return ++$->timer >= $->current->duration;
+    return ++$->timer >= $->current.duration;
 }
 
 void *statem_next(statem_t *$)
 {
-    statem_entry_t *next = $->current + 1;
+    struct statem_entry_t *next = $->entries + $->index + 1;
 
-    $->current = next->ptr ? next : $->entries;
+    $->index = next->ptr ? ++$->index : 0;
+    $->current = $->entries[$->index];
     $->timer = 0;
 
-    return $->current->ptr;
+    return $->current.ptr;
+}
+
+void statem_setDuration(statem_t *$, uint32_t duration)
+{
+    $->current.duration = duration;
+}
+
+uint32_t statem_getDuration(statem_t *$)
+{
+    return $->current.duration;
+}
+
+uint16_t statem_getProgress(statem_t *$)
+{
+    uint32_t d = $->current.duration;
+    return d ? ($->timer * 100) / d : 0;
 }
 
 // void *statem_reset(statem_t *$)
@@ -32,11 +51,6 @@ void *statem_next(statem_t *$)
 // uint16_t statem_getIndex(statem_t *$)
 // {
 //     return $->current - $->entries;
-// }
-
-// uint16_t statem_getProgress(statem_t *$)
-// {
-//     return $->current->duration ? ($->timer * 100) / $->current->duration: 0;
 // }
 
 // void *statem_goto(statem_t *$, uint16_t index)
@@ -54,14 +68,4 @@ void *statem_next(statem_t *$)
 //                          : $->current - $->entries - 1;
 
 //     return statem_goto($, index);
-// }
-
-// void statem_setDuration(statem_t *$, uint16_t duration)
-// {
-//     $->current->duration = duration;
-// }
-
-// void *statem_getCurrent(statem_t *$)
-// {
-//     return $->current->state;
 // }
