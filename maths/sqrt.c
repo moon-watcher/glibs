@@ -63,3 +63,156 @@ unsigned long sqrt_fast(unsigned long x)
 
     return i;
 }
+
+#include <stdint.h>
+
+// ChatGPT alternative // not tested
+unsigned long sqrt_68k(unsigned long x)
+{
+    unsigned long res = 0;
+    unsigned long bit = 1UL << 30; // mayor potencia de 4 <= x
+
+    while (bit > x)
+        bit >>= 2;
+
+    while (bit)
+    {
+        if (x >= res + bit)
+        {
+            x -= res + bit;
+            res = (res >> 1) + bit;
+        }
+        else
+        {
+            res >>= 1;
+        }
+        bit >>= 2;
+    }
+
+    return res;
+}
+
+
+static inline uint16_t sqrt16(uint16_t x)
+{
+    uint16_t res = 0;
+    uint16_t bit = 1 << 14; // mayor potencia de 4 <= 0xFFFF
+
+    // ajustar bit inicial
+    while (bit > x)
+        bit >>= 2;
+
+    while (bit)
+    {
+        uint16_t temp = res + bit;
+
+        if (x >= temp)
+        {
+            x -= temp;
+            res = (res >> 1) + bit;
+        }
+        else
+        {
+            res >>= 1;
+        }
+
+        bit >>= 2;
+    }
+
+    return res;
+}
+
+static inline uint16_t sqrt16_fast(uint16_t x)
+{
+    uint16_t res = 0;
+    uint16_t bit = 1 << 14;
+
+    while (bit)
+    {
+        uint16_t temp = res + bit;
+
+        if (x >= temp)
+        {
+            x -= temp;
+            res = (res >> 1) + bit;
+        }
+        else
+        {
+            res >>= 1;
+        }
+
+        bit >>= 2;
+    }
+
+    return res;
+}
+
+
+static inline uint16_t sqrt16_hybrid(uint16_t x)
+{
+    uint16_t res = 0;
+    uint16_t bit;
+
+    // Selección inicial SIN BUCLE (muy barato en 68K)
+    if (x >= 16384)      bit = 1 << 14;
+    else if (x >= 4096)  bit = 1 << 12;
+    else if (x >= 1024)  bit = 1 << 10;
+    else if (x >= 256)   bit = 1 << 8;
+    else if (x >= 64)    bit = 1 << 6;
+    else if (x >= 16)    bit = 1 << 4;
+    else if (x >= 4)     bit = 1 << 2;
+    else                 bit = 1 << 0;
+
+    // núcleo estándar (igual que antes)
+    while (bit)
+    {
+        uint16_t temp = res + bit;
+
+        if (x >= temp)
+        {
+            x -= temp;
+            res = (res >> 1) + bit;
+        }
+        else
+        {
+            res >>= 1;
+        }
+
+        bit >>= 2;
+    }
+
+    return res;
+}
+
+static inline uint16_t sqrt16_fastest(uint16_t x)
+{
+    const uint8_t sqrt_lut[256] = {
+        0,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,
+        4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,
+        6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+        7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+        8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
+        9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
+        10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,
+        11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,
+        12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,
+        13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,
+        14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,
+        15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,
+        16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
+        17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,
+        18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,
+        19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19
+    };
+
+    if (x == 0)
+        return 0;
+
+    // 1) aproximación ultra barata
+    uint16_t r = sqrt_lut[x >> 8];
+
+    // 2) refinamiento único (Newton 1 paso)
+    r = (r + (x / r)) >> 1;
+
+    return r;
+}
