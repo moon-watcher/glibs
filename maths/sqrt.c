@@ -1,4 +1,4 @@
-#include "sqrt.h"
+#include <stdint.h>
 
 uint32_t sqrt(uint32_t x)
 {
@@ -12,13 +12,13 @@ uint32_t sqrt(uint32_t x)
     {
         uint32_t temp = res + bit;
 
-        if (x >= temp)
+        if (x < temp)
+            res >>= 1;
+        else
         {
             x -= temp;
             res = (res >> 1) + bit;
         }
-        else
-            res >>= 1;
 
         bit >>= 2;
     }
@@ -44,13 +44,13 @@ uint16_t sqrt16(uint16_t x)
     {
         uint16_t temp = res + bit;
 
-        if (x >= temp)
+        if (x < temp)
+            res >>= 1;
+        else
         {
             x -= temp;
             res = (res >> 1) + bit;
         }
-        else
-            res >>= 1;
 
         bit >>= 2;
     }
