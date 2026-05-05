@@ -1,36 +1,13 @@
 #include "ffpAlloc.h"
+#include <stdlib.h>
 
 // ffpAlloc: First Fit Pool Allocator
 
-void ffpAlloc_init(ffpAlloc_t *const a, void *(*malloc)(unsigned), void (*free)(void *))
+uint16_t ffpAlloc_new(ffpAlloc_t *a, uint16_t chunk_size)
 {
-	a->head = 0;
-	a->base = 0;
-	a->count = 0;
-	a->malloc = malloc;
-	a->free = free;
-}
-
-void ffpAlloc_destroy(ffpAlloc_t *const a)
-{
-	while (a->head)
-	{
-		struct ffpAllocNode *aux = a->head->next;
-
-		a->free(a->head);
-		a->head = aux;
-	}
-
-	a->head = 0;
-	a->base = 0;
-	a->count = 0;
-}
-
-unsigned ffpAlloc_new(ffpAlloc_t *const a, unsigned chunk_size)
-{
-	unsigned pos = a->base;
+	uint16_t pos = a->base;
 	struct ffpAllocNode *node = a->head;
-	struct ffpAllocNode *new = a->malloc(sizeof(struct ffpAllocNode));
+	struct ffpAllocNode *new = malloc(sizeof(struct ffpAllocNode));
 	struct ffpAllocNode *next = 0;
 
 	if (node)
@@ -60,7 +37,7 @@ unsigned ffpAlloc_new(ffpAlloc_t *const a, unsigned chunk_size)
 	return pos;
 }
 
-void ffpAlloc_delete(ffpAlloc_t *const a, unsigned pos)
+void ffpAlloc_delete(ffpAlloc_t *a, uint16_t pos)
 {
 	if (pos < a->base)
 		return;
@@ -72,11 +49,13 @@ void ffpAlloc_delete(ffpAlloc_t *const a, unsigned pos)
 	{
 		if (node->index == pos)
 		{
-			prev->next = node->next;
-			a->free(node);
+			if (prev)
+				prev->next = node->next;
+			else
+				a->head = node->next;
 
-			if (--a->count == 0)
-				a->head = 0;
+			free(node);
+			--a->count;
 
 			return;
 		}
@@ -86,7 +65,20 @@ void ffpAlloc_delete(ffpAlloc_t *const a, unsigned pos)
 	}
 }
 
-// unsigned ffpAlloc_count(ffpAlloc_t *const a)
+void ffpAlloc_destroy(ffpAlloc_t *a)
+{
+	while (a->head)
+	{
+		struct ffpAllocNode *aux = a->head->next;
+
+		free(a->head);
+		a->head = aux;
+	}
+
+	*a = (ffpAlloc_t){0};
+}
+
+// uint16_t ffpAlloc_count(ffpAlloc_t *a)
 // {
 // 	return a->count;
 // }
@@ -119,14 +111,12 @@ void ffpAlloc_delete(ffpAlloc_t *const a, unsigned pos)
 
 // void ffpAlloc_sample ( void )
 //{
-//	ffpAlloc_init(0);
-//
 //	ffpAlloc_new(9);
 //	s16 x = ffpAlloc_new(3);
 //	ffpAlloc_new(927);
 //	ffpAlloc_delete ( x );
 //	ffpAlloc_new(2);
-//	unsigned y = ffpAlloc_new(5);
+//	uint16_t y = ffpAlloc_new(5);
 //	ffpAlloc_new(1);
 //	ffpAlloc_new(8);
 //	ffpAlloc_delete ( y );

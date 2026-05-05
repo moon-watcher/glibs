@@ -1,22 +1,21 @@
 #pragma once
 
+#include <stdint.h>
+
+struct ffpAllocNode
+{
+	uint16_t index;
+	uint16_t size;
+	struct ffpAllocNode *next;
+};
+
 typedef struct
 {
-	struct ffpAllocNode
-	{
-		unsigned index;
-		unsigned size;
-		struct ffpAllocNode *next;
-	} *head;
-
-	unsigned base;
-	unsigned count;
-
-	void *(*malloc)(unsigned);
-	void (*free)(void *);
+	struct ffpAllocNode *head;
+	uint16_t base;
+	uint16_t count;
 } ffpAlloc_t;
 
-void ffpAlloc_init(ffpAlloc_t *const, void *(*)(unsigned), void (*)(void*));
-void ffpAlloc_destroy(ffpAlloc_t *const);
-unsigned ffpAlloc_new(ffpAlloc_t *const, unsigned);
-void ffpAlloc_delete(ffpAlloc_t *const, unsigned);
+uint16_t ffpAlloc_new(ffpAlloc_t *, uint16_t);
+void ffpAlloc_delete(ffpAlloc_t *, uint16_t);
+void ffpAlloc_destroy(ffpAlloc_t *);
