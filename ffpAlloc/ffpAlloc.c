@@ -17,7 +17,7 @@ uint16_t ffpAlloc_new(ffpAlloc_t *a, uint16_t chunk_size)
 			pos = node->index + node->size;
 			next = node->next;
 
-			if (next == 0 || next->index >= pos + chunk_size)
+			if (!next || next->index >= pos + chunk_size)
 				break;
 
 			node = next;
