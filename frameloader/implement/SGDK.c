@@ -3,7 +3,7 @@
 /**
  * W/O compresion & implement DMA_queueDma()
  */
-void frameloader_SGDK_updater(frameloader *$)
+void frameloader_SGDK_sprite_updater(frameloader *$)
 {
     TileSet *tileset = ((Animation *)$->resource)->frames[$->frame]->tileset;
 
