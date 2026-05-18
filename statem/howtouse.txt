@@ -36,3 +36,24 @@ if (statem_tick(&sm))
     // ...
     return statem_next(&sm);
 }
+
+
+
+/*
+STATEM_TABLE(boss_states,
+    STATEM_ENTRY_TIMED(boss_idle,    200),
+    STATEM_COND (boss_charge,  player_nearby),
+    STATEM_MIXED(boss_attack,  50, player_attack)
+);
+
+statem_t sm;
+statem_init(&sm, boss_states);
+
+// en el update — solo timer
+if (statem_tick(&sm))
+    return statem_next(&sm);
+
+// en el update — condición o timer
+if (statem_check(&sm, data))
+    return statem_next(&sm);
+*/
