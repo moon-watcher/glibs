@@ -12,7 +12,7 @@ static int _getIndex(struct menu *);
 
 //
 
-void menu_init(struct menu *this, menu_handler_f inc_f, menu_handler_f dec_f, int (*selected_f)(), int (*draw_f)())
+void menu_init(struct menu *this, menu_handler_f inc_f, menu_handler_f dec_f, menu_handler_f fire_f, int (*selected_f)(), int (*draw_f)())
 {
     this->drawOption_f = draw_f;
     this->drawSelected_f = selected_f;
@@ -20,17 +20,19 @@ void menu_init(struct menu *this, menu_handler_f inc_f, menu_handler_f dec_f, in
     this->singleOption = 0;
     this->inc_f = inc_f;
     this->dec_f = dec_f;
+    this->fireOption_f = fire_f;
     this->head = 0;
     this->tail = 0;
     this->selectedOption = 0;
 }
 
-void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct menu *submenu)
+void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct menu *submenu, menu_handler_f exec_f)
 {
     mo->data = data;
     mo->submenu = submenu;
     mo->next = 0;
     mo->prev = 0;
+    mo->exec_f = exec_f;
 
     if (!this->head)
     {
@@ -79,10 +81,14 @@ int menu_update(struct menu *this)
     unsigned index = _getIndex(this);
     struct menuOption *mo = _getSelected(this);
 
-    if (this->inc_f && this->inc_f(this, mo, index))
+    if (this->fireOption_f && this->fireOption_f(this, mo, index))
+    {
+        if (mo->exec_f)
+            mo->exec_f(this, mo, index);
+    }
+    else if (this->inc_f && this->inc_f(this, mo, index))
         _incOption(this);
-
-    if (this->dec_f && this->dec_f(this, mo, index))
+    else if (this->dec_f && this->dec_f(this, mo, index))
         _decOption(this);
 
     struct menu *submenu = _getSubmenu(this);
@@ -142,8 +148,8 @@ static struct menuOption *_decOption(struct menu *this)
 
 static int _drawSelected(struct menu *this)
 {
-    GUARD(this->drawSelected_f,       -1);
-    GUARD(this->selectedOption,       -2);
+    GUARD(this->drawSelected_f, -1);
+    GUARD(this->selectedOption, -2);
     GUARD(this->selectedOption->data, -3);
 
     return this->drawSelected_f(this->selectedOption->data);
@@ -201,8 +207,6 @@ static int _getIndex(struct menu *this)
 
     return -6;
 }
-
-
 
 /**
  * Igual se van!
