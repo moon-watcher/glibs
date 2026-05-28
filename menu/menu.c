@@ -1,9 +1,16 @@
 #include "menu.h"
 #include "debug.h"
 
-#define GUARD(cond, ret) \
-    if (!cond)           \
-        return ret;
+static struct menuOption *_incOption(struct menu *);
+static struct menuOption *_decOption(struct menu *);
+static int _drawSelected(struct menu *);
+static int _drawOption(struct menu *, struct menuOption *);
+static struct menu *_getSubmenu(struct menu *);
+static struct menuOption *_getOptionByIndex(struct menu *, unsigned);
+static struct menuOption *_getSelected(struct menu *);
+static int _getIndex(struct menu *);
+
+//
 
 void menu_init(struct menu *this, menu_handler_f inc_f, menu_handler_f dec_f, int (*selected_f)(), int (*draw_f)())
 {
@@ -26,7 +33,10 @@ void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct
     mo->prev = 0;
 
     if (!this->head)
+    {
         this->head = mo;
+        menu_selectOption(this, mo);
+    }
     else
     {
         mo->prev = this->tail;
@@ -36,39 +46,46 @@ void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct
     this->tail = mo;
 }
 
-void menu_drawAll(struct menu *this)
+void menu_draw(struct menu *this)
 {
-    struct menuOption *mo = this->head;
-
     if (!this->singleOption)
+    {
+        struct menuOption *mo = this->head;
+
         while (mo)
         {
-            menu_drawOption(this, mo);
+            _drawOption(this, mo);
 
             if (mo->submenu)
-                menu_drawAll(mo->submenu);
+                menu_draw(mo->submenu);
 
             mo = mo->next;
         }
+    }
 
     if (this->selectedOption)
-        menu_drawSelected(this);
+        _drawSelected(this);
     else
-        menu_drawOption(this, menu_getOptionByIndex(this, 0));
+        _drawOption(this, _getOptionByIndex(this, 0));
+}
+
+void menu_selectOption(struct menu *this, struct menuOption *mo)
+{
+    this->selectedOption = mo;
 }
 
 int menu_update(struct menu *this)
 {
-    unsigned index = menu_getIndex(this);
-    struct menuOption *mo = menu_getSelected(this);
+    unsigned index = _getIndex(this);
+    struct menuOption *mo = _getSelected(this);
 
     if (this->inc_f && this->inc_f(this, mo, index))
-        menu_incOption(this);
+        _incOption(this);
 
     if (this->dec_f && this->dec_f(this, mo, index))
-        menu_decOption(this);
+        _decOption(this);
 
-    struct menu *submenu = menu_getSubmenu(this);
+    struct menu *submenu = _getSubmenu(this);
 
     if (submenu)
         menu_update(submenu);
@@ -76,7 +93,13 @@ int menu_update(struct menu *this)
     return 1;
 }
 
-struct menuOption *menu_incOption(struct menu *this)
+//
+
+#define GUARD(cond, ret) \
+    if (!cond)           \
+        return ret;
+
+static struct menuOption *_incOption(struct menu *this)
 {
     struct menuOption *mo = this->selectedOption;
 
@@ -90,14 +113,14 @@ struct menuOption *menu_incOption(struct menu *this)
 
     if (this->selectedOption != mo)
     {
-        menu_drawOption(this, mo);
-        menu_drawSelected(this);
+        _drawOption(this, mo);
+        _drawSelected(this);
     }
 
     return this->selectedOption;
 }
 
-struct menuOption *menu_decOption(struct menu *this)
+static struct menuOption *_decOption(struct menu *this)
 {
     struct menuOption *mo = this->selectedOption;
 
@@ -110,14 +133,14 @@ struct menuOption *menu_decOption(struct menu *this)
 
     if (this->selectedOption != mo)
     {
-        menu_drawOption(this, mo);
-        menu_drawSelected(this);
+        _drawOption(this, mo);
+        _drawSelected(this);
     }
 
     return this->selectedOption;
 }
 
-int menu_drawSelected(struct menu *this)
+static int _drawSelected(struct menu *this)
 {
     GUARD(this->drawSelected_f,       -1);
     GUARD(this->selectedOption,       -2);
@@ -126,25 +149,20 @@ int menu_drawSelected(struct menu *this)
     return this->drawSelected_f(this->selectedOption->data);
 }
 
-int menu_drawOption(struct menu *this, struct menuOption *mo)
+static int _drawOption(struct menu *this, struct menuOption *mo)
 {
     GUARD(this->drawOption_f, -4);
 
     return this->drawOption_f(mo->data);
 }
 
-struct menu *menu_getSubmenu(struct menu *this)
+static struct menu *_getSubmenu(struct menu *this)
 {
     struct menuOption *mo = this->selectedOption;
     return mo ? mo->submenu : 0;
 }
 
-void menu_selectOption(struct menu *this, struct menuOption *mo)
-{
-    this->selectedOption = mo;
-}
-
-struct menuOption *menu_getOptionByIndex(struct menu *this, unsigned int index)
+static struct menuOption *_getOptionByIndex(struct menu *this, unsigned int index)
 {
     struct menuOption *mo = this->head;
     unsigned int i = 0;
@@ -160,12 +178,12 @@ struct menuOption *menu_getOptionByIndex(struct menu *this, unsigned int index)
     return 0;
 }
 
-struct menuOption *menu_getSelected(struct menu *this)
+static struct menuOption *_getSelected(struct menu *this)
 {
     return this->selectedOption;
 }
 
-int menu_getIndex(struct menu *this)
+static int _getIndex(struct menu *this)
 {
     GUARD(this->selectedOption, -5);
 
@@ -184,26 +202,31 @@ int menu_getIndex(struct menu *this)
     return -6;
 }
 
-void menu_deactivate(struct menu *this, unsigned int recursive)
+
+
+/**
+ * Igual se van!
+ */
+static void _deactivate(struct menu *this, unsigned int recursive)
 {
-    struct menuOption *mo = menu_getSelected(this);
+    struct menuOption *mo = _getSelected(this);
 
     if (mo)
-        menu_drawOption(this, mo);
+        _drawOption(this, mo);
 
     if (recursive && this->selectedOption && this->selectedOption->submenu)
-        menu_deactivate(this->selectedOption->submenu, recursive);
+        _deactivate(this->selectedOption->submenu, recursive);
 }
 
-void menu_activate(struct menu *this, unsigned int recursive)
+static void _activate(struct menu *this, unsigned int recursive)
 {
-    struct menuOption *mo = menu_getSelected(this);
+    struct menuOption *mo = _getSelected(this);
 
     if (mo)
-        menu_selectOption(this, menu_getOptionByIndex(this, 0));
+        menu_selectOption(this, _getOptionByIndex(this, 0));
 
-    menu_drawSelected(this);
+    _drawSelected(this);
 
     if (recursive && this->selectedOption && this->selectedOption->submenu)
-        menu_activate(this->selectedOption->submenu, recursive);
+        _activate(this->selectedOption->submenu, recursive);
 }
