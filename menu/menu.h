@@ -6,8 +6,8 @@ struct menu
 {
     int (*handler)(struct menu*, struct menuOption*, int);
 
-    int (*drawOption)(void*);
-    int (*drawSelected)(void*);
+    int (*drawOption_f)(void*);
+    int (*drawSelected_f)(void*);
 
     unsigned int round : 1;
     unsigned int oneOption : 1;
@@ -20,7 +20,7 @@ struct menu
 void menu_init(struct menu*, void (*)(), int (*)(), int (*)());
 void menu_addOption(struct menu*, struct menuOption* mo, void*, struct menu*);
 void menu_drawAll(struct menu*);
-int menu_update(struct menu*);
+void menu_update(struct menu*);
 struct menuOption *menu_incOption(struct menu*);
 struct menuOption *menu_decOption(struct menu*);
 int menu_drawSelected(struct menu*);
@@ -35,15 +35,11 @@ void menu_activate(struct menu*, unsigned int);
 
 enum
 {
-    MENU_ERROR_UPDATE = -9999,
-    MENU_ERROR_UPDATE_HANDLER,
+    MENU_ERROR_HANDLER = -9999,
     MENU_ERROR_DRAWSELECTED,
-    MENU_ERROR_DRAWSELECTED_DRAWSELECTED,
-    MENU_ERROR_DRAWSELECTED_SELECTEDOPTION,
-    MENU_ERROR_DRAWSELECTED_DATA,
+    MENU_ERROR_SELECTEDOPTION,
+    MENU_ERROR_DATA,
     MENU_ERROR_DRAWOPTION,
-    MENU_ERROR_DRAWOPTION_DRAWOPTION,
     MENU_ERROR_GETINDEX,
-    MENU_ERROR_GETINDEX_SELECTEDOPTION,
-    MENU_ERROR_GETINDEX_GETINDEX,
+    MENU_ERROR_NOINDEX,
 };
