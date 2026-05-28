@@ -1,10 +1,22 @@
 #pragma once
 
-#include "option.h"
+struct menu;
+
+struct menuOption
+{
+    struct menu *submenu;
+    struct menuOption *next;
+    struct menuOption *prev;
+
+    unsigned char *data;
+};
+
+typedef int (*menu_handler_f)(struct menu *, struct menuOption *, int);
 
 struct menu
 {
-    int (*handler)(struct menu *, struct menuOption *, int);
+    menu_handler_f inc_f;
+    menu_handler_f dec_f;
 
     int (*drawOption_f)(void *);
     int (*drawSelected_f)(void *);
@@ -17,7 +29,7 @@ struct menu
     struct menuOption *selectedOption;
 };
 
-void menu_init(struct menu *, void (*)(), int (*)(), int (*)());
+void menu_init(struct menu *, menu_handler_f, menu_handler_f, int (*)(), int (*)());
 void menu_addOption(struct menu *, struct menuOption *mo, void *, struct menu *);
 void menu_drawAll(struct menu *);
 int menu_update(struct menu *);
@@ -33,13 +45,12 @@ int menu_getIndex(struct menu *);
 void menu_deactivate(struct menu *, unsigned int);
 void menu_activate(struct menu *, unsigned int);
 
-enum
-{
-    MENU_ERROR_HANDLER ,
-    MENU_ERROR_DRAWSELECTED,
-    MENU_ERROR_SELECTEDOPTION,
-    MENU_ERROR_DATA,
-    MENU_ERROR_DRAWOPTION,
-    MENU_ERROR_GETINDEX,
-    MENU_ERROR_NOINDEX,
-};
+// enum
+// {
+//     MENU_ERROR_DRAWSELECTED = -99,
+//     MENU_ERROR_SELECTEDOPTION,
+//     MENU_ERROR_DATA,
+//     MENU_ERROR_DRAWOPTION,
+//     MENU_ERROR_GETINDEX,
+//     MENU_ERROR_NOINDEX,
+// };
