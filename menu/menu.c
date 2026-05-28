@@ -31,28 +31,27 @@ static void _decOption(struct menu *this)
 
 //
 
-void menu_init(struct menu *this, menuOption_handler_f inc_f, menuOption_handler_f dec_f, menuOption_handler_f fire_f, int16_t (*selected_f)(), int16_t (*draw_f)())
+void menu_init(struct menu *this, menuOption_f inc, menuOption_f dec, menuOption_f fire, int16_t (*selected_f)(), int16_t (*draw_f)())
 {
     this->drawOption_f = draw_f;
     this->drawSelected_f = selected_f;
     this->round = 0;
     this->singleOption = 0;
-    this->incOption_f = inc_f;
-    this->decOption_f = dec_f;
-    this->fireOption_f = fire_f;
+    this->incOption_f = inc;
+    this->decOption_f = dec;
+    this->fireOption_f = fire;
     this->head = 0;
     this->tail = 0;
     this->selectedOption = 0;
 }
 
-void menu_addOption(struct menu *this, struct menuOption *mo, const void *data, struct menu *submenu, menuOption_handler_f exec_f)
+void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct menu *submenu, menuOption_f exec)
 {
-    memcpy(mo->data, data, MENU_OPTION_DATA_MAX);
-
+    mo->data = data;
     mo->submenu = submenu;
     mo->next = 0;
     mo->prev = 0;
-    mo->exec_f = exec_f;
+    mo->exec_f = exec;
 
     if (!this->head)
     {
