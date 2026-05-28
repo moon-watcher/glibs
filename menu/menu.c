@@ -31,7 +31,7 @@ static void _decOption(struct menu *this)
 
 //
 
-void menu_init(struct menu *this, menuOption_handler_f inc_f, menuOption_handler_f dec_f, menuOption_handler_f fire_f, int (*selected_f)(), int (*draw_f)())
+void menu_init(struct menu *this, menuOption_handler_f inc_f, menuOption_handler_f dec_f, menuOption_handler_f fire_f, int16_t (*selected_f)(), int16_t (*draw_f)())
 {
     this->drawOption_f = draw_f;
     this->drawSelected_f = selected_f;
@@ -45,9 +45,10 @@ void menu_init(struct menu *this, menuOption_handler_f inc_f, menuOption_handler
     this->selectedOption = 0;
 }
 
-void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct menu *submenu, menuOption_handler_f exec_f)
+void menu_addOption(struct menu *this, struct menuOption *mo, const void *data, struct menu *submenu, menuOption_handler_f exec_f)
 {
-    mo->data = data;
+    memcpy(mo->data, data, MENU_OPTION_DATA_MAX);
+
     mo->submenu = submenu;
     mo->next = 0;
     mo->prev = 0;
@@ -93,12 +94,16 @@ void menu_selectOption(struct menu *this, struct menuOption *mo)
     this->selectedOption = mo;
 }
 
-int menu_update(struct menu *this)
+int16_t menu_update(struct menu *this)
 {
+    int16_t ret = 0;
     struct menuOption *mo = this->selectedOption;
 
     if (this->fireOption_f && this->fireOption_f(mo))
-        mo->exec_f && mo->exec_f(mo);
+    {
+        if (mo->exec_f)
+            ret = mo->exec_f(mo);
+    }
 
     else if (this->incOption_f && this->incOption_f(mo))
         _incOption(this);
@@ -115,7 +120,7 @@ int menu_update(struct menu *this)
     if (this->selectedOption->submenu)
         menu_update(this->selectedOption->submenu);
 
-    return 1;
+    return ret;
 }
 
 // static void _deactivate(struct menu *this, unsigned int recursive)

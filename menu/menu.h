@@ -1,7 +1,11 @@
 #pragma once
 
+#include <stdint.h>
+
 struct menu;
-typedef int (*menuOption_handler_f)(struct menuOption *);
+typedef int16_t (*menuOption_handler_f)(struct menuOption *);
+
+#define MENU_OPTION_DATA_MAX 32
 
 struct menuOption
 {
@@ -10,7 +14,7 @@ struct menuOption
     struct menuOption *prev;
     menuOption_handler_f exec_f;
 
-    unsigned char *data;
+    uint8_t data[MENU_OPTION_DATA_MAX]; // data buffer
 };
 
 
@@ -20,20 +24,20 @@ struct menu
     menuOption_handler_f decOption_f;
     menuOption_handler_f fireOption_f;
 
-    int (*drawOption_f)(void *);
-    int (*drawSelected_f)(void *);
+    int16_t (*drawOption_f)(void *);
+    int16_t (*drawSelected_f)(void *);
 
-    unsigned int round : 1;
-    unsigned int singleOption : 1;
+    uint8_t round : 1;
+    uint8_t singleOption : 1;
 
     struct menuOption *head;
     struct menuOption *tail;
     struct menuOption *selectedOption;
 };
 
-void menu_init(struct menu *, menuOption_handler_f, menuOption_handler_f, menuOption_handler_f, int (*)(), int (*)());
-void menu_addOption(struct menu *, struct menuOption *, void *, struct menu *, menuOption_handler_f);
+void menu_init(struct menu *, menuOption_handler_f, menuOption_handler_f, menuOption_handler_f, int16_t (*)(), int16_t (*)());
+void menu_addOption(struct menu *, struct menuOption *, const void *, struct menu *, menuOption_handler_f);
 void menu_draw(struct menu *);
 void menu_selectOption(struct menu *, struct menuOption *);
-int menu_update(struct menu *);
+int16_t menu_update(struct menu *);
 
