@@ -1,30 +1,26 @@
 #include "menu.h"
 #include "debug.h"
 
-static struct menuOption *_incOption(struct menu *);
-static struct menuOption *_decOption(struct menu *);
-static int _drawSelected(struct menu *);
-static int _drawOption(struct menu *, struct menuOption *);
-static struct menuOption *_getOptionByIndex(struct menu *, unsigned);
-static int _getIndex(struct menu *);
+static void _incOption(struct menu *);
+static void _decOption(struct menu *);
+static void _drawSelected(struct menu *);
+static void _drawOption(struct menu *, struct menuOption *);
 
-//
-
-void menu_init(struct menu *this, menu_handler_f inc_f, menu_handler_f dec_f, menu_handler_f fire_f, int (*selected_f)(), int (*draw_f)())
+void menu_init(struct menu *this, menuOption_handler_f inc_f, menuOption_handler_f dec_f, menuOption_handler_f fire_f, int (*selected_f)(), int (*draw_f)())
 {
     this->drawOption_f = draw_f;
     this->drawSelected_f = selected_f;
     this->round = 0;
     this->singleOption = 0;
-    this->inc_f = inc_f;
-    this->dec_f = dec_f;
+    this->incOption_f = inc_f;
+    this->decOption_f = dec_f;
     this->fireOption_f = fire_f;
     this->head = 0;
     this->tail = 0;
     this->selectedOption = 0;
 }
 
-void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct menu *submenu, menu_handler_f exec_f)
+void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct menu *submenu, menuOption_handler_f exec_f)
 {
     mo->data = data;
     mo->submenu = submenu;
@@ -48,6 +44,9 @@ void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct
 
 void menu_draw(struct menu *this)
 {
+    if (!this)
+        return;
+
     if (!this->singleOption)
     {
         struct menuOption *mo = this->head;
@@ -55,18 +54,13 @@ void menu_draw(struct menu *this)
         while (mo)
         {
             _drawOption(this, mo);
-
-            if (mo->submenu)
-                menu_draw(mo->submenu);
+            menu_draw(mo->submenu);
 
             mo = mo->next;
         }
     }
 
-    if (this->selectedOption)
-        _drawSelected(this);
-    else
-        _drawOption(this, _getOptionByIndex(this, 0));
+    _drawSelected(this);
 }
 
 void menu_selectOption(struct menu *this, struct menuOption *mo)
@@ -76,15 +70,22 @@ void menu_selectOption(struct menu *this, struct menuOption *mo)
 
 int menu_update(struct menu *this)
 {
-    unsigned index = _getIndex(this);
     struct menuOption *mo = this->selectedOption;
 
-    if (this->fireOption_f && this->fireOption_f(this, mo, index))
-        mo->exec_f && mo->exec_f(this, mo, index);
-    else if (this->inc_f && this->inc_f(this, mo, index))
+    if (this->fireOption_f && this->fireOption_f(mo))
+        mo->exec_f && mo->exec_f(mo);
+
+    else if (this->incOption_f && this->incOption_f(mo))
         _incOption(this);
-    else if (this->dec_f && this->dec_f(this, mo, index))
+
+    else if (this->decOption_f && this->decOption_f(mo))
         _decOption(this);
+
+    if (this->selectedOption != mo)
+    {
+        _drawOption(this, mo);
+        _drawSelected(this);
+    }
 
     if (this->selectedOption->submenu)
         menu_update(this->selectedOption->submenu);
@@ -94,100 +95,32 @@ int menu_update(struct menu *this)
 
 //
 
-#define GUARD(cond, ret) \
-    if (!cond)           \
-        return ret;
-
-static struct menuOption *_incOption(struct menu *this)
+static void _drawOption(struct menu *this, struct menuOption *mo)
 {
-    struct menuOption *mo = this->selectedOption;
+    this->drawOption_f && this->drawOption_f(mo->data);
+}
 
-    GUARD(mo, 0);
+static void _drawSelected(struct menu *this)
+{
+    this->drawSelected_f && this->selectedOption->data && this->drawSelected_f(this->selectedOption->data);
+}
 
-    if (mo->next)
-        this->selectedOption = mo->next;
+static void _incOption(struct menu *this)
+{
+    if (this->selectedOption->next)
+        menu_selectOption(this, this->selectedOption->next);
 
     else if (this->round)
-        this->selectedOption = this->head;
-
-    if (this->selectedOption != mo)
-    {
-        _drawOption(this, mo);
-        _drawSelected(this);
-    }
-
-    return this->selectedOption;
+        menu_selectOption(this, this->head);
 }
 
-static struct menuOption *_decOption(struct menu *this)
+static void _decOption(struct menu *this)
 {
-    struct menuOption *mo = this->selectedOption;
+    if (this->selectedOption->prev)
+        menu_selectOption(this, this->selectedOption->prev);
 
-    GUARD(mo, 0);
-
-    if (mo->prev)
-        this->selectedOption = mo->prev;
     else if (this->round)
-        this->selectedOption = this->tail;
-
-    if (this->selectedOption != mo)
-    {
-        _drawOption(this, mo);
-        _drawSelected(this);
-    }
-
-    return this->selectedOption;
-}
-
-static int _drawSelected(struct menu *this)
-{
-    GUARD(this->drawSelected_f, -1);
-    GUARD(this->selectedOption, -2);
-    GUARD(this->selectedOption->data, -3);
-
-    return this->drawSelected_f(this->selectedOption->data);
-}
-
-static int _drawOption(struct menu *this, struct menuOption *mo)
-{
-    GUARD(this->drawOption_f, -4);
-
-    return this->drawOption_f(mo->data);
-}
-
-static struct menuOption *_getOptionByIndex(struct menu *this, unsigned int index)
-{
-    struct menuOption *mo = this->head;
-    unsigned int i = 0;
-
-    while (mo)
-    {
-        if (i++ == index)
-            return mo;
-
-        mo = mo->next;
-    }
-
-    return 0;
-}
-
-static int _getIndex(struct menu *this)
-{
-    GUARD(this->selectedOption, -5);
-
-    struct menuOption *mo = this->head;
-    unsigned int i = 0;
-
-    while (mo)
-    {
-        if (this->selectedOption == mo)
-            return i;
-
-        ++i;
-        mo = mo->next;
-    }
-
-    return -6;
+        menu_selectOption(this, this->tail);
 }
 
 /**
@@ -205,7 +138,7 @@ static void _deactivate(struct menu *this, unsigned int recursive)
 static void _activate(struct menu *this, unsigned int recursive)
 {
     if (this->selectedOption)
-        menu_selectOption(this, _getOptionByIndex(this, 0));
+        menu_selectOption(this, this->head);
 
     _drawSelected(this);
 
