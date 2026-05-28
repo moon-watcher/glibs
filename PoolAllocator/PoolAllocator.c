@@ -46,6 +46,102 @@ void PoolAllocator_free(PoolAllocator *const pool, void *chunk)
 
 /*
 
+/// deepseek
+
+#include "PoolAllocator.h"
+#include <stdint.h>
+#include <string.h>
+
+#define MIN_CHUNK_SIZE sizeof(unsigned)
+
+void PoolAllocator_init(PoolAllocator *pool, unsigned max_blocks, unsigned chunk_bytes)
+{
+    if (chunk_bytes < MIN_CHUNK_SIZE)
+        chunk_bytes = MIN_CHUNK_SIZE;
+
+    pool->max_blocks = max_blocks;
+    pool->chunk_size = chunk_bytes;
+
+    // Los flags empiezan justo después de la cabecera
+    uint8_t *flags = (uint8_t *)pool->memory;
+    memset(flags, 0, max_blocks);   // 0 = libre
+
+    // Los bloques empiezan después de los flags
+    uint8_t *blocks_start = flags + max_blocks;
+
+    // Inicializar la lista libre: cada bloque guarda el índice del siguiente bloque libre
+    for (unsigned i = 0; i < max_blocks; i++) {
+        unsigned *next_ptr = (unsigned *)(blocks_start + i * chunk_bytes);
+        *next_ptr = i + 1;
+    }
+    // El último bloque apunta a max_blocks (centinela)
+    pool->next_free = 0;
+}
+
+void *PoolAllocator_alloc(PoolAllocator *pool)
+{
+    if (pool->next_free >= pool->max_blocks)
+        return NULL;
+
+    uint8_t *flags = (uint8_t *)pool->memory;
+    uint8_t *blocks_start = flags + pool->max_blocks;
+
+    unsigned index = pool->next_free;
+    unsigned *next_ptr = (unsigned *)(blocks_start + index * pool->chunk_size);
+    pool->next_free = *next_ptr;
+
+    flags[index] = 1;   // marcado como ocupado
+    return blocks_start + index * pool->chunk_size;
+}
+
+void PoolAllocator_free(PoolAllocator *pool, void *chunk)
+{
+    if (!chunk) return;
+
+    uint8_t *flags = (uint8_t *)pool->memory;
+    uint8_t *blocks_start = flags + pool->max_blocks;
+
+    ptrdiff_t offset = (uint8_t *)chunk - blocks_start;
+    if (offset < 0 || (offset % pool->chunk_size) != 0)
+        return;
+    unsigned index = (unsigned)(offset / pool->chunk_size);
+    if (index >= pool->max_blocks)
+        return;
+    if (flags[index] == 0)   // ya estaba libre o puntero inválido
+        return;
+
+    // Reinsertar en la lista libre
+    unsigned *next_ptr = (unsigned *)chunk;
+    *next_ptr = pool->next_free;
+    pool->next_free = index;
+    flags[index] = 0;
+}
+
+void PoolAllocator_iterate(PoolAllocator *pool, void (*callback)(void *))
+{
+    uint8_t *flags = (uint8_t *)pool->memory;
+    uint8_t *blocks_start = flags + pool->max_blocks;
+
+    for (unsigned i = 0; i < pool->max_blocks; i++) {
+        if (flags[i]) {   // bloque ocupado
+            void *block = blocks_start + i * pool->chunk_size;
+            callback(block);
+        }
+    }
+}
+
+//////////////////////
+
+
+
+
+
+
+
+
+
+
+
 
 void test_PoolAllocator_init()
 {
