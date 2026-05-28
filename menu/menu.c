@@ -1,7 +1,7 @@
 #include "menu.h"
 #include "debug.h"
 
-#define ISNULL(cond, ret) \
+#define GUARD(cond, ret) \
     if (!cond)            \
         return ret;
 
@@ -10,7 +10,7 @@ void menu_init(struct menu *this, void (*handler)(), int (*selected_f)(), int (*
     this->drawOption_f = draw_f;
     this->drawSelected_f = selected_f;
     this->round = 0;
-    this->oneOption = 0;
+    this->singleOption = 0;
     this->handler = handler;
     this->head = 0;
     this->tail = 0;
@@ -39,7 +39,7 @@ void menu_drawAll(struct menu *this)
 {
     struct menuOption *mo = this->head;
 
-    if (!this->oneOption)
+    if (!this->singleOption)
         while (mo)
         {
             menu_drawOption(this, mo);
@@ -56,9 +56,9 @@ void menu_drawAll(struct menu *this)
         menu_drawOption(this, menu_getOptionByIndex(this, 0));
 }
 
-void menu_update(struct menu *this)
+int menu_update(struct menu *this)
 {
-    ISNULL(this->handler, MENU_ERROR_HANDLER);
+    GUARD(this->handler, MENU_ERROR_HANDLER);
 
     unsigned index = menu_getIndex(this);
     struct menuOption *mo = menu_getSelected(this);
@@ -66,33 +66,29 @@ void menu_update(struct menu *this)
     this->handler(this, mo, index);
     struct menu *submenu = menu_getSubmenu(this);
 
-    // print("%d %p %d %p ", index, mo, ret, submenu);
-
     if (submenu)
         menu_update(submenu);
+
+    return 1;
 }
 
 struct menuOption *menu_incOption(struct menu *this)
 {
     struct menuOption *mo = this->selectedOption;
-trace
-    ISNULL(mo, 0);
+
+    GUARD(mo, 0);
 
     if (mo->next)
         this->selectedOption = mo->next;
+        
     else if (this->round)
         this->selectedOption = this->head;
-trace
 
     if (this->selectedOption != mo)
     {
-trace
         menu_drawOption(this, mo);
-trace
         menu_drawSelected(this);
-trace
     }
-trace
 
     return this->selectedOption;
 }
@@ -101,7 +97,7 @@ struct menuOption *menu_decOption(struct menu *this)
 {
     struct menuOption *mo = this->selectedOption;
 
-    ISNULL(mo, 0);
+    GUARD(mo, 0);
 
     if (mo->prev)
         this->selectedOption = mo->prev;
@@ -119,16 +115,16 @@ struct menuOption *menu_decOption(struct menu *this)
 
 int menu_drawSelected(struct menu *this)
 {
-    ISNULL(this->drawSelected_f, MENU_ERROR_DRAWSELECTED);
-    ISNULL(this->selectedOption, MENU_ERROR_SELECTEDOPTION);
-    ISNULL(this->selectedOption->data, MENU_ERROR_DATA);
+    GUARD(this->drawSelected_f, MENU_ERROR_DRAWSELECTED);
+    GUARD(this->selectedOption, MENU_ERROR_SELECTEDOPTION);
+    GUARD(this->selectedOption->data, MENU_ERROR_DATA);
 
     return this->drawSelected_f(this->selectedOption->data);
 }
 
 int menu_drawOption(struct menu *this, struct menuOption *mo)
 {
-    ISNULL(this->drawOption_f, MENU_ERROR_DRAWOPTION);
+    GUARD(this->drawOption_f, MENU_ERROR_DRAWOPTION);
 
     return this->drawOption_f(mo->data);
 }
@@ -167,7 +163,7 @@ struct menuOption *menu_getSelected(struct menu *this)
 
 int menu_getIndex(struct menu *this)
 {
-    ISNULL(this->selectedOption, MENU_ERROR_GETINDEX);
+    GUARD(this->selectedOption, MENU_ERROR_GETINDEX);
 
     struct menuOption *mo = this->head;
     unsigned int i = 0;
