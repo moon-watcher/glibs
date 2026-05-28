@@ -1,10 +1,35 @@
 #include "menu.h"
 #include "debug.h"
 
-static void _incOption(struct menu *);
-static void _decOption(struct menu *);
-static void _drawSelected(struct menu *);
-static void _drawOption(struct menu *, struct menuOption *);
+static void _drawOption(struct menu *this, struct menuOption *mo)
+{
+    this->drawOption_f && mo->data && this->drawOption_f(mo->data);
+}
+
+static void _drawSelected(struct menu *this)
+{
+    this->drawSelected_f && this->selectedOption->data && this->drawSelected_f(this->selectedOption->data);
+}
+
+static void _incOption(struct menu *this)
+{
+    if (this->selectedOption->next)
+        this->selectedOption = this->selectedOption->next;
+
+    else if (this->round)
+        this->selectedOption = this->head;
+}
+
+static void _decOption(struct menu *this)
+{
+    if (this->selectedOption->prev)
+        this->selectedOption = this->selectedOption->prev;
+
+    else if (this->round)
+        this->selectedOption = this->tail;
+}
+
+//
 
 void menu_init(struct menu *this, menuOption_handler_f inc_f, menuOption_handler_f dec_f, menuOption_handler_f fire_f, int (*selected_f)(), int (*draw_f)())
 {
@@ -31,7 +56,7 @@ void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct
     if (!this->head)
     {
         this->head = mo;
-        menu_selectOption(this, mo);
+        this->selectedOption = mo;
     }
     else
     {
@@ -93,55 +118,22 @@ int menu_update(struct menu *this)
     return 1;
 }
 
-//
+// static void _deactivate(struct menu *this, unsigned int recursive)
+// {
+//     if (this->selectedOption)
+//         _drawOption(this, this->selectedOption);
 
-static void _drawOption(struct menu *this, struct menuOption *mo)
-{
-    this->drawOption_f && this->drawOption_f(mo->data);
-}
+//     if (recursive && this->selectedOption && this->selectedOption->submenu)
+//         _deactivate(this->selectedOption->submenu, recursive);
+// }
 
-static void _drawSelected(struct menu *this)
-{
-    this->drawSelected_f && this->selectedOption->data && this->drawSelected_f(this->selectedOption->data);
-}
+// static void _activate(struct menu *this, unsigned int recursive)
+// {
+//     if (this->selectedOption)
+//         menu_selectOption(this, this->head);
 
-static void _incOption(struct menu *this)
-{
-    if (this->selectedOption->next)
-        menu_selectOption(this, this->selectedOption->next);
+//     _drawSelected(this);
 
-    else if (this->round)
-        menu_selectOption(this, this->head);
-}
-
-static void _decOption(struct menu *this)
-{
-    if (this->selectedOption->prev)
-        menu_selectOption(this, this->selectedOption->prev);
-
-    else if (this->round)
-        menu_selectOption(this, this->tail);
-}
-
-/**
- * Igual se van!
- */
-static void _deactivate(struct menu *this, unsigned int recursive)
-{
-    if (this->selectedOption)
-        _drawOption(this, this->selectedOption);
-
-    if (recursive && this->selectedOption && this->selectedOption->submenu)
-        _deactivate(this->selectedOption->submenu, recursive);
-}
-
-static void _activate(struct menu *this, unsigned int recursive)
-{
-    if (this->selectedOption)
-        menu_selectOption(this, this->head);
-
-    _drawSelected(this);
-
-    if (recursive && this->selectedOption && this->selectedOption->submenu)
-        _activate(this->selectedOption->submenu, recursive);
-}
+//     if (recursive && this->selectedOption && this->selectedOption->submenu)
+//         _activate(this->selectedOption->submenu, recursive);
+// }
