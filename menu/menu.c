@@ -94,7 +94,7 @@ int16_t menu_update(struct menu *$)
     int16_t ret = 0;
     struct menuOption *mo = $->selectedOption;
 
-    if ($->fireOption_f && $->fireOption_f(mo))
+    if (!mo->submenu && $->fireOption_f && $->fireOption_f(mo))
     {
         if (mo->exec_f)
             ret = mo->exec_f(mo);
