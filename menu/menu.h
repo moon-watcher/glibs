@@ -9,7 +9,8 @@ typedef int16_t (*menuOption_f)(struct menuOption *);
 
 struct menuOption
 {
-    struct menu *submenu;
+    struct menu *menu;    // parent
+    struct menu *submenu; // children
     struct menuOption *next;
     struct menuOption *prev;
     menuOption_f exec_f;
@@ -35,7 +36,9 @@ struct menu
 };
 
 void menu_init(struct menu *, menuOption_f, menuOption_f, menuOption_f, int16_t (*)(), int16_t (*)());
-void menu_addOption(struct menu *, struct menuOption *, void *, struct menu *, menuOption_f);
+void menu_add(struct menu *, struct menuOption *, void *, menuOption_f);
 void menu_draw(struct menu *);
-void menu_selectOption(struct menu *, struct menuOption *);
 int16_t menu_update(struct menu *);
+
+void menu_option_submenu(struct menuOption *, struct menu *);
+void menu_option_select(struct menuOption *);

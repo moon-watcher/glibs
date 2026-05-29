@@ -1,143 +1,149 @@
 #include "menu.h"
 #include "debug.h"
 
-static void _drawOption(struct menu *this, struct menuOption *mo)
+static void drawOption(struct menu *$, struct menuOption *mo)
 {
-    this->drawOption_f && mo->data && this->drawOption_f(mo->data);
+    $->drawOption_f && mo->data && $->drawOption_f(mo->data);
 }
 
-static void _drawSelected(struct menu *this)
+static void drawSelected(struct menu *$)
 {
-    this->drawSelected_f && this->selectedOption->data && this->drawSelected_f(this->selectedOption->data);
+    $->drawSelected_f && $->selectedOption->data && $->drawSelected_f($->selectedOption->data);
 }
 
-static void _incOption(struct menu *this)
+static void incOption(struct menu *$)
 {
-    if (this->selectedOption->next)
-        this->selectedOption = this->selectedOption->next;
+    if ($->selectedOption->next)
+        $->selectedOption = $->selectedOption->next;
 
-    else if (this->round)
-        this->selectedOption = this->head;
+    else if ($->round)
+        $->selectedOption = $->head;
 }
 
-static void _decOption(struct menu *this)
+static void decOption(struct menu *$)
 {
-    if (this->selectedOption->prev)
-        this->selectedOption = this->selectedOption->prev;
+    if ($->selectedOption->prev)
+        $->selectedOption = $->selectedOption->prev;
 
-    else if (this->round)
-        this->selectedOption = this->tail;
+    else if ($->round)
+        $->selectedOption = $->tail;
 }
 
 //
 
-void menu_init(struct menu *this, menuOption_f inc, menuOption_f dec, menuOption_f fire, int16_t (*selected_f)(), int16_t (*draw_f)())
+void menu_init(struct menu *$, menuOption_f inc, menuOption_f dec, menuOption_f fire, int16_t (*selected_f)(), int16_t (*draw_f)())
 {
-    this->drawOption_f = draw_f;
-    this->drawSelected_f = selected_f;
-    this->round = 0;
-    this->singleOption = 0;
-    this->incOption_f = inc;
-    this->decOption_f = dec;
-    this->fireOption_f = fire;
-    this->head = 0;
-    this->tail = 0;
-    this->selectedOption = 0;
+    $->drawOption_f = draw_f;
+    $->drawSelected_f = selected_f;
+    $->round = 0;
+    $->singleOption = 0;
+    $->incOption_f = inc;
+    $->decOption_f = dec;
+    $->fireOption_f = fire;
+    $->head = 0;
+    $->tail = 0;
+    $->selectedOption = 0;
 }
 
-void menu_addOption(struct menu *this, struct menuOption *mo, void *data, struct menu *submenu, menuOption_f exec)
+void menu_add(struct menu *$, struct menuOption *mo, void *data, menuOption_f exec)
 {
+    mo->menu = $;
     mo->data = data;
-    mo->submenu = submenu;
+    mo->submenu = 0;
     mo->next = 0;
     mo->prev = 0;
     mo->exec_f = exec;
 
-    if (!this->head)
+    if (!$->head)
     {
-        this->head = mo;
-        this->selectedOption = mo;
+        $->head = mo;
+        $->selectedOption = mo;
     }
     else
     {
-        mo->prev = this->tail;
-        this->tail->next = mo;
+        mo->prev = $->tail;
+        $->tail->next = mo;
     }
 
-    this->tail = mo;
+    $->tail = mo;
 }
 
-void menu_draw(struct menu *this)
+void menu_draw(struct menu *$)
 {
-    if (!this)
+    if (!$)
         return;
 
-    if (!this->singleOption)
+    if (!$->singleOption)
     {
-        struct menuOption *mo = this->head;
+        struct menuOption *mo = $->head;
 
         while (mo)
         {
-            _drawOption(this, mo);
+            drawOption($, mo);
             menu_draw(mo->submenu);
 
             mo = mo->next;
         }
     }
 
-    _drawSelected(this);
+    drawSelected($);
 }
 
-void menu_selectOption(struct menu *this, struct menuOption *mo)
-{
-    this->selectedOption = mo;
-}
-
-int16_t menu_update(struct menu *this)
+int16_t menu_update(struct menu *$)
 {
     int16_t ret = 0;
-    struct menuOption *mo = this->selectedOption;
+    struct menuOption *mo = $->selectedOption;
 
-    if (this->fireOption_f && this->fireOption_f(mo))
+    if ($->fireOption_f && $->fireOption_f(mo))
     {
         if (mo->exec_f)
             ret = mo->exec_f(mo);
     }
 
-    else if (this->incOption_f && this->incOption_f(mo))
-        _incOption(this);
+    else if ($->incOption_f && $->incOption_f(mo))
+        incOption($);
 
-    else if (this->decOption_f && this->decOption_f(mo))
-        _decOption(this);
+    else if ($->decOption_f && $->decOption_f(mo))
+        decOption($);
 
-    if (this->selectedOption != mo)
+    if ($->selectedOption != mo)
     {
-        _drawOption(this, mo);
-        _drawSelected(this);
+        drawOption($, mo);
+        drawSelected($);
     }
 
-    if (this->selectedOption->submenu)
-        menu_update(this->selectedOption->submenu);
+    if ($->selectedOption->submenu)
+        menu_update($->selectedOption->submenu);
 
     return ret;
 }
 
-// static void _deactivate(struct menu *this, unsigned int recursive)
-// {
-//     if (this->selectedOption)
-//         _drawOption(this, this->selectedOption);
+void menu_option_submenu(struct menuOption *$, struct menu *submenu)
+{
+    $->submenu = submenu;
+}
 
-//     if (recursive && this->selectedOption && this->selectedOption->submenu)
-//         _deactivate(this->selectedOption->submenu, recursive);
+void menu_option_select(struct menuOption *$)
+{
+    $->menu->selectedOption = $;
+}
+
+// static void _deactivate(struct menu *$, unsigned int recursive)
+// {
+//     if ($->selectedOption)
+//         drawOption($, $->selectedOption);
+
+//     if (recursive && $->selectedOption && $->selectedOption->submenu)
+//         _deactivate($->selectedOption->submenu, recursive);
 // }
 
-// static void _activate(struct menu *this, unsigned int recursive)
+// static void _activate(struct menu *$, unsigned int recursive)
 // {
-//     if (this->selectedOption)
-//         menu_selectOption(this, this->head);
+//     if ($->selectedOption)
+//         menu_option_select($, $->head);
 
-//     _drawSelected(this);
+//     drawSelected($);
 
-//     if (recursive && this->selectedOption && this->selectedOption->submenu)
-//         _activate(this->selectedOption->submenu, recursive);
+//     if (recursive && $->selectedOption && $->selectedOption->submenu)
+//         _activate($->selectedOption->submenu, recursive);
 // }
