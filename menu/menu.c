@@ -3,12 +3,12 @@
 
 static void drawOption(struct menu *$, struct menuOption *mo)
 {
-    $->drawOption_f && mo->data && $->drawOption_f(mo->data);
+    $->drawOption_f && $->drawOption_f(mo->data);
 }
 
 static void drawSelected(struct menu *$)
 {
-    $->drawSelected_f && $->selectedOption->data && $->drawSelected_f($->selectedOption->data);
+    $->drawSelected_f && $->drawSelected_f($->selectedOption->data);
 }
 
 static void incOption(struct menu *$)
