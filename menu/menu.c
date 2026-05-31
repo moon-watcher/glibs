@@ -29,6 +29,35 @@ static void decOption(struct menu *$)
         $->selectedOption = $->tail;
 }
 
+static int16_t recursive_update(struct menu *$, uint16_t nest_level)
+{
+    int16_t ret = 0;
+    struct menuOption *mo = $->selectedOption;
+
+    if (!mo->submenu && $->fireOption_f && $->fireOption_f(mo))
+    {
+        if (mo->exec_f)
+            ret = mo->exec_f(mo);
+    }
+
+    else if ($->incOption_f && $->incOption_f(mo))
+        incOption($);
+
+    else if ($->decOption_f && $->decOption_f(mo))
+        decOption($);
+
+    if ($->selectedOption != mo)
+    {
+        drawOption($, mo);
+        drawSelected($);
+    }
+
+    if ($->selectedOption->submenu)
+        ret = recursive_update($->selectedOption->submenu, nest_level+1);
+
+    return ret;
+}
+
 //
 
 void menu_init(struct menu *$, menuOption_f inc, menuOption_f dec, menuOption_f fire, int16_t (*selected_f)(), int16_t (*draw_f)())
@@ -47,12 +76,13 @@ void menu_init(struct menu *$, menuOption_f inc, menuOption_f dec, menuOption_f 
 
 void menu_add(struct menu *$, struct menuOption *mo, void *data, menuOption_f exec)
 {
-    mo->menu = $;
+    mo->parentmenu = $;
     mo->data = data;
     mo->submenu = 0;
     mo->next = 0;
     mo->prev = 0;
     mo->exec_f = exec;
+    mo->index = $->tail ? $->tail->index + 1 : 0;
 
     if (!$->head)
     {
@@ -91,31 +121,7 @@ void menu_draw(struct menu *$)
 
 int16_t menu_update(struct menu *$)
 {
-    int16_t ret = 0;
-    struct menuOption *mo = $->selectedOption;
-
-    if (!mo->submenu && $->fireOption_f && $->fireOption_f(mo))
-    {
-        if (mo->exec_f)
-            ret = mo->exec_f(mo);
-    }
-
-    else if ($->incOption_f && $->incOption_f(mo))
-        incOption($);
-
-    else if ($->decOption_f && $->decOption_f(mo))
-        decOption($);
-
-    if ($->selectedOption != mo)
-    {
-        drawOption($, mo);
-        drawSelected($);
-    }
-
-    if ($->selectedOption->submenu)
-        menu_update($->selectedOption->submenu);
-
-    return ret;
+    return recursive_update($, 0);
 }
 
 void menu_option_submenu(struct menuOption *$, struct menu *submenu)
@@ -125,7 +131,7 @@ void menu_option_submenu(struct menuOption *$, struct menu *submenu)
 
 void menu_option_select(struct menuOption *$)
 {
-    $->menu->selectedOption = $;
+    $->parentmenu->selectedOption = $;
 }
 
 // static void _deactivate(struct menu *$, unsigned int recursive)
