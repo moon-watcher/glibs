@@ -46,4 +46,4 @@ typedef struct
     ({ const pool_t *p = (POOL); p->size - p->offset; })
 
 #define pool_total(POOL) \
-    ({ const pool_t *p_ = (POOL); p_->size; })
+    ({ const pool_t *p = (POOL); p->size; })
