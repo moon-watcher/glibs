@@ -15,11 +15,11 @@ static void menu_draw_selected(struct menu *menu)
 
 //
 
-void menu_init(struct menu *menu, struct menuEvents *events)
+void menu_init(struct menu *menu, struct menuEvents *events, int16_t round, int16_t single)
 {
     menu->event = *events;
-    menu->round = 0;
-    menu->singleOption = 0;
+    menu->round = round;
+    menu->singleOption = single;
     menu->head = 0;
     menu->tail = 0;
     menu->selectedOption = 0;
