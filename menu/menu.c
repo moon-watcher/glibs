@@ -104,7 +104,14 @@ int16_t menu_update(struct menu *menu)
     if (menu->selectedOption != option)
     {
         option_draw(option);
+
+        if (option->child && option->child->singleOption)
+            option_draw(option->child->selectedOption);
+
         menu_draw_selected(menu);
+
+        if (menu->selectedOption->child)
+            menu_draw_selected(menu->selectedOption->child);
 
         if (menu->changeOption_f)
             ret = menu->changeOption_f(menu->selectedOption);
