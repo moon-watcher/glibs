@@ -104,12 +104,10 @@ int16_t menu_update(struct menu *menu)
     if (menu->selectedOption != option)
     {
         option_draw(option);
-
         if (option->child && option->child->singleOption)
             option_draw(option->child->selectedOption);
 
         menu_draw_selected(menu);
-
         if (menu->selectedOption->child)
             menu_draw_selected(menu->selectedOption->child);
 
@@ -132,23 +130,3 @@ void menu_option_select(struct menuOption *option)
 {
     option->parent->selectedOption = option;
 }
-
-// static void _deactivate(struct menu *menu, unsigned int recursive)
-// {
-//     if (menu->selectedOption)
-//         option_draw(menu, menu->selectedOption);
-
-//     if (recursive && menu->selectedOption && menu->selectedOption->child)
-//         _deactivate(menu->selectedOption->child, recursive);
-// }
-
-// static void _activate(struct menu *menu, unsigned int recursive)
-// {
-//     if (menu->selectedOption)
-//         menu_option_select(menu, menu->head);
-
-//     menu_draw_selected(menu);
-
-//     if (recursive && menu->selectedOption && menu->selectedOption->child)
-//         _activate(menu->selectedOption->child, recursive);
-// }
