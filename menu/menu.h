@@ -5,25 +5,26 @@
 struct menu;
 struct menuOption;
 
+typedef int16_t (*menuOption_f)(struct menuOption *);
+
 struct menuOption
 {
     struct menu *parent;
     struct menu *child;
     struct menuOption *next;
     struct menuOption *prev;
-    int16_t (*exec_f)(uint16_t, uint8_t *);
+    menuOption_f exec_f;
 
     uint16_t index;
     uint8_t *data;
 };
-
-typedef int16_t (*menuOption_f)(struct menuOption *);
 
 struct menu
 {
     menuOption_f incOption_f;
     menuOption_f decOption_f;
     menuOption_f fireOption_f;
+    menuOption_f changeOption_f;
 
     int16_t (*drawOption_f)(void *);
     int16_t (*drawSelected_f)(void *);
