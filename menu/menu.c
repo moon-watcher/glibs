@@ -3,28 +3,23 @@
 
 static void option_draw(struct menuOption *option)
 {
-    if (option->parent->drawOption_f)
-        option->parent->drawOption_f(option->data);
+    if (option->parent->event.drawOption)
+        option->parent->event.drawOption(option->data);
 }
 
 static void menu_draw_selected(struct menu *menu)
 {
-    if (menu->drawSelected_f)
-        menu->drawSelected_f(menu->selectedOption->data);
+    if (menu->event.drawSelected)
+        menu->event.drawSelected(menu->selectedOption->data);
 }
 
 //
 
-void menu_init(struct menu *menu, menuOption_f inc_f, menuOption_f dec_f, menuOption_f fire_f, int16_t (*selected_f)(), int16_t (*draw_f)())
+void menu_init(struct menu *menu, struct menuEvents *events)
 {
-    menu->drawOption_f = draw_f;
-    menu->drawSelected_f = selected_f;
+    menu->event = *events;
     menu->round = 0;
     menu->singleOption = 0;
-    menu->incOption_f = inc_f;
-    menu->decOption_f = dec_f;
-    menu->fireOption_f = fire_f;
-    menu->changeOption_f = 0;
     menu->head = 0;
     menu->tail = 0;
     menu->selectedOption = 0;
@@ -37,7 +32,7 @@ void menu_add(struct menu *menu, struct menuOption *option, void *data, menuOpti
     option->child = 0;
     option->next = 0;
     option->prev = 0;
-    option->exec_f = exec;
+    option->exec = exec;
     option->index = menu->tail ? menu->tail->index + 1 : 0;
 
     if (!menu->head)
@@ -80,20 +75,20 @@ int16_t menu_update(struct menu *menu)
     int16_t ret = 0;
     struct menuOption *option = menu->selectedOption;
 
-    if (!option->child && menu->fireOption_f && menu->fireOption_f(option))
+    if (!option->child && menu->event.fire && menu->event.fire(option))
     {
-        if (option->exec_f)
-            ret = option->exec_f(option);
+        if (option->exec)
+            ret = option->exec(option);
     }
 
-    else if (menu->incOption_f && menu->incOption_f(option))
+    else if (menu->event.inc && menu->event.inc(option))
     {
         if (menu->selectedOption->next)
             menu->selectedOption = menu->selectedOption->next;
         else if (menu->round)
             menu->selectedOption = menu->head;
     }
-    else if (menu->decOption_f && menu->decOption_f(option))
+    else if (menu->event.dec && menu->event.dec(option))
     {
         if (menu->selectedOption->prev)
             menu->selectedOption = menu->selectedOption->prev;
@@ -111,8 +106,8 @@ int16_t menu_update(struct menu *menu)
         if (menu->selectedOption->child)
             menu_draw_selected(menu->selectedOption->child);
 
-        if (menu->changeOption_f)
-            ret = menu->changeOption_f(menu->selectedOption);
+        if (menu->event.change)
+            ret = menu->event.change(menu->selectedOption);
     }
 
     if (menu->selectedOption->child)
