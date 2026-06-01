@@ -102,7 +102,7 @@ int16_t menu_update(struct menu *menu)
         if (!option->child && menu->fireOption_f && menu->fireOption_f(option))
         {
             if (option->exec_f)
-                ret = option->exec_f(option);
+                ret = option->exec_f(option->index, option->data);
         }
 
         else if (menu->incOption_f && menu->incOption_f(option))
@@ -136,22 +136,22 @@ void menu_option_select(struct menuOption *option)
     option->parent->selectedOption = option;
 }
 
-// static void _deactivate(struct menu *$, unsigned int recursive)
+// static void _deactivate(struct menu *menu, unsigned int recursive)
 // {
-//     if ($->selectedOption)
-//         option_draw($, $->selectedOption);
+//     if (menu->selectedOption)
+//         option_draw(menu, menu->selectedOption);
 
-//     if (recursive && $->selectedOption && $->selectedOption->child)
-//         _deactivate($->selectedOption->child, recursive);
+//     if (recursive && menu->selectedOption && menu->selectedOption->child)
+//         _deactivate(menu->selectedOption->child, recursive);
 // }
 
-// static void _activate(struct menu *$, unsigned int recursive)
+// static void _activate(struct menu *menu, unsigned int recursive)
 // {
-//     if ($->selectedOption)
-//         menu_option_select($, $->head);
+//     if (menu->selectedOption)
+//         menu_option_select(menu, menu->head);
 
-//     menu_draw_selected($);
+//     menu_draw_selected(menu);
 
-//     if (recursive && $->selectedOption && $->selectedOption->child)
-//         _activate($->selectedOption->child, recursive);
+//     if (recursive && menu->selectedOption && menu->selectedOption->child)
+//         _activate(menu->selectedOption->child, recursive);
 // }

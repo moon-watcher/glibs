@@ -5,19 +5,19 @@
 struct menu;
 struct menuOption;
 
-typedef int16_t (*menuOption_f)(struct menuOption *);
-
 struct menuOption
 {
     struct menu *parent;
     struct menu *child;
     struct menuOption *next;
     struct menuOption *prev;
-    menuOption_f exec_f;
+    int16_t (*exec_f)(uint16_t, uint8_t *);
 
-    uint8_t *data;
     uint16_t index;
+    uint8_t *data;
 };
+
+typedef int16_t (*menuOption_f)(struct menuOption *);
 
 struct menu
 {
