@@ -51,23 +51,28 @@ void menu_add(struct menu *menu, struct menuOption *option, void *data, menuOpti
 
 void menu_draw(struct menu *menu)
 {
-    if (!menu)
-        return;
-
-    if (!menu->singleOption)
+    if (menu->singleOption)
+    {
+        // TODO
+        // menu_draw_selected(menu);
+    }
+    else
     {
         struct menuOption *option = menu->head;
 
         while (option)
         {
-            option_draw(option);
-            menu_draw(option->child);
+            if (option->child)
+                menu_draw(option->child);
+
+            if (option == menu->selectedOption)
+                menu_draw_selected(menu);
+            else
+                option_draw(option);
 
             option = option->next;
         }
     }
-
-    menu_draw_selected(menu);
 }
 
 int16_t menu_update(struct menu *menu)
