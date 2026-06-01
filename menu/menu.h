@@ -44,7 +44,9 @@ struct menu
 void menu_init(struct menu *, struct menuEvents *, int16_t, int16_t);
 void menu_add(struct menu *, struct menuOption *, void *, menuOption_f);
 void menu_draw(struct menu *);
+void menu_draw_selected(struct menu *);
 int16_t menu_update(struct menu *);
 
+void menu_option_draw(struct menuOption *);
 void menu_option_submenu(struct menuOption *, struct menu *);
 void menu_option_select(struct menuOption *);

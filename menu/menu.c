@@ -1,19 +1,4 @@
 #include "menu.h"
-#include "debug.h"
-
-static void option_draw(struct menuOption *option)
-{
-    if (option->parent->event.drawOption)
-        option->parent->event.drawOption(option->data);
-}
-
-static void menu_draw_selected(struct menu *menu)
-{
-    if (menu->event.drawSelected)
-        menu->event.drawSelected(menu->selectedOption->data);
-}
-
-//
 
 void menu_init(struct menu *menu, struct menuEvents *events, int16_t round, int16_t single)
 {
@@ -53,8 +38,7 @@ void menu_draw(struct menu *menu)
 {
     if (menu->singleOption)
     {
-        // TODO
-        // menu_draw_selected(menu);
+        // TODO. Select default submenu
     }
     else
     {
@@ -68,11 +52,17 @@ void menu_draw(struct menu *menu)
             if (option == menu->selectedOption)
                 menu_draw_selected(menu);
             else
-                option_draw(option);
+                menu_option_draw(option);
 
             option = option->next;
         }
     }
+}
+
+void menu_draw_selected(struct menu *menu)
+{
+    if (menu->event.drawSelected)
+        menu->event.drawSelected(menu->selectedOption->data);
 }
 
 int16_t menu_update(struct menu *menu)
@@ -103,9 +93,9 @@ int16_t menu_update(struct menu *menu)
 
     if (menu->selectedOption != option)
     {
-        option_draw(option);
+        menu_option_draw(option);
         if (option->child && option->child->singleOption)
-            option_draw(option->child->selectedOption);
+            menu_option_draw(option->child->selectedOption);
 
         menu_draw_selected(menu);
         if (menu->selectedOption->child)
@@ -119,6 +109,12 @@ int16_t menu_update(struct menu *menu)
         ret = menu_update(menu->selectedOption->child);
 
     return ret;
+}
+
+void menu_option_draw(struct menuOption *option)
+{
+    if (option->parent->event.drawOption)
+        option->parent->event.drawOption(option->data);
 }
 
 void menu_option_submenu(struct menuOption *option, struct menu *submenu)
