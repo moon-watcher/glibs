@@ -9,8 +9,8 @@ typedef int16_t (*menuOption_f)(struct menuOption *);
 
 struct menuOption
 {
-    struct menu *parentmenu; // parent
-    struct menu *submenu;    // children
+    struct menu *parent;
+    struct menu *child;
     struct menuOption *next;
     struct menuOption *prev;
     menuOption_f exec_f;
