@@ -2,29 +2,24 @@
 
 void menu_init(struct menu *menu, struct menuEvents *events, int16_t round, int16_t single)
 {
-    menu->event = *events;
-    menu->round = round;
-    menu->singleOption = single;
-    menu->head = 0;
-    menu->tail = 0;
-    menu->selectedOption = 0;
+    *menu = (struct menu){
+        .event = *events,
+        .round = round,
+        .singleOption = single,
+    };
 }
 
 void menu_add(struct menu *menu, struct menuOption *option, void *data, menuOption_f exec)
 {
-    option->parent = menu;
-    option->data = data;
-    option->child = 0;
-    option->next = 0;
-    option->prev = 0;
-    option->exec = exec;
-    option->index = menu->tail ? menu->tail->index + 1 : 0;
+    *option = (struct menuOption){
+        .parent = menu,
+        .data = data,
+        .exec = exec,
+        .index = menu->tail ? menu->tail->index + 1 : 0,
+    };
 
     if (!menu->head)
-    {
-        menu->head = option;
-        menu->selectedOption = option;
-    }
+        menu->head = menu->selectedOption = option;
     else
     {
         option->prev = menu->tail;
@@ -36,26 +31,26 @@ void menu_add(struct menu *menu, struct menuOption *option, void *data, menuOpti
 
 void menu_draw(struct menu *menu)
 {
-    if (menu->singleOption)
+    // TODO in menu.c
+    // Autoselect 1st option's menu
+
+    struct menuOption *option = menu->head;
+
+    while (option)
     {
-        // TODO. Select default submenu
-    }
-    else
-    {
-        struct menuOption *option = menu->head;
+        if (option->child)
+            menu_draw(option->child);
 
-        while (option)
-        {
-            if (option->child)
-                menu_draw(option->child);
+        if (menu->singleOption)
+            menu_option_draw(menu->selectedOption);
 
-            if (option == menu->selectedOption)
-                menu_draw_selected(menu);
-            else
-                menu_option_draw(option);
+        else if (option == menu->selectedOption)
+            menu_draw_selected(menu);
 
-            option = option->next;
-        }
+        else
+            menu_option_draw(option);
+
+        option = option->next;
     }
 }
 
@@ -80,6 +75,7 @@ int16_t menu_update(struct menu *menu)
     {
         if (menu->selectedOption->next)
             menu->selectedOption = menu->selectedOption->next;
+
         else if (menu->round)
             menu->selectedOption = menu->head;
     }
@@ -87,6 +83,7 @@ int16_t menu_update(struct menu *menu)
     {
         if (menu->selectedOption->prev)
             menu->selectedOption = menu->selectedOption->prev;
+
         else if (menu->round)
             menu->selectedOption = menu->tail;
     }
@@ -94,10 +91,11 @@ int16_t menu_update(struct menu *menu)
     if (menu->selectedOption != option)
     {
         menu_option_draw(option);
+        menu_draw_selected(menu);
+
         if (option->child && option->child->singleOption)
             menu_option_draw(option->child->selectedOption);
 
-        menu_draw_selected(menu);
         if (menu->selectedOption->child)
             menu_draw_selected(menu->selectedOption->child);
 
