@@ -1,19 +1,8 @@
 #pragma once
 
-#define JOYREADER_UPDATE(J, V) ({unsigned short v = V; J = *(unsigned int *)&(struct { unsigned short changed, active; }){ ((v) ^ (J)), (v) }; })
-#define JOYREADER_ACTIVE(J)    ((unsigned short)J)
-#define JOYREADER_CHANGED(J)   (J >> 16)
+#define JOYREADER_UPDATE(J, V) ({unsigned short _v = (V); J = ((unsigned int)((unsigned short)(J) ^ _v) << 16) | _v;})
+#define JOYREADER_ACTIVE(J)    ((unsigned short)(J))
+#define JOYREADER_CHANGED(J)   ((unsigned short)((J) >> 16))
 #define JOYREADER_INACTIVE(J)  (~JOYREADER_ACTIVE(J))
 #define JOYREADER_PRESSED(J)   (JOYREADER_CHANGED(J) & JOYREADER_ACTIVE(J))
 #define JOYREADER_RELEASED(J)  (JOYREADER_CHANGED(J) & JOYREADER_INACTIVE(J))
-
-// void joyreader_update(joyreader *const joy, unsigned active)
-// {
-//     joy->changed = active ^ joy->active;
-//     joy->active = active;
-// }
-
-// void joyreader_press(joyreader *const joy, unsigned value)
-// {
-//     joy->active = value;
-// }

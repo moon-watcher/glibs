@@ -13,8 +13,8 @@ struct menuEvents
     menuOption_f dec;
     menuOption_f fire;
     menuOption_f change;
-    int16_t (*drawOption)();
-    int16_t (*drawSelected)();
+    void (*drawOption)(void *);
+    void (*drawSelected)(void *);
 };
 
 struct menuOption
@@ -26,7 +26,7 @@ struct menuOption
     menuOption_f exec;
 
     uint16_t index;
-    uint8_t *data;
+    void *data;
 };
 
 struct menu
