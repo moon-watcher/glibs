@@ -2,7 +2,6 @@
 
 #include <stdint.h>
 
-struct menu;
 struct menuOption;
 
 typedef int16_t (*menuOption_f)(struct menuOption *);
@@ -19,7 +18,6 @@ struct menuEvents
 
 struct menuOption
 {
-    struct menu *parent;
     struct menu *child;
     struct menuOption *next;
     struct menuOption *prev;
@@ -31,14 +29,14 @@ struct menuOption
 
 struct menu
 {
-    struct menuEvents event;
-
-    uint8_t round : 1;
-    uint8_t singleOption : 1;
-
     struct menuOption *head;
     struct menuOption *tail;
     struct menuOption *selectedOption;
+
+    struct menuEvents event;
+
+    uint8_t singleOption : 1;
+    uint8_t round : 1;
 };
 
 void menu_init(struct menu *, struct menuEvents *, int16_t, int16_t);
@@ -46,7 +44,7 @@ void menu_add(struct menu *, struct menuOption *, void *, menuOption_f);
 void menu_draw(struct menu *);
 void menu_draw_selected(struct menu *);
 int16_t menu_update(struct menu *);
+void menu_draw_option(struct menu *, struct menuOption *);
+void menu_select_option(struct menu *, struct menuOption *);
 
-void menu_option_draw(struct menuOption *);
 void menu_option_submenu(struct menuOption *, struct menu *);
-void menu_option_select(struct menuOption *);
