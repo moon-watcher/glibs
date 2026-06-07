@@ -1,7 +1,6 @@
 #pragma once
 
 #include <stdint.h>
-#include <string.h>
 
 typedef struct
 {
@@ -17,7 +16,6 @@ typedef struct
         p->buffer = (uint8_t *)(BUFFER); \
         p->size = sizeof(BUFFER);        \
         p->offset = 0;                   \
-        memset(p->buffer, 0, p->size);   \
     } while (0)
 
 #define pool_alloc(POOL, TYPE)                                                                 \
