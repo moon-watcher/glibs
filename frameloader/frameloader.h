@@ -11,9 +11,7 @@ typedef struct
     uint16_t countdown, timer;
     uint16_t frame, num_frames;
     int16_t loop;
-
-    //
-    uint32_t external;
+    uint32_t ext;
 } frameloader;
 
 void frameloader_init(frameloader *, void (*)(), uint16_t);

@@ -5,9 +5,7 @@ void frameloader_init(frameloader *$, void (*update)(), uint16_t vrampos)
     $->update = update;
     $->vrampos = vrampos;
     $->loop = -1;
-
-    //
-    $->external = 0;
+    $->ext = 0;
 }
 
 void frameloader_set(frameloader *$, void *resource, uint16_t frames, uint16_t timer)
