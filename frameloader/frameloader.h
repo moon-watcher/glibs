@@ -11,11 +11,13 @@ typedef struct
     uint16_t countdown, timer;
     uint16_t frame, num_frames;
     int16_t loop;
+
+    //
     uint32_t ext;
 } frameloader;
 
 void frameloader_init(frameloader *, void (*)(), uint16_t);
-void frameloader_set(frameloader *,  void *, uint16_t, uint16_t);
+void frameloader_set(frameloader *, void *, uint16_t, uint16_t);
 void frameloader_setResource(frameloader *, void *, uint16_t);
 void frameloader_setTimer(frameloader *, uint16_t);
 void frameloader_setLoop(frameloader *, int16_t);
