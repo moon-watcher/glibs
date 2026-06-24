@@ -59,19 +59,15 @@ int16_t menu_update(struct menu *menu)
         if (option->exec)
             ret = option->exec(option);
     }
-    else if (menu->event.inc && menu->event.inc(option))
+    else if (menu->event.inc && (menu->selectedOption->next || menu->round) && menu->event.inc(option))
     {
-        if (menu->selectedOption->next)
-            menu->selectedOption = menu->selectedOption->next;
-        else if (menu->round)
-            menu->selectedOption = menu->head;
+             if (menu->selectedOption->next) menu->selectedOption = menu->selectedOption->next;
+        else if (menu->round)                menu->selectedOption = menu->head;
     }
-    else if (menu->event.dec && menu->event.dec(option))
+    else if (menu->event.dec && (menu->selectedOption->prev || menu->round) && menu->event.dec(option))
     {
-        if (menu->selectedOption->prev)
-            menu->selectedOption = menu->selectedOption->prev;
-        else if (menu->round)
-            menu->selectedOption = menu->tail;
+             if (menu->selectedOption->prev) menu->selectedOption = menu->selectedOption->prev;
+        else if (menu->round)                menu->selectedOption = menu->tail;
     }
 
     if (menu->selectedOption != option)
